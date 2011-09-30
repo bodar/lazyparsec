@@ -15,13 +15,15 @@
  *****************************************************************************/
 package com.googlecode.lazyparsec;
 
-import com.googlecode.lazyparsec.functors.Map;
+import com.googlecode.totallylazy.Callable1;
+
+import static com.googlecode.totallylazy.Callers.call;
 
 final class MapParser<From, To> extends Parser<To> {
   private final Parser<From> parser;
-  private final Map<? super From, ? extends To> m;
+  private final Callable1<? super From, ? extends To> m;
 
-  MapParser(Parser<From> parser, Map<? super From, ? extends To> m) {
+  MapParser(Parser<From> parser, Callable1<? super From, ? extends To> m) {
     this.parser = parser;
     this.m = m;
   }
@@ -29,7 +31,7 @@ final class MapParser<From, To> extends Parser<To> {
   @Override boolean apply(final ParseContext ctxt) {
     final boolean r = parser.run(ctxt);
     if (r) {
-      ctxt.result = m.map(parser.getReturn(ctxt));
+      ctxt.result = call(m, parser.getReturn(ctxt));
     }
     return r;
   }

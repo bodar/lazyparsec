@@ -14,9 +14,9 @@ import java.util.List;
 
 import com.googlecode.lazyparsec.easymock.BaseMockTests;
 import com.googlecode.lazyparsec.error.ParserException;
-import com.googlecode.lazyparsec.functors.Map;
 import com.googlecode.lazyparsec.functors.Map2;
 import com.googlecode.lazyparsec.functors.Maps;
+import com.googlecode.totallylazy.Callable1;
 
 /**
  * Unit test for {@link Parser}.
@@ -63,9 +63,10 @@ public class ParserTest extends BaseMockTests {
     assertFailure(INTEGER.token(), "a", 1, 1);
   }
   
-  @Mock Map<Object, Parser<String>> next;
-  public void testNext_withMap() {
-    expect(next.map(1)).andReturn(FOO);
+  @Mock
+  Callable1<Object, Parser<String>> next;
+  public void testNext_withMap() throws Exception {
+    expect(next.call(1)).andReturn(FOO);
     replay();
     assertParser(INTEGER.next(next), "1", "foo");
     assertEquals(next.toString(), INTEGER.next(next).toString());
@@ -76,8 +77,8 @@ public class ParserTest extends BaseMockTests {
     assertFailure(FAILURE.next(next), "", 1, 1, "failure");
   }
   
-  public void testNext_nextParserFails() {
-    expect(next.map(123)).andReturn(FAILURE);
+  public void testNext_nextParserFails() throws Exception {
+    expect(next.call(123)).andReturn(FAILURE);
     replay();
     assertFailure(INTEGER.next(next), "123", 1, 4, "failure");
   }
@@ -281,8 +282,8 @@ public class ParserTest extends BaseMockTests {
     assertParser(parser, "a", 0, "a");
   }
   
-  public void testIfElse_withNext() {
-    expect(next.map('b')).andReturn(FOO);
+  public void testIfElse_withNext() throws Exception {
+    expect(next.call('b')).andReturn(FOO);
     replay();
     assertParser(areChars("ab").ifelse(next, constant("bar")), "ab", "foo");
   }
@@ -302,17 +303,18 @@ public class ParserTest extends BaseMockTests {
     assertParser(INTEGER.between(isChar('('), isChar(')')), "(123)", 123);
   }
   
-  @Mock Map<Integer, String> map;
-  public void testMap() {
-    expect(map.map(12)).andReturn("foo");
+  @Mock
+  Callable1<Integer, String> callable1;
+  public void testMap() throws Exception {
+    expect(callable1.call(12)).andReturn("foo");
     replay();
-    assertParser(INTEGER.map(map), "12", "foo");
-    assertEquals(map.toString(), INTEGER.map(map).toString());
+    assertParser(INTEGER.map(callable1), "12", "foo");
+    assertEquals(callable1.toString(), INTEGER.map(callable1).toString());
   }
   
   public void testMap_fails() {
     replay();
-    assertFailure(INTEGER.map(map), "", 1, 1, "integer expected, EOF encountered.");
+    assertFailure(INTEGER.map(callable1), "", 1, 1, "integer expected, EOF encountered.");
   }
   
   public void testSepBy1() {
@@ -425,7 +427,8 @@ public class ParserTest extends BaseMockTests {
     assertEquals("[]", EmptyListParser.instance().toString());
   }
   
-  @Mock Map<Integer, Integer> unaryOp;
+  @Mock
+  Callable1<Integer, Integer> unaryOp;
   public void testPrefix_noOperator() {
     replay();
     Parser<Integer> parser = INTEGER.prefix(isChar('-').retn(unaryOp));
@@ -433,10 +436,10 @@ public class ParserTest extends BaseMockTests {
     assertParser(parser, "123", 123);
   }
   
-  public void testPrefix() {
-    expect(unaryOp.map(1)).andReturn(-1);
-    expect(unaryOp.map(-1)).andReturn(1);
-    expect(unaryOp.map(1)).andReturn(-1);
+  public void testPrefix() throws Exception {
+    expect(unaryOp.call(1)).andReturn(-1);
+    expect(unaryOp.call(-1)).andReturn(1);
+    expect(unaryOp.call(1)).andReturn(-1);
     replay();
     Parser<Integer> parser = INTEGER.prefix(isChar('-').retn(unaryOp));
     assertEquals("prefix", parser.toString());
@@ -450,9 +453,9 @@ public class ParserTest extends BaseMockTests {
     assertParser(parser, "123", 123);
   }
   
-  public void testPostfix() {
-    expect(unaryOp.map(2)).andReturn(4);
-    expect(unaryOp.map(4)).andReturn(256);
+  public void testPostfix() throws Exception {
+    expect(unaryOp.call(2)).andReturn(4);
+    expect(unaryOp.call(4)).andReturn(256);
     replay();
     Parser<Integer> parser = INTEGER.postfix(isChar('^').retn(unaryOp));
     assertEquals("postfix", parser.toString());

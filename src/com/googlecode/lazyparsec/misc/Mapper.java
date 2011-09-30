@@ -25,13 +25,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.googlecode.totallylazy.Callable1;
 import net.sf.cglib.reflect.FastClass;
 import net.sf.cglib.reflect.FastMethod;
 
 import com.googlecode.lazyparsec.Parser;
 import com.googlecode.lazyparsec.Parsers;
 import com.googlecode.lazyparsec.functors.Binary;
-import com.googlecode.lazyparsec.functors.Map;
 import com.googlecode.lazyparsec.functors.Unary;
 import com.googlecode.lazyparsec.util.Checks;
 import com.googlecode.lazyparsec.util.Lists;
@@ -142,7 +142,7 @@ public abstract class Mapper<T> {
   /**
    * A {@link Parser} that returns a {@link Unary} instance that invokes the underlying
    * {@code map} method or curried constructor with the only parameter of the
-   * {@link Unary#map(Object)} method.
+   * {@link Unary#call(Object)} method.
    */
   public final Parser<Unary<T>> unary() {
     return Parsers.constant(asUnary());
@@ -184,10 +184,10 @@ public abstract class Mapper<T> {
   public final Parser<Unary<T>> prefix(Parser<?> operator) {
     checkNotSkipped(operator);
     checkFutureParameters(Unary.class, 2);
-    return operator.map(new Map<Object, Unary<T>>() {
-      public Unary<T> map(final Object pre) {
+    return operator.map(new Callable1<Object, Unary<T>>() {
+      public Unary<T> call(final Object pre) {
         return new Unary<T>() {
-          public T map(T v) {
+          public T call(T v) {
             return apply(pre, v);
           }
         };
@@ -223,10 +223,10 @@ public abstract class Mapper<T> {
     List<Parser<?>> operatorList = mergeSkipped(operator);
     if (operatorList.size() == 1) return prefix(operatorList.get(0));
     checkFutureParameters(Unary.class, operatorList.size() + 1);
-    return Parsers.list(operatorList).map(new Map<List<Object>, Unary<T>>() {
-      public Unary<T> map(final List<Object> list) {
+    return Parsers.list(operatorList).map(new Callable1<List<Object>, Unary<T>>() {
+      public Unary<T> call(final List<Object> list) {
         return new Unary<T>() {
-          public T map(T v) {
+          public T call(T v) {
             list.add(v);
             return apply(list.toArray());
           }
@@ -262,10 +262,10 @@ public abstract class Mapper<T> {
   public final Parser<Unary<T>> postfix(Parser<?> operator) {
     checkNotSkipped(operator);
     checkFutureParameters(Unary.class, 2);
-    return operator.map(new Map<Object, Unary<T>>() {
-      public Unary<T> map(final Object post) {
+    return operator.map(new Callable1<Object, Unary<T>>() {
+      public Unary<T> call(final Object post) {
         return new Unary<T>() {
-          public T map(T v) {
+          public T call(T v) {
             return apply(v, post);
           }
         };
@@ -309,10 +309,10 @@ public abstract class Mapper<T> {
     operator = toArray(mergeSkipped(operator));
     if (operator.length == 1) return postfix(operator[0]);
     checkFutureParameters(Unary.class, operator.length + 1);
-    return Parsers.array(operator).map(new Map<Object[], Unary<T>>() {
-      public Unary<T> map(final Object[] array) {
+    return Parsers.array(operator).map(new Callable1<Object[], Unary<T>>() {
+      public Unary<T> call(final Object[] array) {
         return new Unary<T>() {
-          public T map(T v) {
+          public T call(T v) {
             Object[] args = new Object[array.length + 1];
             args[0] = v;
             System.arraycopy(array, 0, args, 1, array.length);
@@ -351,8 +351,8 @@ public abstract class Mapper<T> {
   public final Parser<Binary<T>> infix(Parser<?> operator) {
     checkNotSkipped(operator);
     checkFutureParameters(Binary.class, 3);
-    return operator.map(new Map<Object, Binary<T>>() {
-      public Binary<T> map(final Object op) {
+    return operator.map(new Callable1<Object, Binary<T>>() {
+      public Binary<T> call(final Object op) {
         return new Binary<T>() {
           public T map(T left, T right) {
             return apply(left, op, right);
@@ -397,8 +397,8 @@ public abstract class Mapper<T> {
     operator = toArray(mergeSkipped(operator));
     if (operator.length == 1) return infix(operator[0]);
     checkFutureParameters(Binary.class, operator.length + 2);
-    return Parsers.array(operator).map(new Map<Object[], Binary<T>>() {
-      public Binary<T> map(final Object[] array) {
+    return Parsers.array(operator).map(new Callable1<Object[], Binary<T>>() {
+      public Binary<T> call(final Object[] array) {
         return new Binary<T>() {
           public T map(T left, T right) {
             Object[] args = new Object[array.length + 2];
@@ -453,12 +453,12 @@ public abstract class Mapper<T> {
 
   /**
    * Returns a {@link Unary} instance that invokes the underlying {@code map} method or
-   * curried constructor with the only parameter of the {@link Unary#map(Object)} method.
+   * curried constructor with the only parameter of the {@link Unary#call(Object)} method.
    */
   final Unary<T> asUnary() {
     checkFutureParameters(Unary.class, 1);
     return new Unary<T>() {
-      public T map(T v) {
+      public T call(T v) {
         return apply(v);
       }
       @Override public String toString() {
@@ -484,12 +484,12 @@ public abstract class Mapper<T> {
   }
 
   /**
-   * Returns a {@link Map} instance that invokes the underlying {@code map} method or
-   * curried constructor with the only parameter of the {@link Unary#map(Object)} method.
+   * Returns a {@link com.googlecode.totallylazy.Callable1} instance that invokes the underlying {@code map} method or
+   * curried constructor with the only parameter of the {@link Unary#call(Object)} method.
    */
-  final Map<Object[], T> asMap() {
-    return new Map<Object[], T>() {
-      public T map(Object[] args) {
+  final Callable1<Object[], T> asMap() {
+    return new Callable1<Object[], T>() {
+      public T call(Object[] args) {
         return apply(args);
       }
       @Override public String toString() {
@@ -609,7 +609,7 @@ public abstract class Mapper<T> {
   private static final String SKIPPED = new String("skipped");
   
   private static final Unary<Object> SKIP = new Unary<Object>() {
-    public Object map(Object v) {
+    public Object call(Object v) {
       return v;
     }
     @Override public String toString() {

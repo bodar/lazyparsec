@@ -4,8 +4,8 @@ import static com.googlecode.lazyparsec.Asserts.assertParser;
 import static org.easymock.EasyMock.expect;
 
 import com.googlecode.lazyparsec.easymock.BaseMockTests;
-import com.googlecode.lazyparsec.functors.Map;
 import com.googlecode.lazyparsec.functors.Map2;
+import com.googlecode.totallylazy.Callable1;
 
 /**
  * Unit test for {@link OperatorTable} for building expression parsers.
@@ -18,26 +18,28 @@ public class OperatorTableExpressionTest extends BaseMockTests {
   // left-associative operators, {@code ^} as right-associative operator, {@code ~} as prefix
   // operator, {@code %} as postfix operator, and {@code .} as infix non-associative operator.
   
-  @Mock Map<String, String> negate;
+  @Mock
+  Callable1<String, String> negate;
   @Mock Map2<String, String, String> plus;
   @Mock Map2<String, String, String> subtract;
   @Mock Map2<String, String, String> multiply;
-  @Mock Map<String, String> percent;
+  @Mock
+  Callable1<String, String> percent;
   @Mock Map2<String, String, String> point;
   @Mock Map2<String, String, String> power;
   
-  public void testBuildExpressionParser() {
+  public void testBuildExpressionParser() throws Exception {
     String source = "1+2.3-30%-1+~5*20000%%^2^1*~~3";
     expect(point.map("2", "3")).andReturn("2.3");
     expect(plus.map("1", "2.3")).andReturn("3.3");
-    expect(percent.map("30")).andReturn("0.3");
+    expect(percent.call("30")).andReturn("0.3");
     expect(subtract.map("3.3", "0.3")).andReturn("3.0");
     expect(subtract.map("3.0", "1")).andReturn("2.0");
-    expect(negate.map("5")).andReturn("-5");
-    expect(percent.map("20000")).andReturn("200");
-    expect(percent.map("200")).andReturn("2");
-    expect(negate.map("3")).andReturn("-3");
-    expect(negate.map("-3")).andReturn("3");
+    expect(negate.call("5")).andReturn("-5");
+    expect(percent.call("20000")).andReturn("200");
+    expect(percent.call("200")).andReturn("2");
+    expect(negate.call("3")).andReturn("-3");
+    expect(negate.call("-3")).andReturn("3");
     expect(power.map("2", "1")).andReturn("2");
     expect(power.map("2", "2")).andReturn("4");
     expect(multiply.map("-5", "4")).andReturn("-20");

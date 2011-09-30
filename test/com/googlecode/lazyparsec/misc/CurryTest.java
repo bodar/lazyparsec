@@ -63,9 +63,9 @@ public class CurryTest extends TestCase {
     assertEquals(1, foo.size);
   }
   
-  public void testUnary() {
+  public void testUnary() throws Exception {
     Unary<Object> unary = Curry.<Object>of(Foo.class, 1).unary().parse("");
-    Foo foo = (Foo) unary.map("foo");
+    Foo foo = (Foo) unary.call("foo");
     assertEquals("foo", foo.name);
     assertEquals(1, foo.size);
   }
@@ -151,50 +151,50 @@ public class CurryTest extends TestCase {
     }
   }
   
-  public void testPrefix() {
+  public void testPrefix() throws Exception {
     Expr result = Curry.<Expr>of(PrefixExpr.class).prefix(constant("x"))
-        .parse("").map(FAKE_EXPR);
+        .parse("").call(FAKE_EXPR);
     PrefixExpr prefix = (PrefixExpr) result;
     assertEquals("x", prefix.op);
     assertSame(FAKE_EXPR, prefix.expr);
   }
   
-  public void testPrefix_onlyOneUnskippedOperator() {
+  public void testPrefix_onlyOneUnskippedOperator() throws Exception {
     Expr result = Curry.<Expr>of(PrefixExpr.class).prefix(_(string("foo")), constant("x"))
-        .parse("foo").map(FAKE_EXPR);
+        .parse("foo").call(FAKE_EXPR);
     PrefixExpr prefix = (PrefixExpr) result;
     assertEquals("x", prefix.op);
     assertSame(FAKE_EXPR, prefix.expr);
   }
   
-  public void testPrefix_multiOp() {
+  public void testPrefix_multiOp() throws Exception {
     Expr result = Curry.<Expr>of(PrefixExpr2.class).prefix(constant("x"), constant(2))
-        .parse("").map(FAKE_EXPR);
+        .parse("").call(FAKE_EXPR);
     PrefixExpr2 prefix = (PrefixExpr2) result;
     assertEquals("x", prefix.op);
     assertEquals(2, prefix.size);
     assertSame(FAKE_EXPR, prefix.expr);
   }
   
-  public void testPostfix() {
+  public void testPostfix() throws Exception {
     Expr result = Curry.<Expr>of(PostfixExpr.class).postfix(constant("x"))
-        .parse("").map(FAKE_EXPR);
+        .parse("").call(FAKE_EXPR);
     PostfixExpr postfix = (PostfixExpr) result;
     assertEquals("x", postfix.op);
     assertSame(FAKE_EXPR, postfix.expr);
   }
   
-  public void testPostfix_onlyOneUnskippedOperator() {
+  public void testPostfix_onlyOneUnskippedOperator() throws Exception {
     Expr result = Curry.<Expr>of(PostfixExpr.class).postfix(_(string("foo")), constant("x"))
-        .parse("foo").map(FAKE_EXPR);
+        .parse("foo").call(FAKE_EXPR);
     PostfixExpr postfix = (PostfixExpr) result;
     assertEquals("x", postfix.op);
     assertSame(FAKE_EXPR, postfix.expr);
   }
   
-  public void testPostfix_multiOp() {
+  public void testPostfix_multiOp() throws Exception {
     Expr result = Curry.<Expr>of(PostfixExpr2.class).postfix(constant(1), constant("x"))
-        .parse("").map(FAKE_EXPR);
+        .parse("").call(FAKE_EXPR);
     PostfixExpr2 postfix = (PostfixExpr2) result;
     assertEquals("x", postfix.op);
     assertEquals(1, postfix.size);

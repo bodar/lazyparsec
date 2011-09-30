@@ -168,7 +168,7 @@ public class ParserErrorHandlingTest extends TestCase {
       Terminals.caseSensitive(new String[] {"+", "-"}, new String[] {"foo", "bar", "baz"});
     Parser<List<Token>> lexeme = terminals.tokenizer().lexer(Scanners.WHITESPACES)
         .map(new Unary<List<Token>>() {
-          public List<Token> map(List<Token> tokens) {
+          public List<Token> call(List<Token> tokens) {
             List<Token> result = Lists.arrayList();
             for (Token token : tokens) {
               result.add(new Token(token.index(), 0, "("));

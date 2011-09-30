@@ -19,9 +19,9 @@ import java.util.Collections;
 import java.util.List;
 
 import com.googlecode.lazyparsec.annotations.Private;
-import com.googlecode.lazyparsec.functors.Map;
 import com.googlecode.lazyparsec.functors.Map2;
 import com.googlecode.lazyparsec.util.Lists;
+import com.googlecode.totallylazy.Callable1;
 
 /**
  * Builds {@link Parser} to parse expressions with operator-precedence grammar. The operators
@@ -68,7 +68,7 @@ public final class OperatorTable<T> {
    * @return this.
    */
   public OperatorTable<T> prefix(
-      Parser<? extends Map<? super T, ? extends T>> parser, int precedence) {
+      Parser<? extends Callable1<? super T, ? extends T>> parser, int precedence) {
     ops.add(new Operator(parser, precedence, Associativity.PREFIX));
     return this;
   }
@@ -81,7 +81,7 @@ public final class OperatorTable<T> {
    * @return this.
    */
   public OperatorTable<T> postfix(
-      Parser<? extends Map<? super T, ? extends T>> parser, int precedence) {
+      Parser<? extends Callable1<? super T, ? extends T>> parser, int precedence) {
     ops.add(new Operator(parser, precedence, Associativity.POSTFIX));
     return this;
   }

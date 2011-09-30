@@ -25,10 +25,10 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import com.googlecode.lazyparsec.annotations.Private;
 import com.googlecode.lazyparsec.error.ParserException;
-import com.googlecode.lazyparsec.functors.Map;
 import com.googlecode.lazyparsec.functors.Map2;
 import com.googlecode.lazyparsec.functors.Maps;
 import com.googlecode.lazyparsec.util.Checks;
+import com.googlecode.totallylazy.Callable1;
 
 /**
  * Defines grammar and encapsulates parsing logic.
@@ -112,8 +112,8 @@ public abstract class Parser<T> {
    * A {@link Parser} that executes {@code this}, maps the result using {@code map}
    * to another {@code Parser} object to be executed as the next step.
    */
-  public final <To> Parser<To> next(Map<? super T, ? extends Parser<? extends To>> map) {
-    return new BindNextParser<T, To>(this, map);
+  public final <To> Parser<To> next(Callable1<? super T, ? extends Parser<? extends To>> callable1) {
+    return new BindNextParser<T, To>(this, callable1);
   }
   
   /**
@@ -214,8 +214,8 @@ public abstract class Parser<T> {
    * A {@link Parser} that runs {@code this} parser and transforms the return value using
    * {@code map}.
    */
-  public final <R> Parser<R> map(Map<? super T, ? extends R> map) {
-    return new MapParser<T, R>(this, map);
+  public final <R> Parser<R> map(Callable1<? super T, ? extends R> callable1) {
+    return new MapParser<T, R>(this, callable1);
   }
 
   /**
@@ -302,7 +302,7 @@ public abstract class Parser<T> {
    * {@code alternative} otherwise.
    */
   public final <R> Parser<R> ifelse(
-      Map<? super T, ? extends Parser<? extends R>> consequence, Parser<? extends R> alternative) {
+      Callable1<? super T, ? extends Parser<? extends R>> consequence, Parser<? extends R> alternative) {
     return new IfElseParser<R, T>(this, consequence, alternative);
   }
   
@@ -341,8 +341,8 @@ public abstract class Parser<T> {
    */
   public final Parser<List<T>> sepBy1(Parser<?> delim) {
     final Parser<T> afterFirst = delim.step(0).next(this);
-    Map<T, Parser<List<T>>> binder = new Map<T, Parser<List<T>>>() {
-      public Parser<List<T>> map(T firstValue) {
+    Callable1<T, Parser<List<T>>> binder = new Callable1<T, Parser<List<T>>>() {
+      public Parser<List<T>> call(T firstValue) {
         return new RepeatAtLeastParser<T>(
             afterFirst, 0, ListFactories.arrayListFactoryWithFirstElement(firstValue));
       }
@@ -387,8 +387,8 @@ public abstract class Parser<T> {
    * <p> The return values are collected in a {@link List}.
    */
   public final Parser<List<T>> sepEndBy1(final Parser<?> delim) {
-    return next(new Map<T, Parser<List<T>>>() {
-      public Parser<List<T>> map(T first) {
+    return next(new Callable1<T, Parser<List<T>>>() {
+      public Parser<List<T>> call(T first) {
         return new DelimitedListParser<T>(
             Parser.this, delim, ListFactories.arrayListFactoryWithFirstElement(first));
       }
@@ -408,25 +408,25 @@ public abstract class Parser<T> {
 
   /**
    * A {@link Parser} that runs {@code op} for 0 or more times greedily, then runs {@code this}.
-   * The {@link Map} objects returned from {@code op} are applied from right to left to the return
+   * The {@link com.googlecode.totallylazy.Callable1} objects returned from {@code op} are applied from right to left to the return
    * value of {@code p}.
    * 
    * <p> {@code p.prefix(op)} is equivalent to {@code op* p} in EBNF.
    */
   @SuppressWarnings("unchecked")
-  public final Parser<T> prefix(Parser<? extends Map<? super T, ? extends T>> op) {
+  public final Parser<T> prefix(Parser<? extends Callable1<? super T, ? extends T>> op) {
     return Parsers.sequence(op.many(), this, Parsers.PREFIX_OPERATOR_MAP2);
   }
 
   /**
    * A {@link Parser} that runs {@code this} and then runs {@code op} for 0 or more times greedily.
-   * The {@link Map} objects returned from {@code op} are applied from left to right to the return
+   * The {@link com.googlecode.totallylazy.Callable1} objects returned from {@code op} are applied from left to right to the return
    * value of p.
    * 
    * <p> {@code p.postfix(op)} is equivalent to {@code p op*} in EBNF.
    */
   @SuppressWarnings("unchecked")
-  public final Parser<T> postfix(Parser<? extends Map<? super T, ? extends T>> op) {
+  public final Parser<T> postfix(Parser<? extends Callable1<? super T, ? extends T>> op) {
     return Parsers.sequence(this, op.many(), Parsers.POSTFIX_OPERATOR_MAP2);
   }
 

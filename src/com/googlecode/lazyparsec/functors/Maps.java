@@ -15,21 +15,23 @@
  *****************************************************************************/
 package com.googlecode.lazyparsec.functors;
 
+import com.googlecode.totallylazy.Callable1;
+
 import java.util.Locale;
 
 /**
- * Provides common implementations of {@link Map} interface and the variants.
+ * Provides common implementations of {@link Callable1} interface and the variants.
  * 
  * @author Ben Yu
  */
 public final class Maps {
   
   /**
-   * The {@link Map} that maps a {@link String} to {@link Integer} by calling
+   * The {@link Callable1} that maps a {@link String} to {@link Integer} by calling
    * {@link Integer#valueOf(String)}.
    */
-  public static final Map<String, Integer> TO_INTEGER = new Map<String, Integer>() {
-    public Integer map(String v) {
+  public static final Callable1<String, Integer> TO_INTEGER = new Callable1<String, Integer>() {
+    public Integer call(String v) {
       return Integer.valueOf(v);
     }
     @Override public String toString() {
@@ -43,7 +45,7 @@ public final class Maps {
   /** Returns a {@link Unary} that maps a {@link String} to lower case using {@code locale}. */
   public static Unary<String> toLowerCase(final Locale locale) {
     return  new Unary<String>() {
-      public String map(String s) {
+      public String call(String s) {
         return s.toLowerCase(locale);
       }
       @Override public String toString() {
@@ -58,7 +60,7 @@ public final class Maps {
   /** Returns a {@link Unary} that maps a {@link String} to upper case using {@code locale}. */
   public static Unary<String> toUpperCase(final Locale locale) {
     return  new Unary<String>() {
-      public String map(String s) {
+      public String call(String s) {
         return s.toUpperCase(locale);
       }
       @Override public String toString() {
@@ -68,21 +70,21 @@ public final class Maps {
   }
   
   /**
-   * A {@link Map} instance that maps its parameter to a {@link String} by calling
+   * A {@link Callable1} instance that maps its parameter to a {@link String} by calling
    * {@link Object#toString()} against it.
    */
   @SuppressWarnings("unchecked")
-  public static <T> Map<T, String> mapToString() {
+  public static <T> Callable1<T, String> mapToString() {
     return TO_STRING;
   }
   
   /**
-   * Returns a {@link Map} that maps the string representation of an enum
+   * Returns a {@link Callable1} that maps the string representation of an enum
    * to the corresponding enum value by calling {@link Enum#valueOf(Class, String)}.
    */
-  public static <E extends Enum<E>> Map<String, E> toEnum(final Class<E> enumType) {
-    return new Map<String, E>() {
-      public E map(String name) {
+  public static <E extends Enum<E>> Callable1<String, E> toEnum(final Class<E> enumType) {
+    return new Callable1<String, E>() {
+      public E call(String name) {
         return Enum.valueOf(enumType, name);
       }
       @Override public String toString() {
@@ -97,20 +99,20 @@ public final class Maps {
     return (Unary<T>) ID;
   }
   
-  /** Returns a {@link Map} that always maps any object to {@code v}. */
-  public static <F, T> Map <F, T> constant(final T v) {
-    return new Map <F, T>() {
-      public T map(F from) { return v; }
+  /** Returns a {@link Callable1} that always maps any object to {@code v}. */
+  public static <F, T> Callable1<F, T> constant(final T v) {
+    return new Callable1<F, T>() {
+      public T call(F from) { return v; }
       @Override public String toString() {
         return String.valueOf(v);
       }
     };
   }
   
-  /** Adapts a {@link java.util.Map} to {@link Map}. */
-  public static <K, V> Map<K, V> map(final java.util.Map<K, V> m) {
-    return new Map<K, V>() {
-      public V map(K k) {
+  /** Adapts a {@link java.util.Map} to {@link Callable1}. */
+  public static <K, V> Callable1<K, V> map(final java.util.Map<K, V> m) {
+    return new Callable1<K, V>() {
+      public V call(K k) {
         return m.get(k);
       }
       @Override public String toString() {
@@ -184,15 +186,15 @@ public final class Maps {
   }
   
   private static final Unary<Object> ID = new Unary<Object>() {
-    public Object map(Object v) {
+    public Object call(Object v) {
       return v;
     }
     @Override public String toString() {return "identity";}
   };
   
   @SuppressWarnings("unchecked")
-  private static final Map TO_STRING = new Map<Object, String>() {
-    public String map(Object obj) {
+  private static final Callable1 TO_STRING = new Callable1<Object, String>() {
+    public String call(Object obj) {
       return String.valueOf(obj);
     }
     @Override public String toString() {

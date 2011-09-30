@@ -15,33 +15,37 @@
  *****************************************************************************/
 package com.googlecode.lazyparsec;
 
-import com.googlecode.lazyparsec.functors.Map;
+import com.googlecode.totallylazy.Callable1;
+
+import static com.googlecode.totallylazy.Callers.call;
 
 final class IfElseParser<T, C> extends Parser<T> {
-  private final Parser<C> cond;
-  private final Map<? super C, ? extends Parser<? extends T>> consequence;
-  private final Parser<? extends T> alternative;
+    private final Parser<C> cond;
+    private final Callable1<? super C, ? extends Parser<? extends T>> consequence;
+    private final Parser<? extends T> alternative;
 
-  IfElseParser(Parser<C> cond,
-      Map<? super C, ? extends Parser<? extends T>> consequence, Parser<? extends T> alternative) {
-    this.cond = cond;
-    this.consequence = consequence;
-    this.alternative = alternative;
-  }
-
-  @Override boolean apply(ParseContext ctxt) {
-    final Object ret = ctxt.result;
-    final int step = ctxt.step;
-    final int at = ctxt.at;
-    if (ParserInternals.runWithoutRecordingError(cond, ctxt)) {
-      Parser<? extends T> parser = consequence.map(cond.getReturn(ctxt));
-      return parser.run(ctxt);
+    IfElseParser(Parser<C> cond,
+                 Callable1<? super C, ? extends Parser<? extends T>> consequence, Parser<? extends T> alternative) {
+        this.cond = cond;
+        this.consequence = consequence;
+        this.alternative = alternative;
     }
-    ctxt.set(step, at, ret);
-    return alternative.run(ctxt);
-  }
-  
-  @Override public String toString() {
-    return "ifelse";
-  }
+
+    @Override
+    boolean apply(ParseContext ctxt) {
+        final Object ret = ctxt.result;
+        final int step = ctxt.step;
+        final int at = ctxt.at;
+        if (ParserInternals.runWithoutRecordingError(cond, ctxt)) {
+            Parser<? extends T> parser = call(consequence, cond.getReturn(ctxt));
+            return parser.run(ctxt);
+        }
+        ctxt.set(step, at, ret);
+        return alternative.run(ctxt);
+    }
+
+    @Override
+    public String toString() {
+        return "ifelse";
+    }
 }

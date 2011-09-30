@@ -15,7 +15,7 @@
  *****************************************************************************/
 package com.googlecode.lazyparsec;
 
-import com.googlecode.lazyparsec.functors.Map;
+import com.googlecode.totallylazy.Callable1;
 
 /**
  * Runs a {@link Parser} and then maps the parser result to another {@code Parser} object, the
@@ -25,21 +25,21 @@ import com.googlecode.lazyparsec.functors.Map;
  */
 final class BindNextParser<From, To> extends Parser<To> {
   private final Parser<? extends From> parser;
-  private final Map<? super From, ? extends Parser<? extends To>> map;
+  private final Callable1<? super From, ? extends Parser<? extends To>> callable1;
   
   BindNextParser(
-      Parser<? extends From> parser, Map<? super From, ? extends Parser<? extends To>> next) {
-    this.map = next;
+      Parser<? extends From> parser, Callable1<? super From, ? extends Parser<? extends To>> next) {
+    this.callable1 = next;
     this.parser = parser;
   }
 
   @Override boolean apply(ParseContext ctxt) {
     if (!parser.run(ctxt))
       return false;
-    return Parsers.runNext(ctxt, map);
+    return Parsers.runNext(ctxt, callable1);
   }
   
   @Override public String toString() {
-    return map.toString();
+    return callable1.toString();
   }
 }

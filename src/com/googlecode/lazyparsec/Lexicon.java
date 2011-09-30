@@ -15,82 +15,96 @@
  *****************************************************************************/
 package com.googlecode.lazyparsec;
 
-import static com.googlecode.lazyparsec.util.Checks.checkArgument;
-
 import com.googlecode.lazyparsec.annotations.Private;
-import com.googlecode.lazyparsec.functors.Map;
 import com.googlecode.lazyparsec.util.Strings;
+import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callers;
+
+import static com.googlecode.lazyparsec.util.Checks.checkArgument;
 
 /**
  * A {@link Lexicon} is a group of lexical words that can be tokenized by a single tokenizer.
- * 
+ *
  * @author Ben Yu
  */
 class Lexicon {
-  
-  /** Maps lexical word name to token value. */
-  final Map<String, Object> words;
-  
-  /** The scanner that recognizes any of the lexical word. */
-  final Parser<?> tokenizer;
-  
-  Lexicon(Map<String, Object> words, Parser<?> tokenizer) {
-    this.words = words;
-    this.tokenizer = tokenizer;
-  }
-  
-  /** Returns the tokenizer that tokenizes all managed terminals. */
-  @SuppressWarnings("unchecked")
-  public Parser<Object> tokenizer() {
-    return (Parser) tokenizer;
-  }
-  
-  /**
-   * A {@link Parser} that recognizes a sequence of tokens identified by {@code tokenNames}, as an
-   * atomic step.
-   */
-  public Parser<Object> phrase(String... tokenNames) {
-    Parser<?>[] wordParsers = new Parser<?>[tokenNames.length];
-    for (int i = 0; i < tokenNames.length; i++) {
-      wordParsers[i] = token(tokenNames[i]);
-    }
-    return Parsers.sequence(wordParsers).atomic()
-      .label(Strings.join(" ", tokenNames));
-  }
-  
-  /** A {@link Parser} that recognizes a token identified by any of {@code tokenNames}. */
-  public Parser<Token> token(String... tokenNames) {
-    if (tokenNames.length == 0) return Parsers.never();
-    @SuppressWarnings("unchecked")
-    Parser<Token>[] ps = new Parser[tokenNames.length];
-    for(int i = 0; i < tokenNames.length; i++) {
-      ps[i] = Parsers.token(InternalFunctors.tokenWithSameValue(word(tokenNames[i])));
-    }
-    return Parsers.plus(ps);
-  }
-  
-  /** A {@link Parser} that recognizes the token identified by {@code tokenName}. */
-  public Parser<Token> token(String tokenName) {
-    return Parsers.token(InternalFunctors.tokenWithSameValue(word(tokenName)));
-  }
 
-  /**
-   * Gets the token value identified by the token text. This text is the operator or the keyword.
-   * 
-   * @param name the token text.
-   * @return the token object. 
-   * @exception IllegalArgumentException if the token object does not exist.
-   */
-  @Private Object word(String name) {
-    Object p = words.map(name);
-    checkArgument(p != null, "token %s unavailable", name);
-    return p;
-  }
-  
-  /** Returns a {@link Lexicon} instance that's a union of {@code this} and {@code that}. */
-  Lexicon union(Lexicon that) {
-    return new Lexicon(
-        InternalFunctors.fallback(words, that.words),
-        Parsers.plus(tokenizer, that.tokenizer));
-  }
+    /**
+     * Maps lexical word name to token value.
+     */
+    final Callable1<String, Object> words;
+
+    /**
+     * The scanner that recognizes any of the lexical word.
+     */
+    final Parser<?> tokenizer;
+
+    Lexicon(Callable1<String, Object> words, Parser<?> tokenizer) {
+        this.words = words;
+        this.tokenizer = tokenizer;
+    }
+
+    /**
+     * Returns the tokenizer that tokenizes all managed terminals.
+     */
+    @SuppressWarnings("unchecked")
+    public Parser<Object> tokenizer() {
+        return (Parser) tokenizer;
+    }
+
+    /**
+     * A {@link Parser} that recognizes a sequence of tokens identified by {@code tokenNames}, as an
+     * atomic step.
+     */
+    public Parser<Object> phrase(String... tokenNames) {
+        Parser<?>[] wordParsers = new Parser<?>[tokenNames.length];
+        for (int i = 0; i < tokenNames.length; i++) {
+            wordParsers[i] = token(tokenNames[i]);
+        }
+        return Parsers.sequence(wordParsers).atomic()
+                .label(Strings.join(" ", tokenNames));
+    }
+
+    /**
+     * A {@link Parser} that recognizes a token identified by any of {@code tokenNames}.
+     */
+    public Parser<Token> token(String... tokenNames) {
+        if (tokenNames.length == 0) return Parsers.never();
+        @SuppressWarnings("unchecked")
+        Parser<Token>[] ps = new Parser[tokenNames.length];
+        for (int i = 0; i < tokenNames.length; i++) {
+            ps[i] = Parsers.token(InternalFunctors.tokenWithSameValue(word(tokenNames[i])));
+        }
+        return Parsers.plus(ps);
+    }
+
+    /**
+     * A {@link Parser} that recognizes the token identified by {@code tokenName}.
+     */
+    public Parser<Token> token(String tokenName) {
+        return Parsers.token(InternalFunctors.tokenWithSameValue(word(tokenName)));
+    }
+
+    /**
+     * Gets the token value identified by the token text. This text is the operator or the keyword.
+     *
+     * @param name the token text.
+     * @return the token object.
+     * @throws IllegalArgumentException if the token object does not exist.
+     */
+    @Private
+    Object word(String name) {
+        Object p = Callers.call(words, name);
+        checkArgument(p != null, "token %s unavailable", name);
+        return p;
+    }
+
+    /**
+     * Returns a {@link Lexicon} instance that's a union of {@code this} and {@code that}.
+     */
+    Lexicon union(Lexicon that) {
+        return new Lexicon(
+                InternalFunctors.fallback(words, that.words),
+                Parsers.plus(tokenizer, that.tokenizer));
+    }
 }

@@ -1,10 +1,11 @@
 package com.googlecode.lazyparsec;
 
 import static org.easymock.EasyMock.expect;
+
+import com.googlecode.totallylazy.Callable1;
 import junit.framework.TestCase;
 
 import com.googlecode.lazyparsec.easymock.BaseMockTests;
-import com.googlecode.lazyparsec.functors.Map;
 import com.googlecode.lazyparsec.functors.Map2;
 import com.googlecode.lazyparsec.functors.Map3;
 import com.googlecode.lazyparsec.functors.Map4;
@@ -67,35 +68,37 @@ public class InternalFunctorsTest extends TestCase {
   }
   
   public static class FallbackTest extends BaseMockTests {
-    @Mock Map<String, Integer> map1;
-    @Mock Map<String, Integer> map2;
+    @Mock
+    Callable1<String, Integer> callable11;
+    @Mock
+    Callable1<String, Integer> callable12;
      
-    public void testFirstMapReturnsNonNull() {
-      expect(map1.map("one")).andReturn(1);
+    public void testFirstMapReturnsNonNull() throws Exception {
+      expect(callable11.call("one")).andReturn(1);
       replay();
-      assertEquals(Integer.valueOf(1), fallback().map("one"));
+      assertEquals(Integer.valueOf(1), fallback().call("one"));
     }
     
-    public void testFirstMapReturnsNull() {
-      expect(map1.map("one")).andReturn(null);
-      expect(map2.map("one")).andReturn(1);
+    public void testFirstMapReturnsNull() throws Exception {
+      expect(callable11.call("one")).andReturn(null);
+      expect(callable12.call("one")).andReturn(1);
       replay();
-      assertEquals(Integer.valueOf(1), fallback().map("one"));
+      assertEquals(Integer.valueOf(1), fallback().call("one"));
     }
   
-    public void testBothMapsReturnNull() {
-      expect(map1.map("null")).andReturn(null);
-      expect(map2.map("null")).andReturn(null);
+    public void testBothMapsReturnNull() throws Exception {
+      expect(callable11.call("null")).andReturn(null);
+      expect(callable12.call("null")).andReturn(null);
       replay();
-      assertNull(fallback().map("null"));
+      assertNull(fallback().call("null"));
     }
     
     public void testToString() {
       assertEquals("fallback", fallback().toString());
     }
     
-    private Map<String, Integer> fallback() {
-      return InternalFunctors.fallback(map1, map2);
+    private Callable1<String, Integer> fallback() {
+      return InternalFunctors.fallback(callable11, callable12);
     }
   }
 }

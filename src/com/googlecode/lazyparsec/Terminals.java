@@ -19,10 +19,10 @@ import com.googlecode.lazyparsec.Tokens.Fragment;
 import com.googlecode.lazyparsec.Tokens.ScientificNotation;
 import com.googlecode.lazyparsec.Tokens.Tag;
 import com.googlecode.lazyparsec.annotations.Private;
-import com.googlecode.lazyparsec.functors.Map;
 import com.googlecode.lazyparsec.util.Checks;
 import com.googlecode.lazyparsec.util.Objects;
 import com.googlecode.lazyparsec.util.Strings;
+import com.googlecode.totallylazy.Callable1;
 
 /**
  * Provides convenient API to build lexer and parsers for terminals.
@@ -271,13 +271,13 @@ public final class Terminals extends Lexicon {
    * @param wordScanner the scanner that returns a word in the language.
    * @param ops the operator names.
    * @param keywords the keyword names.
-   * @param wordMap maps the text to a token value for non-keywords recognized by
+   * @param wordCallable1 maps the text to a token value for non-keywords recognized by
    * {@code wordScanner}.
    * @return the Terminals instance.
    */
   public static Terminals caseInsensitive(
-      Parser<String> wordScanner, String[] ops, String[] keywords, Map<String, ?> wordMap) {
-    return instance(wordScanner, ops, keywords, false, wordMap);
+      Parser<String> wordScanner, String[] ops, String[] keywords, Callable1<String, ?> wordCallable1) {
+    return instance(wordScanner, ops, keywords, false, wordCallable1);
   }
   
   /**
@@ -289,13 +289,13 @@ public final class Terminals extends Lexicon {
    * @param wordScanner the scanner that returns a word in the language.
    * @param ops the operator names.
    * @param keywords the keyword names.
-   * @param wordMap maps the text to a token value for non-keywords recognized by
+   * @param wordCallable1 maps the text to a token value for non-keywords recognized by
    * {@code wordScanner}.
    * @return the Terminals instance.
    */
   public static Terminals caseSensitive(
-      Parser<String> wordScanner, String[] ops, String[] keywords, Map<String, ?> wordMap) {
-    return instance(wordScanner, ops, keywords, true, wordMap);
+      Parser<String> wordScanner, String[] ops, String[] keywords, Callable1<String, ?> wordCallable1) {
+    return instance(wordScanner, ops, keywords, true, wordCallable1);
   }
   
   /**
@@ -336,10 +336,10 @@ public final class Terminals extends Lexicon {
   
   private static Terminals instance(
       Parser<String> wordScanner, String[] ops, String[] keywords,
-      boolean caseSensitive, Map<String, ?> wordMap) {
+      boolean caseSensitive, Callable1<String, ?> wordCallable1) {
     checkDup(ops, keywords, true);
     Lexicon operators = Operators.lexicon(ops);
-    Lexicon keywordsOrWords = Keywords.lexicon(wordScanner, keywords, caseSensitive, wordMap);
+    Lexicon keywordsOrWords = Keywords.lexicon(wordScanner, keywords, caseSensitive, wordCallable1);
     return new Terminals(operators.union(keywordsOrWords));
   }
   

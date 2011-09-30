@@ -2,6 +2,7 @@ package com.googlecode.lazyparsec.functors;
 
 import java.util.HashMap;
 
+import com.googlecode.totallylazy.Callable1;
 import junit.framework.TestCase;
 
 /**
@@ -11,18 +12,18 @@ import junit.framework.TestCase;
  */
 public class MapsTest extends TestCase {
   
-  public void testToInteger() {
-    assertEquals(new Integer(123), Maps.TO_INTEGER.map("123"));
+  public void testToInteger() throws Exception {
+    assertEquals(new Integer(123), Maps.TO_INTEGER.call("123"));
     assertEquals("integer", Maps.TO_INTEGER.toString());
   }
   
-  public void testToLowerCase() {
-    assertEquals("foo", Maps.TO_LOWER_CASE.map("Foo"));
+  public void testToLowerCase() throws Exception {
+    assertEquals("foo", Maps.TO_LOWER_CASE.call("Foo"));
     assertEquals("toLowerCase", Maps.TO_LOWER_CASE.toString());
   }
   
-  public void testToUpperCase() {
-    assertEquals("FOO", Maps.TO_UPPER_CASE.map("Foo"));
+  public void testToUpperCase() throws Exception {
+    assertEquals("FOO", Maps.TO_UPPER_CASE.call("Foo"));
     assertEquals("toUpperCase", Maps.TO_UPPER_CASE.toString());
   }
   
@@ -30,36 +31,36 @@ public class MapsTest extends TestCase {
     FOO, BAR
   }
   
-  public void testToEnum() {
-    assertEquals(MyEnum.FOO, Maps.toEnum(MyEnum.class).map("FOO"));
+  public void testToEnum() throws Exception {
+    assertEquals(MyEnum.FOO, Maps.toEnum(MyEnum.class).call("FOO"));
     assertEquals("-> " + MyEnum.class.getName(), Maps.toEnum(MyEnum.class).toString());
   }
   
-  public void testIdentity() {
-    String string = new String("test");
-    assertSame(string, Maps.identity().map(string));
+  public void testIdentity() throws Exception {
+    String string = "test";
+    assertSame(string, Maps.identity().call(string));
     assertEquals("identity", Maps.identity().toString());
   }
   
-  public void testConstant() {
-    String string = new String("test");
-    assertSame(string, Maps.constant(string).map(1));
+  public void testConstant() throws Exception {
+    String string = "test";
+    assertSame(string, Maps.constant(string).call(1));
     assertEquals("test", Maps.constant(string).toString());
   }
   
-  public void testJmap() {
-    HashMap<String, Integer> hashmap = new HashMap<String, Integer>();
-    hashmap.put("one", 1);
-    Map<String, Integer> map = Maps.map(hashmap);
-    assertEquals(hashmap.toString(), map.toString());
-    assertEquals(1, map.map("one").intValue());
-    assertNull(map.map("two"));
+  public void testJmap() throws Exception {
+    HashMap<String, Integer> hashMap = new HashMap<String, Integer>();
+    hashMap.put("one", 1);
+    Callable1<String, Integer> callable1 = Maps.map(hashMap);
+    assertEquals(hashMap.toString(), callable1.toString());
+    assertEquals(1, callable1.call("one").intValue());
+    assertNull(callable1.call("two"));
   }
   
-  public void testMapToString() {
-    assertEquals("1", Maps.mapToString().map(1));
+  public void testMapToString() throws Exception {
+    assertEquals("1", Maps.mapToString().call(1));
     assertEquals("toString", Maps.mapToString().toString());
-    assertEquals(String.valueOf((Object) null), Maps.mapToString().map(null));
+    assertEquals(String.valueOf((Object) null), Maps.mapToString().call(null));
   }
   
   public void testToPair() {

@@ -15,11 +15,11 @@
  *****************************************************************************/
 package com.googlecode.lazyparsec;
 
-import com.googlecode.lazyparsec.functors.Map;
 import com.googlecode.lazyparsec.functors.Map2;
 import com.googlecode.lazyparsec.functors.Map3;
 import com.googlecode.lazyparsec.functors.Map4;
 import com.googlecode.lazyparsec.functors.Map5;
+import com.googlecode.totallylazy.Callable1;
 
 /**
  * Functors used only internally by this package. 
@@ -129,15 +129,15 @@ final class InternalFunctors {
   }
 
   /**
-   * Returns a {@link Map} that delegates to {@code map} and falls back to {@code defaultMap} for
+   * Returns a {@link com.googlecode.totallylazy.Callable1} that delegates to {@code map} and falls back to {@code defaultMap} for
    * null return values.
    */
-  public static <F, T> Map<F, T> fallback(
-      final Map<F, T> map, final Map<? super F, ? extends T> defaultMap) {
-    return new Map<F, T>() {
-      public T map(F v) {
-        T result = map.map(v);
-        return (result == null) ? defaultMap.map(v) : result;
+  public static <F, T> Callable1<F, T> fallback(
+      final Callable1<F, T> callable1, final Callable1<? super F, ? extends T> defaultCallable1) {
+    return new Callable1<F, T>() {
+      public T call(F v) throws Exception {
+        T result = callable1.call(v);
+        return (result == null) ? defaultCallable1.call(v) : result;
       }
       @Override public String toString() {
         return "fallback";
