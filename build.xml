@@ -16,8 +16,6 @@
     <property name="test.jar.path" value="${artifacts}/${release.name}.test.jar"/>
     <property name="build.dependencies.dir" value="lib/build"/>
     <property name="runtime.dependencies.dir" value="lib/runtime"/>
-    <property name="optional.dependencies.dir" value="lib/optional"/>
-    <property name="manual.dependencies.dir" value="lib/manual"/>
 
     <import file="${build}/macros.xml"/>
     <import file="${build}/shavenmaven.xml"/>
@@ -25,8 +23,6 @@
     <path id="all.dependancies">
         <fileset dir="${build.dependencies.dir}" includes="**/*.jar"/>
         <fileset dir="${runtime.dependencies.dir}" includes="*.jar"/>
-        <fileset dir="${optional.dependencies.dir}" includes="*.jar"/>
-        <fileset dir="${manual.dependencies.dir}" includes="*.jar"/>
     </path>
 
     <path id="all.jars">
@@ -42,8 +38,6 @@
                     directory="${build.dependencies.dir}"/>
             <update dependencies="build/runtime.dependencies"
                     directory="${runtime.dependencies.dir}"/>
-            <update dependencies="build/optional.dependencies"
-                    directory="${optional.dependencies.dir}"/>
         </parallel>
     </target>
 
