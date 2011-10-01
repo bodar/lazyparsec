@@ -16,6 +16,10 @@
 package com.googlecode.lazyparsec.functors;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Quadruple;
+import com.googlecode.totallylazy.Quintuple;
+import com.googlecode.totallylazy.Triple;
 
 import java.util.Locale;
 
@@ -124,7 +128,7 @@ public final class Maps {
   @SuppressWarnings("unchecked")
   private static final Map2 ID2 = new Map2() {
     public Pair map(Object a, Object b) {
-      return Tuples.pair(a, b);
+        return Pair.pair(a, b);
     }
     @Override public String toString() {
       return "pair";
@@ -133,7 +137,7 @@ public final class Maps {
   
   @SuppressWarnings("unchecked")
   private static final Map3 ID3 = new Map3() {
-    public Tuple3 map(Object a, Object b, Object c) {
+    public Triple map(Object a, Object b, Object c) {
       return Tuples.tuple(a, b, c);
     }
     @Override public String toString() {
@@ -143,7 +147,7 @@ public final class Maps {
   
   @SuppressWarnings("unchecked")
   private static final Map4 ID4 = new Map4() {
-    public Tuple4 map(Object a, Object b, Object c, Object d) {
+    public Quadruple map(Object a, Object b, Object c, Object d) {
       return Tuples.tuple(a, b, c, d);
     }
     @Override public String toString() {
@@ -153,7 +157,7 @@ public final class Maps {
       
   @SuppressWarnings("unchecked")
   private static final Map5 ID5 = new Map5() {
-    public Tuple5 map(Object a, Object b, Object c, Object d, Object e) {
+    public Quintuple map(Object a, Object b, Object c, Object d, Object e) {
       return Tuples.tuple(a, b, c, d, e);
     }
     @Override public String toString() {
@@ -167,21 +171,21 @@ public final class Maps {
     return ID2;
   }
   
-  /** A {@link Map3} object that maps 3 values to a {@link Tuple3} object. */
+  /** A {@link Map3} object that maps 3 values to a {@link Triple} object. */
   @SuppressWarnings("unchecked")
-  public static <A, B, C> Map3<A, B, C, Tuple3<A, B, C>> toTuple3() {
+  public static <A, B, C> Map3<A, B, C, Triple<A, B, C>> toTriple() {
     return ID3;
   }
   
-  /** A {@link Map4} object that maps 4 values to a {@link Tuple4} object. */
+  /** A {@link Map4} object that maps 4 values to a {@link Quadruple} object. */
   @SuppressWarnings("unchecked")
-  public static <A, B, C, D> Map4<A, B, C, D, Tuple4<A, B, C, D>> toTuple4() {
+  public static <A, B, C, D> Map4<A, B, C, D, Quadruple<A, B, C, D>> toQuadruple() {
     return ID4;
   }
   
-  /** A {@link Map5} object that maps 5 values to a {@link Tuple5} object. */
+  /** A {@link Map5} object that maps 5 values to a {@link Quintuple} object. */
   @SuppressWarnings("unchecked")
-  public static <A, B, C, D, E> Map5<A, B, C, D, E, Tuple5<A, B, C, D, E>> toTuple5() {
+  public static <A, B, C, D, E> Map5<A, B, C, D, E, Quintuple<A, B, C, D, E>> toQuintuple() {
     return ID5;
   }
   

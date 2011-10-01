@@ -16,6 +16,7 @@ import com.googlecode.lazyparsec.functors.Map3;
 import com.googlecode.lazyparsec.functors.Map4;
 import com.googlecode.lazyparsec.functors.Map5;
 import com.googlecode.lazyparsec.functors.Tuples;
+import com.googlecode.totallylazy.Pair;
 
 /**
  * Unit test for {@link Parsers}.
@@ -135,7 +136,7 @@ public class ParsersTest extends BaseMockTests {
   public void testPair() {
     Parser<?> parser = Parsers.pair(isChar('a'), isChar('b'));
     assertEquals("pair", parser.toString());
-    assertParser(parser, "ab", Tuples.pair('a', 'b'));
+      assertParser(parser, "ab", Pair.pair('a', 'b'));
     assertFailure(parser, "xb", 1, 1);
     assertFailure(parser, "ax", 1, 2);
   }
@@ -143,7 +144,7 @@ public class ParsersTest extends BaseMockTests {
   public void testTuple_2Parsers() {
     Parser<?> parser = Parsers.tuple(isChar('a'), isChar('b'));
     assertEquals("pair", parser.toString());
-    assertParser(parser, "ab", Tuples.pair('a', 'b'));
+      assertParser(parser, "ab", Pair.pair('a', 'b'));
     assertFailure(parser, "xb", 1, 1);
     assertFailure(parser, "ax", 1, 2);
   }

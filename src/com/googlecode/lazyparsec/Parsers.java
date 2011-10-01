@@ -22,13 +22,13 @@ import com.googlecode.lazyparsec.functors.Map3;
 import com.googlecode.lazyparsec.functors.Map4;
 import com.googlecode.lazyparsec.functors.Map5;
 import com.googlecode.lazyparsec.functors.Maps;
-import com.googlecode.lazyparsec.functors.Pair;
-import com.googlecode.lazyparsec.functors.Tuple3;
-import com.googlecode.lazyparsec.functors.Tuple4;
-import com.googlecode.lazyparsec.functors.Tuple5;
 import com.googlecode.lazyparsec.util.Lists;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callers;
+import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Quadruple;
+import com.googlecode.totallylazy.Quintuple;
+import com.googlecode.totallylazy.Triple;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -228,31 +228,31 @@ public final class Parsers {
 
     /**
      * A {@link Parser} that sequentially runs 3 parser objects and collects the results in a
-     * {@link Tuple3} object.
+     * {@link Triple} object.
      */
-    public static <A, B, C> Parser<Tuple3<A, B, C>> tuple(
+    public static <A, B, C> Parser<Triple<A, B, C>> tuple(
             Parser<? extends A> p1, Parser<? extends B> p2, Parser<? extends C> p3) {
-        return sequence(p1, p2, p3, Maps.<A, B, C>toTuple3());
+        return sequence(p1, p2, p3, Maps.<A, B, C>toTriple());
     }
 
     /**
      * A {@link Parser} that sequentially runs 4 parser objects and collects the results in a
-     * {@link Tuple4} object.
+     * {@link Quadruple} object.
      */
-    public static <A, B, C, D> Parser<Tuple4<A, B, C, D>> tuple(
+    public static <A, B, C, D> Parser<Quadruple<A, B, C, D>> tuple(
             Parser<? extends A> p1, Parser<? extends B> p2,
             Parser<? extends C> p3, Parser<? extends D> p4) {
-        return sequence(p1, p2, p3, p4, Maps.<A, B, C, D>toTuple4());
+        return sequence(p1, p2, p3, p4, Maps.<A, B, C, D>toQuadruple());
     }
 
     /**
      * A {@link Parser} that sequentially runs 5 parser objects and collects the results in a
-     * {@link Tuple5} object.
+     * {@link Quintuple} object.
      */
-    public static <A, B, C, D, E> Parser<Tuple5<A, B, C, D, E>> tuple(
+    public static <A, B, C, D, E> Parser<Quintuple<A, B, C, D, E>> tuple(
             Parser<? extends A> p1, Parser<? extends B> p2, Parser<? extends C> p3,
             Parser<? extends D> p4, Parser<? extends E> p5) {
-        return sequence(p1, p2, p3, p4, p5, Maps.<A, B, C, D, E>toTuple5());
+        return sequence(p1, p2, p3, p4, p5, Maps.<A, B, C, D, E>toQuintuple());
     }
 
     /**
