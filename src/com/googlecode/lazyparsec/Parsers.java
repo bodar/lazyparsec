@@ -17,13 +17,13 @@ package com.googlecode.lazyparsec;
 
 import com.googlecode.lazyparsec.annotations.Private;
 import com.googlecode.lazyparsec.error.ParserException;
-import com.googlecode.lazyparsec.functors.Map3;
 import com.googlecode.lazyparsec.functors.Map4;
 import com.googlecode.lazyparsec.functors.Map5;
 import com.googlecode.lazyparsec.functors.Maps;
 import com.googlecode.lazyparsec.util.Lists;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Callable3;
 import com.googlecode.totallylazy.Callers;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Quadruple;
@@ -294,8 +294,8 @@ public final class Parsers {
      */
     public static <A, B, C, T> Parser<T> sequence(
             Parser<A> p1, Parser<B> p2, Parser<C> p3,
-            Map3<? super A, ? super B, ? super C, ? extends T> map) {
-        return new Sequence3Parser<A, B, C, T>(p1, p2, p3, map);
+            Callable3<? super A, ? super B, ? super C, ? extends T> callable) {
+        return new Sequence3Parser<A, B, C, T>(p1, p2, p3, callable);
     }
 
     /**

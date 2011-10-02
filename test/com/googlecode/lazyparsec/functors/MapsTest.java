@@ -69,8 +69,8 @@ public class MapsTest extends TestCase {
     assertEquals("pair", Maps.toPair().toString());
   }
   
-  public void testToTuple3() {
-    assertEquals(Tuples.tuple("12", 1, 2), Maps.toTriple().map("12", 1, 2));
+  public void testToTuple3() throws Exception {
+    assertEquals(Tuples.tuple("12", 1, 2), Maps.toTriple().call("12", 1, 2));
     assertEquals("tuple", Maps.toTriple().toString());
   }
   

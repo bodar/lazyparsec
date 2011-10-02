@@ -15,23 +15,23 @@
  *****************************************************************************/
 package com.googlecode.lazyparsec;
 
-import com.googlecode.lazyparsec.functors.Map3;
+import com.googlecode.totallylazy.Callable3;
 
 final class Sequence3Parser<A, B, C, T> extends Parser<T> {
   private final Parser<A> p1;
   private final Parser<B> p2;
   private final Parser<C> p3;
-  private final Map3<? super A, ? super B, ? super C, ? extends T> m3;
+  private final Callable3<? super A, ? super B, ? super C, ? extends T> m3;
 
   Sequence3Parser(Parser<A> p1, Parser<B> p2, Parser<C> p3,
-      Map3<? super A, ? super B, ? super C, ? extends T> m3) {
+      Callable3<? super A, ? super B, ? super C, ? extends T> m3) {
     this.p1 = p1;
     this.p2 = p2;
     this.p3 = p3;
     this.m3 = m3;
   }
 
-  @Override boolean apply(ParseContext ctxt) {
+  @Override boolean apply(ParseContext ctxt) throws Exception {
     boolean r1 = p1.run(ctxt);
     if (!r1) return false;
     A o1 = p1.getReturn(ctxt);
@@ -41,7 +41,7 @@ final class Sequence3Parser<A, B, C, T> extends Parser<T> {
     boolean r3 = p3.run(ctxt);
     if (!r3) return false;
     C o3 = p3.getReturn(ctxt);
-    ctxt.result = m3.map(o1, o2, o3);
+    ctxt.result = m3.call(o1, o2, o3);
     return true;
   }
   

@@ -15,11 +15,11 @@
  *****************************************************************************/
 package com.googlecode.lazyparsec;
 
-import com.googlecode.lazyparsec.functors.Map3;
 import com.googlecode.lazyparsec.functors.Map4;
 import com.googlecode.lazyparsec.functors.Map5;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
+import com.googlecode.totallylazy.Callable3;
 
 /**
  * Functors used only internally by this package. 
@@ -74,8 +74,8 @@ final class InternalFunctors {
   };
   
   @SuppressWarnings("unchecked")
-  private static final Map3 LAST_OF_THREE = new Map3() {
-    public Object map(Object a, Object b, Object last) {
+  private static final Callable3 LAST_OF_THREE = new Callable3() {
+    public Object call(Object a, Object b, Object last) {
       return last;
     }
     @Override public String toString() {
@@ -114,7 +114,7 @@ final class InternalFunctors {
   }
   
   @SuppressWarnings("unchecked")
-  static<A, B, T> Map3<A, B, T, T> lastOfThree() {
+  static<A, B, T> Callable3<A, B, T, T> lastOfThree() {
     return LAST_OF_THREE;
   }
   
