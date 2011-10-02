@@ -64,8 +64,8 @@ public class MapsTest extends TestCase {
     assertEquals(String.valueOf((Object) null), Maps.mapToString().call(null));
   }
   
-  public void testToPair() {
-      assertEquals(Pair.pair("one", 1), Maps.toPair().map("one", 1));
+  public void testToPair() throws Exception {
+      assertEquals(Pair.pair("one", 1), Maps.toPair().call("one", 1));
     assertEquals("pair", Maps.toPair().toString());
   }
   

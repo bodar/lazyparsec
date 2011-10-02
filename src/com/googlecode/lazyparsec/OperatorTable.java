@@ -19,9 +19,9 @@ import java.util.Collections;
 import java.util.List;
 
 import com.googlecode.lazyparsec.annotations.Private;
-import com.googlecode.lazyparsec.functors.Map2;
 import com.googlecode.lazyparsec.util.Lists;
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callable2;
 
 /**
  * Builds {@link Parser} to parse expressions with operator-precedence grammar. The operators
@@ -94,7 +94,7 @@ public final class OperatorTable<T> {
    * @return this.
    */
   public OperatorTable<T> infixl(
-      Parser<? extends Map2<? super T, ? super T, ? extends T>> parser, int precedence) {
+      Parser<? extends Callable2<? super T, ? super T, ? extends T>> parser, int precedence) {
     ops.add(new Operator(parser, precedence, Associativity.LASSOC));
     return this;
   }
@@ -107,7 +107,7 @@ public final class OperatorTable<T> {
    * @return this.
    */
   public OperatorTable<T> infixr(
-      Parser<? extends Map2<? super T, ? super T, ? extends T>> parser, int precedence) {
+      Parser<? extends Callable2<? super T, ? super T, ? extends T>> parser, int precedence) {
     ops.add(new Operator(parser, precedence, Associativity.RASSOC));
     return this;
   }
@@ -119,7 +119,7 @@ public final class OperatorTable<T> {
    * @return this.
    */
   public OperatorTable<T> infixn(
-      Parser<? extends Map2<? super T, ? super T, ? extends T>> parser, int precedence) {
+      Parser<? extends Callable2<? super T, ? super T, ? extends T>> parser, int precedence) {
     ops.add(new Operator(parser, precedence, Associativity.NASSOC));
     return this;
   }

@@ -27,7 +27,7 @@ final class ReturnSourceParser extends Parser<String> {
     this.parser = parser;
   }
 
-  @Override boolean apply(ParseContext ctxt) {
+  @Override boolean apply(ParseContext ctxt) throws Exception {
     int begin = ctxt.getIndex();
     if (!parser.apply(ctxt)) {
       return false;

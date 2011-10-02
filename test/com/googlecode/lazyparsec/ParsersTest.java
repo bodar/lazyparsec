@@ -11,11 +11,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.googlecode.lazyparsec.easymock.BaseMockTests;
-import com.googlecode.lazyparsec.functors.Map2;
 import com.googlecode.lazyparsec.functors.Map3;
 import com.googlecode.lazyparsec.functors.Map4;
 import com.googlecode.lazyparsec.functors.Map5;
 import com.googlecode.lazyparsec.functors.Tuples;
+import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Pair;
 
 /**
@@ -460,18 +460,19 @@ public class ParsersTest extends BaseMockTests {
     assertEquals("foo", Parsers.unexpected("foo").toString());
   }
   
-  @Mock Map2<Character, Character, Integer> map2;
-  public void testSequence_withMap2() {
-    expect(map2.map('a', 'b')).andReturn(1);
+  @Mock
+  Callable2<Character, Character, Integer> callable2;
+  public void testSequence_withMap2() throws Exception {
+    expect(callable2.call('a', 'b')).andReturn(1);
     replay();
-    Parser<Integer> parser = Parsers.sequence(isChar('a'), isChar('b'), map2);
-    assertEquals(map2.toString(), parser.toString());
+    Parser<Integer> parser = Parsers.sequence(isChar('a'), isChar('b'), callable2);
+    assertEquals(callable2.toString(), parser.toString());
     assertParser(parser, "ab", 1);
   }
   
   public void testSequence_withMap2_fails() {
     replay();
-    Parser<Integer> parser = Parsers.sequence(isChar('a'), isChar('b'), map2);
+    Parser<Integer> parser = Parsers.sequence(isChar('a'), isChar('b'), callable2);
     assertFailure(parser, "xb", 1, 1);
     assertFailure(parser, "ax", 1, 2);
   }

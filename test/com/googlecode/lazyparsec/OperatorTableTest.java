@@ -4,9 +4,9 @@ import static com.googlecode.lazyparsec.OperatorTable.Associativity.*;
 
 import com.googlecode.lazyparsec.OperatorTable.Associativity;
 import com.googlecode.lazyparsec.OperatorTable.Operator;
-import com.googlecode.lazyparsec.functors.Map2;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callable2;
 import junit.framework.TestCase;
 
 /**
@@ -17,7 +17,7 @@ import junit.framework.TestCase;
 public class OperatorTableTest extends TestCase {
   private static final Parser<?> OP = Parsers.never();
   private static final Parser<Callable1<Integer, Integer>> UNARY_OP = Parsers.never();
-  private static final Parser<Map2<Integer, Integer, Integer>> BINARY_OP = Parsers.never();
+  private static final Parser<Callable2<Integer, Integer, Integer>> BINARY_OP = Parsers.never();
   
   public void testAssociativityOrder() {
     assertTotalOrder(PREFIX, POSTFIX, LASSOC, NASSOC, RASSOC);

@@ -72,7 +72,7 @@ public class MapperTest extends TestCase {
         assertEquals(10, unary.call("10"));
     }
 
-    public void testBinary() {
+    public void testBinary() throws Exception {
         Parser<Binary<Object>> parser = new Mapper<Object>() {
             @SuppressWarnings("unused")
             String map(String name, int i) {
@@ -81,7 +81,7 @@ public class MapperTest extends TestCase {
         }.binary();
         assertEquals(String.class.getName(), parser.toString());
         Binary<Object> binary = parser.parse("");
-        assertEquals("a1", binary.map("a", 1));
+        assertEquals("a1", binary.call("a", 1));
     }
 
     public void testPrefix() throws Exception {
@@ -124,24 +124,24 @@ public class MapperTest extends TestCase {
         assertEquals("a12", unary.call("a"));
     }
 
-    public void testInfix() {
+    public void testInfix() throws Exception {
         Binary<Object> unary = new Mapper<Object>() {
             @SuppressWarnings("unused")
             String map(String name, int i, int j) {
                 return name + i + j;
             }
         }.infix(constant(1)).parse("");
-        assertEquals("a12", unary.map("a", 2));
+        assertEquals("a12", unary.call("a", 2));
     }
 
-    public void testInfix_multiOp() {
+    public void testInfix_multiOp() throws Exception {
         Binary<Object> unary = new Mapper<Object>() {
             @SuppressWarnings("unused")
             String map(String name, int i, int j, int k) {
                 return name + i + j + k;
             }
         }.infix(constant(1), constant(2)).parse("");
-        assertEquals("a123", unary.map("a", 3));
+        assertEquals("a123", unary.call("a", 3));
     }
 
     public void testMap_errorPropagated() {
@@ -294,13 +294,13 @@ public class MapperTest extends TestCase {
                         _(constant("bar")), constant(true), constant('c')).parse("").call(1).toString());
     }
 
-    public void testParametersSkippedForInfix() {
+    public void testParametersSkippedForInfix() throws Exception {
         assertEquals("foo12truec",
                 Mapper.<Object>curry(Thing.class, "foo", 2L).infix(
-                        constant(true), _(constant("bar"))).parse("").map(1, 'c').toString());
+                        constant(true), _(constant("bar"))).parse("").call(1, 'c').toString());
         assertEquals("thing12truec",
                 thingMapper().infix(
-                        constant(true), _(constant("bar"))).parse("").map(1, 'c').toString());
+                        constant(true), _(constant("bar"))).parse("").call(1, 'c').toString());
     }
 
     public void testInvalidSkipForPrefix() {

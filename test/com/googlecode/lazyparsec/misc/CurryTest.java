@@ -70,9 +70,9 @@ public class CurryTest extends TestCase {
     assertEquals(1, foo.size);
   }
   
-  public void testBinary() {
+  public void testBinary() throws Exception {
     Binary<Object> binary = Curry.<Object>of(Foo.class).binary().parse("");
-    Foo foo = (Foo) binary.map("foo", 2);
+    Foo foo = (Foo) binary.call("foo", 2);
     assertEquals("foo", foo.name);
     assertEquals(2, foo.size);
   }
@@ -201,33 +201,33 @@ public class CurryTest extends TestCase {
     assertSame(FAKE_EXPR, postfix.expr);
   }
   
-  public void testInfix() {
+  public void testInfix() throws Exception {
     Expr left = FAKE_EXPR;
     Expr right = new Expr() {};
     Expr result = Curry.<Expr>of(InfixExpr.class).infix(constant("x"))
-        .parse("").map(left, right);
+        .parse("").call(left, right);
     InfixExpr infix = (InfixExpr) result;
     assertEquals("x", infix.op);
     assertSame(left, infix.left);
     assertSame(right, infix.right);
   }
   
-  public void testInfix_onlyOneUnskippedOperator() {
+  public void testInfix_onlyOneUnskippedOperator() throws Exception {
     Expr left = FAKE_EXPR;
     Expr right = new Expr() {};
     Expr result = Curry.<Expr>of(InfixExpr.class).infix(_(string("foo")), constant("x"))
-        .parse("foo").map(left, right);
+        .parse("foo").call(left, right);
     InfixExpr infix = (InfixExpr) result;
     assertEquals("x", infix.op);
     assertSame(left, infix.left);
     assertSame(right, infix.right);
   }
   
-  public void testInfix_multiOp() {
+  public void testInfix_multiOp() throws Exception {
     Expr left = FAKE_EXPR;
     Expr right = new Expr() {};
     Expr result = Curry.<Expr>of(InfixExpr2.class).infix(constant("x"), constant(3))
-        .parse("").map(left, right);
+        .parse("").call(left, right);
     InfixExpr2 infix = (InfixExpr2) result;
     assertEquals("x", infix.op);
     assertEquals(3, infix.size);
@@ -381,9 +381,9 @@ public class CurryTest extends TestCase {
     }
   }
   
-  public void testWrongArgumentType() {
+  public void testWrongArgumentType() throws Exception {
     try {
-      Curry.<Object>of(Foo.class).asBinary().map("foo", 2L);
+      Curry.<Object>of(Foo.class).asBinary().call("foo", 2L);
       fail();
     } catch (IllegalArgumentException e) {
       assertTrue(e.getMessage(), e.getMessage().contains("int"));

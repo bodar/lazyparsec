@@ -25,10 +25,10 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import com.googlecode.lazyparsec.annotations.Private;
 import com.googlecode.lazyparsec.error.ParserException;
-import com.googlecode.lazyparsec.functors.Map2;
 import com.googlecode.lazyparsec.functors.Maps;
 import com.googlecode.lazyparsec.util.Checks;
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callable2;
 
 /**
  * Defines grammar and encapsulates parsing logic.
@@ -415,7 +415,7 @@ public abstract class Parser<T> {
    */
   @SuppressWarnings("unchecked")
   public final Parser<T> prefix(Parser<? extends Callable1<? super T, ? extends T>> op) {
-    return Parsers.sequence(op.many(), this, Parsers.PREFIX_OPERATOR_MAP2);
+    return Parsers.sequence(op.many(), this, Parsers.PREFIX_OPERATOR_CALLABLE_2);
   }
 
   /**
@@ -427,32 +427,32 @@ public abstract class Parser<T> {
    */
   @SuppressWarnings("unchecked")
   public final Parser<T> postfix(Parser<? extends Callable1<? super T, ? extends T>> op) {
-    return Parsers.sequence(this, op.many(), Parsers.POSTFIX_OPERATOR_MAP2);
+    return Parsers.sequence(this, op.many(), Parsers.POSTFIX_OPERATOR_CALLABLE_2);
   }
 
   /**
    * A {@link Parser} that parses non-associative infix operator. Runs {@code this} for the left
    * operand, and then runs {@code op} and {@code this} for the operator and the right operand
-   * optionally. The {@link Map2} objects returned from {@code op} are applied to the return values
+   * optionally. The {@link com.googlecode.totallylazy.Callable2} objects returned from {@code op} are applied to the return values
    * of the two operands, if any.
    * 
    * <p> {@code p.infixn(op)} is equivalent to {@code p (op p)?} in EBNF.
    */
-  public final Parser<T> infixn(Parser<? extends Map2<? super T, ? super T, ? extends T>> op) {
+  public final Parser<T> infixn(Parser<? extends Callable2<? super T, ? super T, ? extends T>> op) {
     return Parsers.infixn(this, op);
   }
 
  /**
   * A {@link Parser} for left-associative infix operator. Runs {@code this} for the left operand,
   * and then runs {@code op} and {@code this} for the operator and the right operand for 0 or more
-  * times greedily. The {@link Map2} objects returned from {@code op} are applied from left to right
+  * times greedily. The {@link com.googlecode.totallylazy.Callable2} objects returned from {@code op} are applied from left to right
   * to the return values of {@code this}, if any.
   * For example: {@code a + b + c + d} is evaluated as {@code (((a + b)+c)+d)}.
   * 
   * <p> {@code p.infixl(op)} is equivalent to {@code p (op p)*} in EBNF.
   */
   public final Parser<T> infixl(
-      Parser<? extends Map2<? super T, ? super T, ? extends T>> op) {
+      Parser<? extends Callable2<? super T, ? super T, ? extends T>> op) {
     // somehow generics doesn't work if we inline the code here.
     return Parsers.infixl(this, op);
   }
@@ -460,13 +460,13 @@ public abstract class Parser<T> {
   /**
    * A {@link Parser} for right-associative infix operator. Runs {@code this} for the left operand,
    * and then runs {@code op} and {@code this} for the operator and the right operand for 0 or more
-   * times greedily. The {@link Map2} objects returned from {@code op} are applied from right to
+   * times greedily. The {@link com.googlecode.totallylazy.Callable2} objects returned from {@code op} are applied from right to
    * left to the return values of {@code this}, if any.
    * For example: {@code a + b + c + d} is evaluated as {@code a + (b + (c + d))}.
    * 
    * <p> {@code p.infixr(op)} is equivalent to {@code p (op p)*} in EBNF.
    */
-  public final Parser<T> infixr(Parser<? extends Map2<? super T, ? super T, ? extends T>> op) {
+  public final Parser<T> infixr(Parser<? extends Callable2<? super T, ? super T, ? extends T>> op) {
     return Parsers.infixr(this, op);
   }
   
@@ -596,10 +596,10 @@ public abstract class Parser<T> {
     try {
       return apply(ctxt);
     }
-    catch(RuntimeException e) {
+    catch(Exception e) {
       throw asParserException(e, ctxt);
     }
   }
   
-  abstract boolean apply(ParseContext ctxt);
+  abstract boolean apply(ParseContext ctxt) throws Exception;
 }

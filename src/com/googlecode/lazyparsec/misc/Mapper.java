@@ -151,7 +151,7 @@ public abstract class Mapper<T> {
   /**
    * A {@link Parser} that returns a {@link Binary} instance that invokes the underlying
    * {@code map} method or curried constructor with the two parameters of the
-   * {@link Binary#map(Object, Object)} method.
+   * {@link Binary#call(Object, Object)} method.
    */
   public final Parser<Binary<T>> binary() {
     return Parsers.constant(asBinary());
@@ -354,7 +354,7 @@ public abstract class Mapper<T> {
     return operator.map(new Callable1<Object, Binary<T>>() {
       public Binary<T> call(final Object op) {
         return new Binary<T>() {
-          public T map(T left, T right) {
+          public T call(T left, T right) {
             return apply(left, op, right);
           }
         };
@@ -400,7 +400,7 @@ public abstract class Mapper<T> {
     return Parsers.array(operator).map(new Callable1<Object[], Binary<T>>() {
       public Binary<T> call(final Object[] array) {
         return new Binary<T>() {
-          public T map(T left, T right) {
+          public T call(T left, T right) {
             Object[] args = new Object[array.length + 2];
             args[0] = left;
             System.arraycopy(array, 0, args, 1, array.length);
@@ -469,12 +469,12 @@ public abstract class Mapper<T> {
 
   /**
    * Returns a {@link Binary} instance that invokes the underlying {@code map} method or
-   * curried constructor with the two parameters of the {@link Binary#map(Object, Object)} method. 
+   * curried constructor with the two parameters of the {@link Binary#call(Object, Object)} method.
    */
   final Binary<T> asBinary() {
     checkFutureParameters(Binary.class, 2);
     return new Binary<T>() {
-      public T map(T left, T right) {
+      public T call(T left, T right) {
         return apply(left, right);
       }
       @Override public String toString() {

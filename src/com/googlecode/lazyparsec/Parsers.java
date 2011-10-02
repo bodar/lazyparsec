@@ -17,13 +17,13 @@ package com.googlecode.lazyparsec;
 
 import com.googlecode.lazyparsec.annotations.Private;
 import com.googlecode.lazyparsec.error.ParserException;
-import com.googlecode.lazyparsec.functors.Map2;
 import com.googlecode.lazyparsec.functors.Map3;
 import com.googlecode.lazyparsec.functors.Map4;
 import com.googlecode.lazyparsec.functors.Map5;
 import com.googlecode.lazyparsec.functors.Maps;
 import com.googlecode.lazyparsec.util.Lists;
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Callers;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Quadruple;
@@ -284,8 +284,8 @@ public final class Parsers {
      * and transforms the return values using {@code map}.
      */
     public static <A, B, T> Parser<T> sequence(
-            Parser<A> p1, Parser<B> p2, Map2<? super A, ? super B, ? extends T> map) {
-        return new Sequence2Parser<A, B, T>(p1, p2, map);
+            Parser<A> p1, Parser<B> p2, Callable2<? super A, ? super B, ? extends T> callable) {
+        return new Sequence2Parser<A, B, T>(p1, p2, callable);
     }
 
     /**
@@ -589,19 +589,19 @@ public final class Parsers {
 
     @SuppressWarnings("unchecked")
     static <From> boolean runNext(ParseContext state, Callable1<? super From, ? extends Parser<?>> next) {
-        Parser<?> parser = call(next, (From) state.result);
+        Parser<?> parser = Callers.call(next, (From) state.result);
         return parser.run(state);
     }
 
     @SuppressWarnings("unchecked")
-    static final Map2 PREFIX_OPERATOR_MAP2 = prefixOperatorMap2("prefix");
+    static final Callable2 PREFIX_OPERATOR_CALLABLE_2 = prefixOperatorMap2("prefix");
 
     @SuppressWarnings("unchecked")
-    static final Map2 POSTFIX_OPERATOR_MAP2 = postfixOperatorMap2("postfix");
+    static final Callable2 POSTFIX_OPERATOR_CALLABLE_2 = postfixOperatorMap2("postfix");
 
     /**
      * Non-associative infix operator. Runs {@code p} and then runs {@code op}
-     * and {@code p} optionally. The {@link Map2} objects returned from {@code op}
+     * and {@code p} optionally. The {@link com.googlecode.totallylazy.Callable2} objects returned from {@code op}
      * is applied to the return values of the two {@code this} pattern, if any.
      * <p/>
      * {@code infixn(p, op)} is equivalent to {@code p (op p)?} in EBNF.
@@ -610,13 +610,13 @@ public final class Parsers {
      * @return the new Parser object
      */
     static <T> Parser<T> infixn(
-            final Parser<T> p, final Parser<? extends Map2<? super T, ? super T, ? extends T>> op) {
+            final Parser<T> p, final Parser<? extends Callable2<? super T, ? super T, ? extends T>> op) {
         return p.next(new Callable1<T, Parser<T>>() {
             public Parser<T> call(final T a) {
                 final Parser<T> shift = sequence(op, p,
-                        new Map2<Map2<? super T, ? super T, ? extends T>, T, T>() {
-                            public T map(Map2<? super T, ? super T, ? extends T> m2, T b) {
-                                return m2.map(a, b);
+                        new Callable2<Callable2<? super T, ? super T, ? extends T>, T, T>() {
+                            public T call(Callable2<? super T, ? super T, ? extends T> m2, T b) throws Exception {
+                                return m2.call(a, b);
                             }
 
                             @Override
@@ -647,9 +647,9 @@ public final class Parsers {
      * @return the new Parser object
      */
     static <T> Parser<T> infixl(
-            Parser<T> p, Parser<? extends Map2<? super T, ? super T, ? extends T>> op) {
+            Parser<T> p, Parser<? extends Callable2<? super T, ? super T, ? extends T>> op) {
         @SuppressWarnings("unchecked")
-        Parser<Callable1<T, T>> opAndRhs = sequence(op, p, MAP_OPERATOR_AND_RHS_TO_CLOSURE);
+        Parser<Callable1<T, T>> opAndRhs = sequence(op, p, CALLABLE_OPERATOR_AND_RHS_TO_CLOSURE);
         final Parser<List<Callable1<T, T>>> afterFirstOperand = opAndRhs.many();
         Callable1<T, Parser<T>> next = new Callable1<T, Parser<T>>() {
             public Parser<T> call(final T first) {
@@ -688,15 +688,15 @@ public final class Parsers {
      */
     @SuppressWarnings("unchecked")
     static <T> Parser<T> infixr(
-            Parser<T> p, Parser<? extends Map2<? super T, ? super T, ? extends T>> op) {
-        Parser<Rhs<T>> rhs = sequence(op, p, INFIXR_OPERATOR_MAP2);
+            Parser<T> p, Parser<? extends Callable2<? super T, ? super T, ? extends T>> op) {
+        Parser<Rhs<T>> rhs = sequence(op, p, INFIXR_OPERATOR_CALLABLE_2);
         return sequence(p, rhs.many(), APPLY_INFIXR_OPERATORS);
     }
 
-    private static <T> Map2<List<? extends Callable1<? super T, ? extends T>>, T, T> prefixOperatorMap2(
+    private static <T> Callable2<List<? extends Callable1<? super T, ? extends T>>, T, T> prefixOperatorMap2(
             final String name) {
-        return new Map2<List<? extends Callable1<? super T, ? extends T>>, T, T>() {
-            public T map(List<? extends Callable1<? super T, ? extends T>> ops, T a) {
+        return new Callable2<List<? extends Callable1<? super T, ? extends T>>, T, T>() {
+            public T call(List<? extends Callable1<? super T, ? extends T>> ops, T a) {
                 return applyPrefixOperators(a, ops);
             }
 
@@ -724,10 +724,10 @@ public final class Parsers {
         return a;
     }
 
-    private static <T> Map2<T, List<? extends Callable1<? super T, ? extends T>>, T> postfixOperatorMap2(
+    private static <T> Callable2<T, List<? extends Callable1<? super T, ? extends T>>, T> postfixOperatorMap2(
             final String name) {
-        return new Map2<T, List<? extends Callable1<? super T, ? extends T>>, T>() {
-            public T map(T a, List<? extends Callable1<? super T, ? extends T>> ops) {
+        return new Callable2<T, List<? extends Callable1<? super T, ? extends T>>, T>() {
+            public T call(T a, List<? extends Callable1<? super T, ? extends T>> ops) {
                 return applyPostfixOperators(a, ops);
             }
 
@@ -748,10 +748,10 @@ public final class Parsers {
 
     // 1+ 1+ 1+ ..... 1
     private static final class Rhs<T> {
-        final Map2<? super T, ? super T, ? extends T> op;
+        final Callable2<? super T, ? super T, ? extends T> op;
         final T rhs;
 
-        Rhs(Map2<? super T, ? super T, ? extends T> op, T rhs) {
+        Rhs(Callable2<? super T, ? super T, ? extends T> op, T rhs) {
             this.op = op;
             this.rhs = rhs;
         }
@@ -763,11 +763,11 @@ public final class Parsers {
     }
 
     @SuppressWarnings("unchecked")
-    private static final Map2 INFIXR_OPERATOR_MAP2 = toInfixRhs();
+    private static final Callable2 INFIXR_OPERATOR_CALLABLE_2 = toInfixRhs();
 
-    private static <T> Map2<Map2<? super T, ? super T, ? extends T>, T, Rhs<T>> toInfixRhs() {
-        return new Map2<Map2<? super T, ? super T, ? extends T>, T, Rhs<T>>() {
-            public Rhs<T> map(Map2<? super T, ? super T, ? extends T> m2, T b) {
+    private static <T> Callable2<Callable2<? super T, ? super T, ? extends T>, T, Rhs<T>> toInfixRhs() {
+        return new Callable2<Callable2<? super T, ? super T, ? extends T>, T, Rhs<T>>() {
+            public Rhs<T> call(Callable2<? super T, ? super T, ? extends T> m2, T b) {
                 return new Rhs<T>(m2, b);
             }
 
@@ -779,20 +779,20 @@ public final class Parsers {
     }
 
     @SuppressWarnings("unchecked")
-    private static final Map2 APPLY_INFIXR_OPERATORS = applyInfixrOperators();
+    private static final Callable2 APPLY_INFIXR_OPERATORS = applyInfixrOperators();
 
-    private static final <T> Map2<T, List<Rhs<T>>, T> applyInfixrOperators() {
-        return new Map2<T, List<Rhs<T>>, T>() {
-            public T map(final T first, final List<Rhs<T>> rhss) {
+    private static final <T> Callable2<T, List<Rhs<T>>, T> applyInfixrOperators() {
+        return new Callable2<T, List<Rhs<T>>, T>() {
+            public T call(final T first, final List<Rhs<T>> rhss) throws Exception {
                 if (rhss.isEmpty())
                     return first;
                 int lastIndex = rhss.size() - 1;
                 T o2 = rhss.get(lastIndex).rhs;
                 for (int i = lastIndex; i > 0; i--) {
                     T o1 = rhss.get(i - 1).rhs;
-                    o2 = rhss.get(i).op.map(o1, o2);
+                    o2 = rhss.get(i).op.call(o1, o2);
                 }
-                return rhss.get(0).op.map(first, o2);
+                return rhss.get(0).op.call(first, o2);
             }
 
             @Override
@@ -803,14 +803,14 @@ public final class Parsers {
     }
 
     @SuppressWarnings("unchecked")
-    static final Map2 MAP_OPERATOR_AND_RHS_TO_CLOSURE = fromOperatorAndRhsToClosure();
+    static final Callable2 CALLABLE_OPERATOR_AND_RHS_TO_CLOSURE = fromOperatorAndRhsToClosure();
 
-    private static <A, B, R> Map2<Map2<A, B, R>, B, Callable1<A, R>> fromOperatorAndRhsToClosure() {
-        return new Map2<Map2<A, B, R>, B, Callable1<A, R>>() {
-            public Callable1<A, R> map(final Map2<A, B, R> op, final B b) {
+    private static <A, B, R> Callable2<Callable2<A, B, R>, B, Callable1<A, R>> fromOperatorAndRhsToClosure() {
+        return new Callable2<Callable2<A, B, R>, B, Callable1<A, R>>() {
+            public Callable1<A, R> call(final Callable2<A, B, R> op, final B b) {
                 return new Callable1<A, R>() {
-                    public R call(A a) {
-                        return op.map(a, b);
+                    public R call(A a) throws Exception {
+                        return op.call(a, b);
                     }
 
                     @Override

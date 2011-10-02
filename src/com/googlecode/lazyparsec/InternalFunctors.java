@@ -15,11 +15,11 @@
  *****************************************************************************/
 package com.googlecode.lazyparsec;
 
-import com.googlecode.lazyparsec.functors.Map2;
 import com.googlecode.lazyparsec.functors.Map3;
 import com.googlecode.lazyparsec.functors.Map4;
 import com.googlecode.lazyparsec.functors.Map5;
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callable2;
 
 /**
  * Functors used only internally by this package. 
@@ -54,8 +54,8 @@ final class InternalFunctors {
   }
   
   @SuppressWarnings("unchecked")
-  private static final Map2 FIRST_OF_TWO = new Map2() {
-    public Object map(Object first, Object b) {
+  private static final Callable2 FIRST_OF_TWO = new Callable2() {
+    public Object call(Object first, Object b) {
       return first;
     }
     @Override public String toString() {
@@ -64,8 +64,8 @@ final class InternalFunctors {
   };
   
   @SuppressWarnings("unchecked")
-  private static final Map2 LAST_OF_TWO = new Map2() {
-    public Object map(Object a, Object last) {
+  private static final Callable2 LAST_OF_TWO = new Callable2() {
+    public Object call(Object a, Object last) {
       return last;
     }
     @Override public String toString() {
@@ -104,12 +104,12 @@ final class InternalFunctors {
   };
   
   @SuppressWarnings("unchecked")
-  static <T, B> Map2<T, B, T> firstOfTwo() {
+  static <T, B> Callable2<T, B, T> firstOfTwo() {
     return FIRST_OF_TWO;
   }
   
   @SuppressWarnings("unchecked")
-  static<A, T> Map2<A, T, T> lastOfTwo() {
+  static<A, T> Callable2<A, T, T> lastOfTwo() {
     return LAST_OF_TWO;
   }
   

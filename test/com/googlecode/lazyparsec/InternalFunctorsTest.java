@@ -3,10 +3,10 @@ package com.googlecode.lazyparsec;
 import static org.easymock.EasyMock.expect;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callable2;
 import junit.framework.TestCase;
 
 import com.googlecode.lazyparsec.easymock.BaseMockTests;
-import com.googlecode.lazyparsec.functors.Map2;
 import com.googlecode.lazyparsec.functors.Map3;
 import com.googlecode.lazyparsec.functors.Map4;
 import com.googlecode.lazyparsec.functors.Map5;
@@ -37,16 +37,16 @@ public class InternalFunctorsTest extends TestCase {
     assertSame(token, fromToken.map(token));
   }
   
-  public void testFirstOfTwo() {
-    Map2<String, Integer, String> map = InternalFunctors.firstOfTwo();
-    assertEquals("followedBy", map.toString());
-    assertEquals("one", map.map("one", 2));
+  public void testFirstOfTwo() throws Exception {
+    Callable2<String, Integer, String> callable = InternalFunctors.firstOfTwo();
+    assertEquals("followedBy", callable.toString());
+    assertEquals("one", callable.call("one", 2));
   }
   
-  public void testLastOfTwo() {
-    Map2<Integer, String, String> map = InternalFunctors.lastOfTwo();
-    assertEquals("sequence", map.toString());
-    assertEquals("two", map.map(1, "two"));
+  public void testLastOfTwo() throws Exception {
+    Callable2<Integer, String, String> callable = InternalFunctors.lastOfTwo();
+    assertEquals("sequence", callable.toString());
+    assertEquals("two", callable.call(1, "two"));
   }
   
   public void testLastOfThree() {

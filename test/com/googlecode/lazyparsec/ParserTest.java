@@ -14,9 +14,9 @@ import java.util.List;
 
 import com.googlecode.lazyparsec.easymock.BaseMockTests;
 import com.googlecode.lazyparsec.error.ParserException;
-import com.googlecode.lazyparsec.functors.Map2;
 import com.googlecode.lazyparsec.functors.Maps;
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callable2;
 
 /**
  * Unit test for {@link Parser}.
@@ -462,7 +462,8 @@ public class ParserTest extends BaseMockTests {
     assertParser(parser, "2^^", 256);
   }
   
-  @Mock Map2<Integer, Integer, Integer> binaryOp;
+  @Mock
+  Callable2<Integer, Integer, Integer> binaryOp;
   public void testInfixn_noOperator() {
     replay();
     Parser<Integer> parser = INTEGER.infixn(isChar('+').retn(binaryOp));
@@ -470,8 +471,8 @@ public class ParserTest extends BaseMockTests {
     assertParser(parser, "1", 1);
   }
   
-  public void testInfixn() {
-    expect(binaryOp.map(1, 2)).andReturn(3);
+  public void testInfixn() throws Exception {
+    expect(binaryOp.call(1, 2)).andReturn(3);
     replay();
     Parser<Integer> parser = INTEGER.infixn(isChar('+').retn(binaryOp));
     assertEquals("infixn", parser.toString());
@@ -485,9 +486,9 @@ public class ParserTest extends BaseMockTests {
     assertParser(parser, "1", 1);
   }
   
-  public void testInfixl() {
-    expect(binaryOp.map(4, 1)).andReturn(3);
-    expect(binaryOp.map(3, 2)).andReturn(1);
+  public void testInfixl() throws Exception {
+    expect(binaryOp.call(4, 1)).andReturn(3);
+    expect(binaryOp.call(3, 2)).andReturn(1);
     replay();
     Parser<Integer> parser = INTEGER.infixl(isChar('-').retn(binaryOp));
     assertEquals("infixl", parser.toString());
@@ -506,9 +507,9 @@ public class ParserTest extends BaseMockTests {
     assertParser(parser, "1", 1);
   }
   
-  public void testInfixr() {
-    expect(binaryOp.map(1, 2)).andReturn(12);
-    expect(binaryOp.map(4, 12)).andReturn(412);
+  public void testInfixr() throws Exception {
+    expect(binaryOp.call(1, 2)).andReturn(12);
+    expect(binaryOp.call(4, 12)).andReturn(412);
     replay();
     Parser<Integer> parser = INTEGER.infixr(string("->").retn(binaryOp));
     assertEquals("infixr", parser.toString());

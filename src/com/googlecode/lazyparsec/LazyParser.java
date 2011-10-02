@@ -32,7 +32,7 @@ final class LazyParser<T> extends Parser<T> {
     this.ref = ref;
   }
   
-  @Override boolean apply(ParseContext ctxt) {
+  @Override boolean apply(ParseContext ctxt) throws Exception {
     return deref().apply(ctxt);
   }
 

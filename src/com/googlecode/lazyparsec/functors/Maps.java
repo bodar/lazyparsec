@@ -16,6 +16,7 @@
 package com.googlecode.lazyparsec.functors;
 
 import com.googlecode.totallylazy.Callable1;
+import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Quadruple;
 import com.googlecode.totallylazy.Quintuple;
@@ -126,8 +127,8 @@ public final class Maps {
   }
   
   @SuppressWarnings("unchecked")
-  private static final Map2 ID2 = new Map2() {
-    public Pair map(Object a, Object b) {
+  private static final Callable2 ID_2 = new Callable2() {
+    public Pair call(Object a, Object b) {
         return Pair.pair(a, b);
     }
     @Override public String toString() {
@@ -165,10 +166,10 @@ public final class Maps {
     }
   };
   
-  /** A {@link Map2} object that maps 2 values into a {@link Pair} object. */
+  /** A {@link Callable2} object that maps 2 values into a {@link Pair} object. */
   @SuppressWarnings("unchecked")
-  public static <A, B> Map2<A, B, Pair<A, B>> toPair() {
-    return ID2;
+  public static <A, B> Callable2<A, B, Pair<A, B>> toPair() {
+    return ID_2;
   }
   
   /** A {@link Map3} object that maps 3 values to a {@link Triple} object. */
