@@ -16,20 +16,22 @@
 package com.googlecode.lazyparsec;
 
 final class SequenceParser extends Parser<Object> {
-  private final Parser<?>[] parsers;
+    private final Parser<?>[] parsers;
 
-  SequenceParser(Parser<?>[] parsers) {
-    this.parsers = parsers;
-  }
-
-  @Override boolean apply(ParseContext ctxt) {
-    for (Parser<?> p : parsers) {
-      if (!p.run(ctxt)) return false;
+    SequenceParser(Parser<?>[] parsers) {
+        this.parsers = parsers;
     }
-    return true;
-  }
-  
-  @Override public String toString() {
-    return "sequence";
-  }
+
+    @Override
+    boolean apply(ParseContext ctxt) {
+        for (Parser<?> p : parsers) {
+            if (!p.run(ctxt)) return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "sequence";
+    }
 }

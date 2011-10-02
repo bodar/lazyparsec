@@ -23,17 +23,18 @@ import com.googlecode.lazyparsec.Tokens.Fragment;
  * @author Ben Yu
  */
 abstract class IsFragment implements TokenMap<String> {
-  
-  public String map(final Token token) {
-    final Object val = token.value();
-    if (val instanceof Fragment) {
-      Fragment c = (Fragment) val;
-      if (!isExpectedTag(c.tag())) return null;
-      return c.text();
+
+    public String map(final Token token) {
+        final Object val = token.value();
+        if (val instanceof Fragment) {
+            Fragment c = (Fragment) val;
+            if (!isExpectedTag(c.tag())) return null;
+            return c.text();
+        } else return null;
     }
-    else return null;
-  }
-  
-  /** Is {@code type} expected? */
-  abstract boolean isExpectedTag(Object type);
+
+    /**
+     * Is {@code type} expected?
+     */
+    abstract boolean isExpectedTag(Object type);
 }

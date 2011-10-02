@@ -18,52 +18,55 @@ package com.googlecode.lazyparsec;
 /**
  * Parses a list of pattern started with a delimiter, separated and optionally
  * ended by the delimiter.
- * 
+ *
  * @author Ben Yu
  */
 class DelimitedParser<T, R> extends Parser<R> {
-  final Parser<T> parser;
-  private final Parser<?> delim;
+    final Parser<T> parser;
+    private final Parser<?> delim;
 
-  DelimitedParser(Parser<T> p, Parser<?> delim) {
-    this.parser = p;
-    this.delim = delim;
-  }
-
-  @Override boolean apply(final ParseContext ctxt) {
-    final R result = begin();
-    for (;;) {
-      final int step0 = ctxt.step;
-      final int at0 = ctxt.at;
-      boolean r = ParserInternals.greedyRun(delim, ctxt);
-      if (!r) {
-        if (!ParserInternals.stillThere(ctxt, at0, step0)) return false;
-        ctxt.result = result;
-        return true;
-      }
-      final int step1 = ctxt.step;
-      final int at1 = ctxt.at;
-      r = ParserInternals.greedyRun(parser, ctxt);
-      if (!r) {
-        if (!ParserInternals.stillThere(ctxt, at1, step1)) return false;
-        ctxt.result = result;
-        return true;
-      }
-      if (at0 == ctxt.at) { // infinite loop
-        ctxt.result = result;
-        return true;
-      }
-      element(ctxt, result);
+    DelimitedParser(Parser<T> p, Parser<?> delim) {
+        this.parser = p;
+        this.delim = delim;
     }
-  }
 
-  R begin() {
-    return null;
-  }
+    @Override
+    boolean apply(final ParseContext ctxt) {
+        final R result = begin();
+        for (; ; ) {
+            final int step0 = ctxt.step;
+            final int at0 = ctxt.at;
+            boolean r = ParserInternals.greedyRun(delim, ctxt);
+            if (!r) {
+                if (!ParserInternals.stillThere(ctxt, at0, step0)) return false;
+                ctxt.result = result;
+                return true;
+            }
+            final int step1 = ctxt.step;
+            final int at1 = ctxt.at;
+            r = ParserInternals.greedyRun(parser, ctxt);
+            if (!r) {
+                if (!ParserInternals.stillThere(ctxt, at1, step1)) return false;
+                ctxt.result = result;
+                return true;
+            }
+            if (at0 == ctxt.at) { // infinite loop
+                ctxt.result = result;
+                return true;
+            }
+            element(ctxt, result);
+        }
+    }
 
-  void element(ParseContext ctxt, R result) {}
-  
-  @Override public String toString() {
-    return "delimited";
-  }
+    R begin() {
+        return null;
+    }
+
+    void element(ParseContext ctxt, R result) {
+    }
+
+    @Override
+    public String toString() {
+        return "delimited";
+    }
 }

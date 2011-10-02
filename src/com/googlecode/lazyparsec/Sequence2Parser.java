@@ -18,28 +18,30 @@ package com.googlecode.lazyparsec;
 import com.googlecode.totallylazy.Callable2;
 
 final class Sequence2Parser<A, B, T> extends Parser<T> {
-  private final Parser<A> p1;
-  private final Parser<B> p2;
-  private final Callable2<? super A, ? super B, ? extends T> m2;
+    private final Parser<A> p1;
+    private final Parser<B> p2;
+    private final Callable2<? super A, ? super B, ? extends T> m2;
 
-  Sequence2Parser(Parser<A> p1, Parser<B> p2, Callable2<? super A, ? super B, ? extends T> m2) {
-    this.p1 = p1;
-    this.p2 = p2;
-    this.m2 = m2;
-  }
+    Sequence2Parser(Parser<A> p1, Parser<B> p2, Callable2<? super A, ? super B, ? extends T> m2) {
+        this.p1 = p1;
+        this.p2 = p2;
+        this.m2 = m2;
+    }
 
-  @Override boolean apply(ParseContext ctxt) throws Exception {
-    boolean r1 = p1.run(ctxt);
-    if (!r1) return false;
-    A o1 = p1.getReturn(ctxt);
-    boolean r2 = p2.run(ctxt);
-    if (!r2) return false;
-    B o2 = p2.getReturn(ctxt);
-    ctxt.result = m2.call(o1, o2);
-    return true;
-  }
-  
-  @Override public String toString() {
-    return m2.toString();
-  }
+    @Override
+    boolean apply(ParseContext ctxt) throws Exception {
+        boolean r1 = p1.run(ctxt);
+        if (!r1) return false;
+        A o1 = p1.getReturn(ctxt);
+        boolean r2 = p2.run(ctxt);
+        if (!r2) return false;
+        B o2 = p2.getReturn(ctxt);
+        ctxt.result = m2.call(o1, o2);
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return m2.toString();
+    }
 }

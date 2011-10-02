@@ -15,41 +15,44 @@
  *****************************************************************************/
 package com.googlecode.lazyparsec;
 
+import com.googlecode.lazyparsec.util.Lists;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import com.googlecode.lazyparsec.util.Lists;
-
 /**
  * Common implementations of {@link ListFactory}.
- * 
+ *
  * @author Ben Yu
  */
 final class ListFactories {
-  
-  /** Returns a {@link ListFactory} that creates an empty {@link ArrayList}. */
-  @SuppressWarnings("unchecked")
-  public static <T> ListFactory<T> arrayListFactory() {
-    return ARRAY_LIST_FACTORY;
-  }
-  
-  /**
-   * Returns a {@link ListFactory} that creates an {@link ArrayList} instance
-   * with {@code first} as the first element.
-   */
-  public static <T> ListFactory<T> arrayListFactoryWithFirstElement(final T first) {
-    return new ListFactory<T>() {
-      public List<T> newList() {
-        ArrayList<T> list = Lists.arrayList();
-        list.add(first);
-        return list;
-      }
-    };
-  }
-  @SuppressWarnings("unchecked")
-  private static final ListFactory ARRAY_LIST_FACTORY = new ListFactory<Object>() {
-    public List<Object> newList() {
-      return Lists.arrayList();
+
+    /**
+     * Returns a {@link ListFactory} that creates an empty {@link ArrayList}.
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> ListFactory<T> arrayListFactory() {
+        return ARRAY_LIST_FACTORY;
     }
-  };
+
+    /**
+     * Returns a {@link ListFactory} that creates an {@link ArrayList} instance
+     * with {@code first} as the first element.
+     */
+    public static <T> ListFactory<T> arrayListFactoryWithFirstElement(final T first) {
+        return new ListFactory<T>() {
+            public List<T> newList() {
+                ArrayList<T> list = Lists.arrayList();
+                list.add(first);
+                return list;
+            }
+        };
+    }
+
+    @SuppressWarnings("unchecked")
+    private static final ListFactory ARRAY_LIST_FACTORY = new ListFactory<Object>() {
+        public List<Object> newList() {
+            return Lists.arrayList();
+        }
+    };
 }

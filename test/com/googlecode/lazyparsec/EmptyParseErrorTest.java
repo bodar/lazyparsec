@@ -20,16 +20,16 @@ import junit.framework.TestCase;
 
 /**
  * Unit test for {@link EmptyParseError}.
- * 
+ *
  * @author benyu
  */
 public class EmptyParseErrorTest extends TestCase {
-  public void testEmptyParseError() {
-    EmptyParseError error = new EmptyParseError(1, "foo");
-    assertEquals(1, error.getIndex());
-    assertEquals("foo", error.getEncountered());
-    assertNull(error.getUnexpected());
-    assertNull(error.getFailureMessage());
-    assertEquals(0, error.getExpected().size());
-  }
+    public void testEmptyParseError() {
+        EmptyParseError error = new EmptyParseError(1, "foo");
+        assertEquals(1, error.getIndex());
+        assertEquals("foo", error.getEncountered());
+        assertNull(error.getUnexpected());
+        assertNull(error.getFailureMessage());
+        assertEquals(0, error.getExpected().size());
+    }
 }

@@ -10,32 +10,30 @@ import java.io.IOException;
 
 /**
  * @author Ben Yu
- *
- * Jan 3, 2005
+ *         <p/>
+ *         Jan 3, 2005
  */
 public final class Utils {
 
-  public static String readFile(final String name) {
-    try{
-      final FileReader fr = new FileReader(name);
-      try{
-        final StringBuffer dest = new StringBuffer();
-        final char[] buf = new char[4000];
-        for(;;) {
-          final int n = fr.read(buf);
-          if (n > 0) {
-            dest.append(buf, 0, n);
-          }
-          if (n < 0) break;
+    public static String readFile(final String name) {
+        try {
+            final FileReader fr = new FileReader(name);
+            try {
+                final StringBuffer dest = new StringBuffer();
+                final char[] buf = new char[4000];
+                for (; ; ) {
+                    final int n = fr.read(buf);
+                    if (n > 0) {
+                        dest.append(buf, 0, n);
+                    }
+                    if (n < 0) break;
+                }
+                return dest.toString();
+            } finally {
+                fr.close();
+            }
+        } catch (IOException e) {
+            throw new IllegalStateException(e.getMessage());
         }
-        return dest.toString();
-      }
-      finally{
-        fr.close();
-      }
     }
-    catch(IOException e) {
-      throw new IllegalStateException(e.getMessage());
-    }
-  }
 }

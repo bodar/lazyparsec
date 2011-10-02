@@ -16,13 +16,15 @@
 package com.googlecode.lazyparsec;
 
 final class NeverParser<T> extends Parser<T> {
-  
-  @Override boolean apply(ParseContext ctxt) {
-    ctxt.trap();
-    return false;
-  }
-  
-  @Override public String toString() {
-    return "never";
-  }
+
+    @Override
+    boolean apply(ParseContext ctxt) {
+        ctxt.trap();
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "never";
+    }
 }

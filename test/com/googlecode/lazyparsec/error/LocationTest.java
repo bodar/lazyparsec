@@ -17,22 +17,21 @@
 package com.googlecode.lazyparsec.error;
 
 import com.googlecode.lazyparsec.util.ObjectTester;
-
 import junit.framework.TestCase;
 
 /**
  * Unit test for {@link Location}.
- * 
+ *
  * @author Ben Yu
  */
 public class LocationTest extends TestCase {
-  
-  public void testToString() {
-    assertEquals("line 1 column 2", new Location(1, 2).toString());
-  }
-  
-  public void testEquals() {
-    ObjectTester.assertEqual(new Location(1, 2), new Location(1, 2));
-    ObjectTester.assertNotEqual(new Location(1, 2), new Location(2, 2), new Location(1, 1));
-  }
+
+    public void testToString() {
+        assertEquals("line 1 column 2", new Location(1, 2).toString());
+    }
+
+    public void testEquals() {
+        ObjectTester.assertEqual(new Location(1, 2), new Location(1, 2));
+        ObjectTester.assertNotEqual(new Location(1, 2), new Location(2, 2), new Location(1, 1));
+    }
 }

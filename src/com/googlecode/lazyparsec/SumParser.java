@@ -16,27 +16,29 @@
 package com.googlecode.lazyparsec;
 
 final class SumParser<T> extends Parser<T> {
-  private final Parser<? extends T>[] alternatives;
+    private final Parser<? extends T>[] alternatives;
 
-  SumParser(Parser<? extends T>... alternatives) {
-    this.alternatives = alternatives;
-  }
-
-  @Override boolean apply(ParseContext ctxt) {
-    Object result = ctxt.result;
-    int at = ctxt.at;
-    int step = ctxt.step;
-    for (Parser<? extends T> p : alternatives) {
-      if (p.run(ctxt)) {
-        return true;
-      }
-      if (ctxt.at != at && ctxt.step - step >= 1) return false;
-      ctxt.set(step, at, result);
+    SumParser(Parser<? extends T>... alternatives) {
+        this.alternatives = alternatives;
     }
-    return false;
-  }
-  
-  @Override public String toString() {
-    return "plus";
-  }
+
+    @Override
+    boolean apply(ParseContext ctxt) {
+        Object result = ctxt.result;
+        int at = ctxt.at;
+        int step = ctxt.step;
+        for (Parser<? extends T> p : alternatives) {
+            if (p.run(ctxt)) {
+                return true;
+            }
+            if (ctxt.at != at && ctxt.step - step >= 1) return false;
+            ctxt.set(step, at, result);
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "plus";
+    }
 }

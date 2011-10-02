@@ -21,7 +21,9 @@ package com.googlecode.lazyparsec.pattern;
  * @author Ben Yu
  */
 public interface CharPredicate {
-  
-  /** Tests whether {@code c} satisfies the predicate. */
-  boolean isChar(char c);
+
+    /**
+     * Tests whether {@code c} satisfies the predicate.
+     */
+    boolean isChar(char c);
 }

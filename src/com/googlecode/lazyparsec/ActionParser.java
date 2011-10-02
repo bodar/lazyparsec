@@ -16,18 +16,20 @@
 package com.googlecode.lazyparsec;
 
 final class ActionParser extends Parser<Object> {
-  private final Runnable action;
-  
-  ActionParser(Runnable action) {
-    this.action = action;
-  }
-  
-  @Override boolean apply(ParseContext ctxt) {
-    action.run();
-    return true;
-  }
-  
-  @Override public String toString() {
-    return action.toString();
-  }
+    private final Runnable action;
+
+    ActionParser(Runnable action) {
+        this.action = action;
+    }
+
+    @Override
+    boolean apply(ParseContext ctxt) {
+        action.run();
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return action.toString();
+    }
 }

@@ -17,27 +17,29 @@ package com.googlecode.lazyparsec;
 
 /**
  * After a scanner succeeds, feeds the recognized character range to a nested scanner.
- * 
+ *
  * @author Ben Yu
  */
 final class NestedScanner extends Parser<Void> {
-  private final Parser<?> outer;
-  private final Parser<Void> inner;
-  
-  NestedScanner(Parser<?> parser, Parser<Void> scanner) {
-    this.outer = parser;
-    this.inner = scanner;
-  }
+    private final Parser<?> outer;
+    private final Parser<Void> inner;
 
-  @Override boolean apply(ParseContext ctxt) {
-    int from = ctxt.at;
-    if (!outer.run(ctxt)) return false;
-    ScannerState scannerState = new ScannerState(
-        ctxt.module, ctxt.characters(), from, ctxt.at, ctxt.locator, ctxt.result);
-    return ParserInternals.runNestedParser(ctxt, scannerState, inner);
-  }
-  
-  @Override public String toString() {
-    return "nested scanner";
-  }
+    NestedScanner(Parser<?> parser, Parser<Void> scanner) {
+        this.outer = parser;
+        this.inner = scanner;
+    }
+
+    @Override
+    boolean apply(ParseContext ctxt) {
+        int from = ctxt.at;
+        if (!outer.run(ctxt)) return false;
+        ScannerState scannerState = new ScannerState(
+                ctxt.module, ctxt.characters(), from, ctxt.at, ctxt.locator, ctxt.result);
+        return ParserInternals.runNestedParser(ctxt, scannerState, inner);
+    }
+
+    @Override
+    public String toString() {
+        return "nested scanner";
+    }
 }

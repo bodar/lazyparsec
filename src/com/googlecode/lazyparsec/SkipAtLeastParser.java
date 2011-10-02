@@ -16,24 +16,26 @@
 package com.googlecode.lazyparsec;
 
 final class SkipAtLeastParser extends Parser<Void> {
-  private final Parser<?> parser;
-  private final int min;
+    private final Parser<?> parser;
+    private final int min;
 
-  SkipAtLeastParser(Parser<?> parser, int min) {
-    this.parser = parser;
-    this.min = min;
-  }
-
-  @Override boolean apply(ParseContext ctxt) {
-    if (!ParserInternals.repeat(parser, min, ctxt)) return false;
-    if (ParserInternals.many(parser, ctxt)) {
-      ctxt.result = null;
-      return true;
+    SkipAtLeastParser(Parser<?> parser, int min) {
+        this.parser = parser;
+        this.min = min;
     }
-    return false;
-  }
-  
-  @Override public String toString() {
-    return "skipAtLeast";
-  }
+
+    @Override
+    boolean apply(ParseContext ctxt) {
+        if (!ParserInternals.repeat(parser, min, ctxt)) return false;
+        if (ParserInternals.many(parser, ctxt)) {
+            ctxt.result = null;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "skipAtLeast";
+    }
 }

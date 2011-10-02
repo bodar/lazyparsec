@@ -19,34 +19,36 @@ import com.googlecode.lazyparsec.pattern.CharPredicate;
 
 /**
  * Parses a given characgter.
- * 
+ *
  * @author Ben Yu
  */
 final class IsCharScanner extends Parser<Void> {
-  private final String name;
-  private final CharPredicate predicate;
-  
-  IsCharScanner(String name, CharPredicate predicate) {
-    this.name = name;
-    this.predicate = predicate;
-  }
+    private final String name;
+    private final CharPredicate predicate;
 
-  @Override boolean apply(ParseContext ctxt) {
-    if (ctxt.isEof()) {
-      ctxt.expected(name);
-      return false;
+    IsCharScanner(String name, CharPredicate predicate) {
+        this.name = name;
+        this.predicate = predicate;
     }
-    char c = ctxt.peekChar();
-    if (predicate.isChar(c)) {
-      ctxt.next();
-      ctxt.result = null;
-      return true;
+
+    @Override
+    boolean apply(ParseContext ctxt) {
+        if (ctxt.isEof()) {
+            ctxt.expected(name);
+            return false;
+        }
+        char c = ctxt.peekChar();
+        if (predicate.isChar(c)) {
+            ctxt.next();
+            ctxt.result = null;
+            return true;
+        }
+        ctxt.expected(name);
+        return false;
     }
-    ctxt.expected(name);
-    return false;
-  }
-  
-  @Override public String toString() {
-    return name;
-  }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

@@ -17,26 +17,28 @@ package com.googlecode.lazyparsec;
 
 /**
  * Returns the source string of the part that matches the target parser.
- * 
+ *
  * @author Ben Yu
  */
 final class ReturnSourceParser extends Parser<String> {
-  private final Parser<?> parser;
-  
-  ReturnSourceParser(Parser<?> parser) {
-    this.parser = parser;
-  }
+    private final Parser<?> parser;
 
-  @Override boolean apply(ParseContext ctxt) throws Exception {
-    int begin = ctxt.getIndex();
-    if (!parser.apply(ctxt)) {
-      return false;
+    ReturnSourceParser(Parser<?> parser) {
+        this.parser = parser;
     }
-    ctxt.result = ctxt.source.subSequence(begin, ctxt.getIndex()).toString();
-    return true;
-  }
-  
-  @Override public String toString() {
-    return "source";
-  }
+
+    @Override
+    boolean apply(ParseContext ctxt) throws Exception {
+        int begin = ctxt.getIndex();
+        if (!parser.apply(ctxt)) {
+            return false;
+        }
+        ctxt.result = ctxt.source.subSequence(begin, ctxt.getIndex()).toString();
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "source";
+    }
 }

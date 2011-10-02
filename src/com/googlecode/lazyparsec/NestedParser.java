@@ -16,23 +16,25 @@
 package com.googlecode.lazyparsec;
 
 final class NestedParser<T> extends Parser<T> {
-  private final Parser<Token[]> lexer;
-  private final Parser<? extends T> parser;
+    private final Parser<Token[]> lexer;
+    private final Parser<? extends T> parser;
 
-  NestedParser(Parser<Token[]> lexer, Parser<? extends T> p) {
-    this.lexer = lexer;
-    this.parser = p;
-  }
+    NestedParser(Parser<Token[]> lexer, Parser<? extends T> p) {
+        this.lexer = lexer;
+        this.parser = p;
+    }
 
-  @Override boolean apply(ParseContext ctxt) {
-    if (!lexer.run(ctxt)) return false;
-    Token[] tokens = lexer.getReturn(ctxt);
-    ParserState parserState = new ParserState(
-        ctxt.module, ctxt.source, tokens, 0, ctxt.locator, ctxt.getIndex(), tokens);
-    return ParserInternals.runNestedParser(ctxt, parserState, parser);
-  }
-  
-  @Override public String toString() {
-    return parser.toString();
-  }
+    @Override
+    boolean apply(ParseContext ctxt) {
+        if (!lexer.run(ctxt)) return false;
+        Token[] tokens = lexer.getReturn(ctxt);
+        ParserState parserState = new ParserState(
+                ctxt.module, ctxt.source, tokens, 0, ctxt.locator, ctxt.getIndex(), tokens);
+        return ParserInternals.runNestedParser(ctxt, parserState, parser);
+    }
+
+    @Override
+    public String toString() {
+        return parser.toString();
+    }
 }

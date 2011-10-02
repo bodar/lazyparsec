@@ -16,28 +16,30 @@
 package com.googlecode.lazyparsec;
 
 final class OrParser<T> extends Parser<T> {
-  private final Parser<? extends T>[] alternatives;
+    private final Parser<? extends T>[] alternatives;
 
-  OrParser(Parser<? extends T>... alternatives) {
-    this.alternatives = alternatives;
-  }
-
-  @Override boolean apply(ParseContext ctxt) {
-    final Object result = ctxt.result;
-    final int at = ctxt.at;
-    final int step = ctxt.step;
-    for(Parser<? extends T> p : alternatives) {
-      if (p.run(ctxt)) {
-        return true;
-      }
-      ctxt.set(step, at, result);
+    OrParser(Parser<? extends T>... alternatives) {
+        this.alternatives = alternatives;
     }
-    // set the index to the most relevant error so far.
-    ctxt.setAt(step, at);
-    return false;
-  }
-  
-  @Override public String toString() {
-    return "or";
-  }
+
+    @Override
+    boolean apply(ParseContext ctxt) {
+        final Object result = ctxt.result;
+        final int at = ctxt.at;
+        final int step = ctxt.step;
+        for (Parser<? extends T> p : alternatives) {
+            if (p.run(ctxt)) {
+                return true;
+            }
+            ctxt.set(step, at, result);
+        }
+        // set the index to the most relevant error so far.
+        ctxt.setAt(step, at);
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "or";
+    }
 }

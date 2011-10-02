@@ -34,8 +34,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.googlecode.totallylazy.Callers.call;
-
 /**
  * Provides common {@link Parser} implementations.
  *

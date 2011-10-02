@@ -19,11 +19,13 @@ import java.util.List;
 
 /**
  * Creates a {link List}.
- * 
+ *
  * @author Ben Yu
  */
 interface ListFactory<T> {
-  
-  /** Creates a new list. */
-  List<T> newList();
+
+    /**
+     * Creates a new list.
+     */
+    List<T> newList();
 }

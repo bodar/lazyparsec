@@ -17,16 +17,16 @@ package com.googlecode.lazyparsec;
 
 /**
  * Maps two integers to a boolean value.
- * 
+ *
  * @author Ben Yu
  */
 interface IntOrder {
-  /**
-   * Compares two integers.
-   * 
-   * @param a 1st int
-   * @param b 2nd int
-   * @return the comparison result.
-   */
-  boolean compare(int a, int b);
+    /**
+     * Compares two integers.
+     *
+     * @param a 1st int
+     * @param b 2nd int
+     * @return the comparison result.
+     */
+    boolean compare(int a, int b);
 }

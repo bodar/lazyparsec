@@ -16,18 +16,20 @@
 package com.googlecode.lazyparsec;
 
 final class UnexpectedParser<T> extends Parser<T> {
-  private final String name;
+    private final String name;
 
-  UnexpectedParser(String name) {
-    this.name = name;
-  }
+    UnexpectedParser(String name) {
+        this.name = name;
+    }
 
-  @Override boolean apply(final ParseContext ctxt) {
-    ctxt.unexpected(name);
-    return false;
-  }
-  
-  @Override public String toString() {
-    return name;
-  }
+    @Override
+    boolean apply(final ParseContext ctxt) {
+        ctxt.unexpected(name);
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

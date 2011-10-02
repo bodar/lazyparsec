@@ -18,35 +18,37 @@ package com.googlecode.lazyparsec;
 import java.util.List;
 
 final class RepeatTimesParser<T> extends Parser<List<T>> {
-  private final Parser<? extends T> parser;
-  private final int min;
-  private final int max;
-  private final ListFactory<T> listFactory;
-  
-  RepeatTimesParser(Parser<? extends T> parser, int min, int max) {
-    this(parser, min, max, ListFactories.<T>arrayListFactory());
-  }
+    private final Parser<? extends T> parser;
+    private final int min;
+    private final int max;
+    private final ListFactory<T> listFactory;
 
-  RepeatTimesParser(
-      Parser<? extends T> parser, int min, int max, ListFactory<T> listFactory) {
-    this.parser = parser;
-    this.min = min;
-    this.max = max;
-    this.listFactory = listFactory;
-  }
-
-  @Override boolean apply(ParseContext ctxt) {
-    List<T> result = listFactory.newList();
-    if (!ParserInternals.repeat(parser, min, result, ctxt))
-      return false;
-    if (ParserInternals.repeatAtMost(parser, max - min, result, ctxt)) {
-      ctxt.result = result;
-      return true;
+    RepeatTimesParser(Parser<? extends T> parser, int min, int max) {
+        this(parser, min, max, ListFactories.<T>arrayListFactory());
     }
-    return false;
-  }
-  
-  @Override public String toString() {
-    return "times";
-  }
+
+    RepeatTimesParser(
+            Parser<? extends T> parser, int min, int max, ListFactory<T> listFactory) {
+        this.parser = parser;
+        this.min = min;
+        this.max = max;
+        this.listFactory = listFactory;
+    }
+
+    @Override
+    boolean apply(ParseContext ctxt) {
+        List<T> result = listFactory.newList();
+        if (!ParserInternals.repeat(parser, min, result, ctxt))
+            return false;
+        if (ParserInternals.repeatAtMost(parser, max - min, result, ctxt)) {
+            ctxt.result = result;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "times";
+    }
 }

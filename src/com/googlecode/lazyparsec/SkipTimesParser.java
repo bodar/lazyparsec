@@ -16,26 +16,28 @@
 package com.googlecode.lazyparsec;
 
 final class SkipTimesParser extends Parser<Void> {
-  private final Parser<?> parser;
-  private final int min;
-  private final int max;
+    private final Parser<?> parser;
+    private final int min;
+    private final int max;
 
-  SkipTimesParser(Parser<?> parser, int min, int max) {
-    this.parser = parser;
-    this.min = min;
-    this.max = max;
-  }
-
-  @Override boolean apply(ParseContext ctxt) {
-    if (!ParserInternals.repeat(parser, min, ctxt)) return false;
-    if (ParserInternals.repeatAtMost(parser, max - min, ctxt)) {
-      ctxt.result = null;
-      return true;
+    SkipTimesParser(Parser<?> parser, int min, int max) {
+        this.parser = parser;
+        this.min = min;
+        this.max = max;
     }
-    return false;
-  }
-  
-  @Override public String toString() {
-    return "skipTimes";
-  }
+
+    @Override
+    boolean apply(ParseContext ctxt) {
+        if (!ParserInternals.repeat(parser, min, ctxt)) return false;
+        if (ParserInternals.repeatAtMost(parser, max - min, ctxt)) {
+            ctxt.result = null;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "skipTimes";
+    }
 }

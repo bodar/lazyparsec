@@ -16,22 +16,24 @@
 package com.googlecode.lazyparsec;
 
 final class AtomicParser<T> extends Parser<T> {
-  private final Parser<T> p;
+    private final Parser<T> p;
 
-  AtomicParser(Parser<T> p) {
-    this.p = p;
-  }
+    AtomicParser(Parser<T> p) {
+        this.p = p;
+    }
 
-  @Override boolean apply(ParseContext ctxt) {
-    int at = ctxt.at;
-    int step = ctxt.step;
-    boolean r = p.run(ctxt);
-    if (r) ctxt.step = step + 1;
-    else ctxt.setAt(step, at);
-    return r;
-  }
-  
-  @Override public String toString() {
-    return p.toString();
-  }
+    @Override
+    boolean apply(ParseContext ctxt) {
+        int at = ctxt.at;
+        int step = ctxt.step;
+        boolean r = p.run(ctxt);
+        if (r) ctxt.step = step + 1;
+        else ctxt.setAt(step, at);
+        return r;
+    }
+
+    @Override
+    public String toString() {
+        return p.toString();
+    }
 }

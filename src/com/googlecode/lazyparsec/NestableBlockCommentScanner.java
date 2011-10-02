@@ -18,54 +18,56 @@ package com.googlecode.lazyparsec;
 
 /**
  * Parses any nestable comment pattern.
- * 
+ *
  * @author Ben Yu
  */
 final class NestableBlockCommentScanner extends Parser<Void> {
-  private final Parser<?> openQuote;
-  private final Parser<?> closeQuote;
-  private final Parser<?> commented;
-  
-  NestableBlockCommentScanner(Parser<?> openQuote, Parser<?> closeQuote, Parser<?> commented) {
-    this.openQuote = openQuote;
-    this.closeQuote = closeQuote;
-    this.commented = commented;
-  }
+    private final Parser<?> openQuote;
+    private final Parser<?> closeQuote;
+    private final Parser<?> commented;
 
-  @Override boolean apply(final ParseContext ctxt) {
-    if (!openQuote.run(ctxt)) return false;
-    for(int level = 1; level > 0;) {
-      final int step = ctxt.step;
-      final int at = ctxt.at;
-      if (closeQuote.run(ctxt)) {
-        if (at == ctxt.at) {
-          throw new IllegalStateException("closing comment scanner not consuming input.");
-        }
-        level--;
-        continue;
-      }
-      if (!ParserInternals.stillThere(ctxt, at, step)) return false;
-      if (openQuote.run(ctxt)) {
-        if (at == ctxt.at) {
-          throw new IllegalStateException("opening comment scanner not consuming input.");
-        }
-        level++;
-        continue;
-      }
-      if (!ParserInternals.stillThere(ctxt, at, step)) return false;
-      if (commented.run(ctxt)) {
-        if (at == ctxt.at) {
-          throw new IllegalStateException("commented scanner not consuming input.");
-        }
-        continue;
-      }
-      return false;
+    NestableBlockCommentScanner(Parser<?> openQuote, Parser<?> closeQuote, Parser<?> commented) {
+        this.openQuote = openQuote;
+        this.closeQuote = closeQuote;
+        this.commented = commented;
     }
-    ctxt.result = null;
-    return true;
-  }
-  
-  @Override public String toString() {
-    return "nestable block comment";
-  }
+
+    @Override
+    boolean apply(final ParseContext ctxt) {
+        if (!openQuote.run(ctxt)) return false;
+        for (int level = 1; level > 0; ) {
+            final int step = ctxt.step;
+            final int at = ctxt.at;
+            if (closeQuote.run(ctxt)) {
+                if (at == ctxt.at) {
+                    throw new IllegalStateException("closing comment scanner not consuming input.");
+                }
+                level--;
+                continue;
+            }
+            if (!ParserInternals.stillThere(ctxt, at, step)) return false;
+            if (openQuote.run(ctxt)) {
+                if (at == ctxt.at) {
+                    throw new IllegalStateException("opening comment scanner not consuming input.");
+                }
+                level++;
+                continue;
+            }
+            if (!ParserInternals.stillThere(ctxt, at, step)) return false;
+            if (commented.run(ctxt)) {
+                if (at == ctxt.at) {
+                    throw new IllegalStateException("commented scanner not consuming input.");
+                }
+                continue;
+            }
+            return false;
+        }
+        ctxt.result = null;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "nestable block comment";
+    }
 }

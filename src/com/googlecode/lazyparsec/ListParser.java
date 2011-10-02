@@ -15,35 +15,37 @@
  *****************************************************************************/
 package com.googlecode.lazyparsec;
 
+import com.googlecode.lazyparsec.util.Lists;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.googlecode.lazyparsec.util.Lists;
 
 /**
  * Sequentially runs a list of {@link Parser} objects and collects the return values in a
  * {@link List}.
- * 
+ *
  * @author Ben Yu
  */
 final class ListParser<T> extends Parser<List<T>> {
-  private final Parser<? extends T>[] parsers;
+    private final Parser<? extends T>[] parsers;
 
-  ListParser(Parser<? extends T>[] parsers) {
-    this.parsers = parsers;
-  }
-
-  @Override boolean apply(ParseContext ctxt) {
-    ArrayList<T> list = Lists.arrayList(parsers.length);
-    for (Parser<? extends T> parser : parsers) {
-      if (!parser.run(ctxt)) return false;
-      list.add(parser.getReturn(ctxt));
+    ListParser(Parser<? extends T>[] parsers) {
+        this.parsers = parsers;
     }
-    ctxt.result = list;
-    return true;
-  }
-  
-  @Override public String toString() {
-    return "list";
-  }
+
+    @Override
+    boolean apply(ParseContext ctxt) {
+        ArrayList<T> list = Lists.arrayList(parsers.length);
+        for (Parser<? extends T> parser : parsers) {
+            if (!parser.run(ctxt)) return false;
+            list.add(parser.getReturn(ctxt));
+        }
+        ctxt.result = list;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "list";
+    }
 }

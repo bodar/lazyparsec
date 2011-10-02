@@ -17,31 +17,33 @@ package com.googlecode.lazyparsec;
 
 
 final class BestParser<T> extends Parser<T> {
-  private final Parser<? extends T>[] parsers;
-  private final IntOrder order;
+    private final Parser<? extends T>[] parsers;
+    private final IntOrder order;
 
-  BestParser(Parser<? extends T>[] parsers, IntOrder order) {
-    this.parsers = parsers;
-    this.order = order;
-  }
-
-  @Override boolean apply(ParseContext ctxt) {
-    final Object result = ctxt.result;
-    final int step = ctxt.step;
-    final int at = ctxt.at;
-    for (int i = 0; i < parsers.length; i++) {
-      Parser<? extends T> parser = parsers[i];
-      if (parser.run(ctxt)) {
-        ParserInternals.runForBestFit(order, parsers, i + 1, ctxt, result, step, at);
-        return true;
-      }
-      // in alternate, we do not care partial match.
-      ctxt.set(step, at, result);
+    BestParser(Parser<? extends T>[] parsers, IntOrder order) {
+        this.parsers = parsers;
+        this.order = order;
     }
-    return false;
-  }
-  
-  @Override public String toString() {
-    return order.toString();
-  }
+
+    @Override
+    boolean apply(ParseContext ctxt) {
+        final Object result = ctxt.result;
+        final int step = ctxt.step;
+        final int at = ctxt.at;
+        for (int i = 0; i < parsers.length; i++) {
+            Parser<? extends T> parser = parsers[i];
+            if (parser.run(ctxt)) {
+                ParserInternals.runForBestFit(order, parsers, i + 1, ctxt, result, step, at);
+                return true;
+            }
+            // in alternate, we do not care partial match.
+            ctxt.set(step, at, result);
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return order.toString();
+    }
 }

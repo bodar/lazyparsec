@@ -15,29 +15,31 @@
  *****************************************************************************/
 package com.googlecode.lazyparsec;
 
-/** 
+/**
  * Parses any one character.
- *  
+ *
  * @author Ben Yu
  */
 final class AnyCharScanner extends Parser<Void> {
-  private final String name;
-  
-  AnyCharScanner(String name) {
-    this.name = name;
-  }
+    private final String name;
 
-  @Override boolean apply(ParseContext ctxt) {
-    if (ctxt.isEof()) {
-      ctxt.expected(name);
-      return false;
+    AnyCharScanner(String name) {
+        this.name = name;
     }
-    ctxt.next();
-    ctxt.result = null;
-    return true;
-  }
-  
-  @Override public String toString() {
-    return name;
-  }
+
+    @Override
+    boolean apply(ParseContext ctxt) {
+        if (ctxt.isEof()) {
+            ctxt.expected(name);
+            return false;
+        }
+        ctxt.next();
+        ctxt.result = null;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

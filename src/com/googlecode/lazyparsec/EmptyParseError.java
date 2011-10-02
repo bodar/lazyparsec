@@ -16,43 +16,43 @@
 
 package com.googlecode.lazyparsec;
 
+import com.googlecode.lazyparsec.error.ParseErrorDetails;
+
 import java.util.Collections;
 import java.util.List;
 
-import com.googlecode.lazyparsec.error.ParseErrorDetails;
-
 /**
  * Empty implementation of {@link ParseErrorDetails} for subclasses to override.
- * 
+ *
  * @author benyu
  */
 class EmptyParseError implements ParseErrorDetails {
-  
-  private final int index;
-  private final String encountered;
-  
-  EmptyParseError(int index, String encountered) {
-    this.index = index;
-    this.encountered = encountered;
-  }
-  
-  public final String getEncountered() {
-    return encountered;
-  }
 
-  public List<String> getExpected() {
-    return Collections.emptyList();
-  }
+    private final int index;
+    private final String encountered;
 
-  public String getFailureMessage() {
-    return null;
-  }
+    EmptyParseError(int index, String encountered) {
+        this.index = index;
+        this.encountered = encountered;
+    }
 
-  public final int getIndex() {
-    return index;
-  }
+    public final String getEncountered() {
+        return encountered;
+    }
 
-  public String getUnexpected() {
-    return null;
-  }
+    public List<String> getExpected() {
+        return Collections.emptyList();
+    }
+
+    public String getFailureMessage() {
+        return null;
+    }
+
+    public final int getIndex() {
+        return index;
+    }
+
+    public String getUnexpected() {
+        return null;
+    }
 }

@@ -16,21 +16,23 @@
 package com.googlecode.lazyparsec;
 
 final class PeekParser<T> extends Parser<T> {
-  private final Parser<T> parser;
+    private final Parser<T> parser;
 
-  PeekParser(Parser<T> parser) {
-    this.parser = parser;
-  }
+    PeekParser(Parser<T> parser) {
+        this.parser = parser;
+    }
 
-  @Override boolean apply(ParseContext ctxt) {
-    int step = ctxt.step;
-    int at = ctxt.at;
-    boolean ok = parser.run(ctxt);
-    if (ok) ctxt.setAt(step, at);
-    return ok;
-  }
-  
-  @Override public String toString() {
-    return "peek";
-  }
+    @Override
+    boolean apply(ParseContext ctxt) {
+        int step = ctxt.step;
+        int at = ctxt.at;
+        boolean ok = parser.run(ctxt);
+        if (ok) ctxt.setAt(step, at);
+        return ok;
+    }
+
+    @Override
+    public String toString() {
+        return "peek";
+    }
 }

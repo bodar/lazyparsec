@@ -20,19 +20,21 @@ package com.googlecode.lazyparsec;
  *
  * @author Ben Yu
  */
-final class ExpectParser <T> extends Parser <T> {
-  private final String name;
+final class ExpectParser<T> extends Parser<T> {
+    private final String name;
 
-  ExpectParser(String name) {
-    this.name = name;
-  }
+    ExpectParser(String name) {
+        this.name = name;
+    }
 
-  @Override boolean apply(ParseContext ctxt) {
-    ctxt.expected(name);
-    return false;
-  }
-  
-  @Override public String toString() {
-    return name;
-  }
+    @Override
+    boolean apply(ParseContext ctxt) {
+        ctxt.expected(name);
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

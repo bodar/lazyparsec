@@ -19,9 +19,10 @@ import com.googlecode.totallylazy.Callable1;
 
 /**
  * Represents a unary operation on the same type {@code T}.
- * 
+ * <p/>
  * <p> Implement this interface for unary operator instead of {@link Callable1} for brevity.
- * 
+ *
  * @author Ben Yu
  */
-public interface Unary<T> extends Callable1<T, T> {}
+public interface Unary<T> extends Callable1<T, T> {
+}

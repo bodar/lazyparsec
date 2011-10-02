@@ -23,28 +23,30 @@ import com.googlecode.lazyparsec.pattern.Pattern;
  * @author Ben Yu
  */
 final class PatternScanner extends Parser<Void> {
-  private final String name;
-  private final Pattern pattern;
-  
-  PatternScanner(String name, Pattern pattern) {
-    this.name = name;
-    this.pattern = pattern;
-  }
+    private final String name;
+    private final Pattern pattern;
 
-  @Override boolean apply(final ParseContext ctxt) {
-    int at = ctxt.at;
-    CharSequence src = ctxt.characters();
-    int matchLength = pattern.match(src, at, src.length());
-    if (matchLength < 0) {
-      ctxt.expected(name);
-      return false;
+    PatternScanner(String name, Pattern pattern) {
+        this.name = name;
+        this.pattern = pattern;
     }
-    ctxt.next(matchLength);
-    ctxt.result = null;
-    return true;
-  }
-  
-  @Override public String toString() {
-    return name;
-  }
+
+    @Override
+    boolean apply(final ParseContext ctxt) {
+        int at = ctxt.at;
+        CharSequence src = ctxt.characters();
+        int matchLength = pattern.match(src, at, src.length());
+        if (matchLength < 0) {
+            ctxt.expected(name);
+            return false;
+        }
+        ctxt.next(matchLength);
+        ctxt.result = null;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

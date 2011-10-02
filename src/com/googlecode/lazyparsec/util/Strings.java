@@ -17,25 +17,29 @@ package com.googlecode.lazyparsec.util;
 
 /**
  * Internal utility for {@link String} operation.
- * 
+ *
  * @author Ben Yu
  */
 public final class Strings {
 
-  /** Joins {@code objects} with {@code delim} as the delimiter. */
-  public static String join(String delim, Object[] objects) {
-    // Do not use varargs to prevent some silly compiler warnings.
-    if (objects.length == 0) return "";
-    return join(new StringBuilder(), delim, objects).toString();
-  }
-
-  /** Joins {@code objects} with {@code delim} as the delimiter. */
-  public static StringBuilder join(StringBuilder builder, String delim, Object[] objects) {
-    int i = 0;
-    for (Object obj : objects) {
-      if (i++ > 0) builder.append(delim);
-      builder.append(obj);
+    /**
+     * Joins {@code objects} with {@code delim} as the delimiter.
+     */
+    public static String join(String delim, Object[] objects) {
+        // Do not use varargs to prevent some silly compiler warnings.
+        if (objects.length == 0) return "";
+        return join(new StringBuilder(), delim, objects).toString();
     }
-    return builder;
-  }
+
+    /**
+     * Joins {@code objects} with {@code delim} as the delimiter.
+     */
+    public static StringBuilder join(StringBuilder builder, String delim, Object[] objects) {
+        int i = 0;
+        for (Object obj : objects) {
+            if (i++ > 0) builder.append(delim);
+            builder.append(obj);
+        }
+        return builder;
+    }
 }

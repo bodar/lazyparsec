@@ -21,18 +21,20 @@ package com.googlecode.lazyparsec;
  * @author Ben Yu
  */
 final class FailureParser<T> extends Parser<T> {
-  private final String message;
+    private final String message;
 
-  FailureParser(String msg) {
-    this.message = msg;
-  }
+    FailureParser(String msg) {
+        this.message = msg;
+    }
 
-  @Override boolean apply(ParseContext ctxt) {
-    ctxt.fail(message);
-    return false;
-  }
-  
-  @Override public String toString() {
-    return message;
-  }
+    @Override
+    boolean apply(ParseContext ctxt) {
+        ctxt.fail(message);
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return message;
+    }
 }

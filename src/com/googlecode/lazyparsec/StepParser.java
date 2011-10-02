@@ -16,23 +16,25 @@
 package com.googlecode.lazyparsec;
 
 final class StepParser<T> extends Parser<T> {
-  private final Parser<T> parser;
+    private final Parser<T> parser;
 
-  private final int n;
+    private final int n;
 
-  StepParser(Parser<T> parser, int n) {
-    this.parser = parser;
-    this.n = n;
-  }
+    StepParser(Parser<T> parser, int n) {
+        this.parser = parser;
+        this.n = n;
+    }
 
-  @Override boolean apply(ParseContext ctxt) {
-    int step = ctxt.step;
-    if (!parser.run(ctxt)) return false;
-    ctxt.step = step + n;
-    return true;
-  }
-  
-  @Override public String toString() {
-    return parser.toString();
-  }
+    @Override
+    boolean apply(ParseContext ctxt) {
+        int step = ctxt.step;
+        if (!parser.run(ctxt)) return false;
+        ctxt.step = step + n;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return parser.toString();
+    }
 }

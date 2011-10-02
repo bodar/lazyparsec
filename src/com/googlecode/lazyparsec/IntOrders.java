@@ -17,33 +17,41 @@ package com.googlecode.lazyparsec;
 
 /**
  * Common {@link IntOrder} implementations.
- * 
+ *
  * @author Ben Yu
  */
 final class IntOrders {
-  
-  /**
-   * An {@link IntOrder} instance that determines if the first integer is less than the second one.
-   * 
-   * <p> {@code LT.compare(1, 2) == true}.
-   */
-  static final IntOrder LT = new IntOrder() {
-    public boolean compare(int a, int b) { return a < b; }
-    @Override public String toString() {
-      return "shortest";
-    }
-  };
-  
-  /**
-   * An {@link IntOrder} instance that determines if the first integer is smaller than the second
-   * one.
-   * 
-   * <p> {@code GT.compare(2, 1) == true}.
-   */
-  static final IntOrder GT = new IntOrder() {
-    public boolean compare(int a, int b) {return a > b;}
-    @Override public String toString() {
-      return "longest";
-    }
-  };
+
+    /**
+     * An {@link IntOrder} instance that determines if the first integer is less than the second one.
+     * <p/>
+     * <p> {@code LT.compare(1, 2) == true}.
+     */
+    static final IntOrder LT = new IntOrder() {
+        public boolean compare(int a, int b) {
+            return a < b;
+        }
+
+        @Override
+        public String toString() {
+            return "shortest";
+        }
+    };
+
+    /**
+     * An {@link IntOrder} instance that determines if the first integer is smaller than the second
+     * one.
+     * <p/>
+     * <p> {@code GT.compare(2, 1) == true}.
+     */
+    static final IntOrder GT = new IntOrder() {
+        public boolean compare(int a, int b) {
+            return a > b;
+        }
+
+        @Override
+        public String toString() {
+            return "longest";
+        }
+    };
 }

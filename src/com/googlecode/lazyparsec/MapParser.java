@@ -20,23 +20,25 @@ import com.googlecode.totallylazy.Callable1;
 import static com.googlecode.totallylazy.Callers.call;
 
 final class MapParser<From, To> extends Parser<To> {
-  private final Parser<From> parser;
-  private final Callable1<? super From, ? extends To> m;
+    private final Parser<From> parser;
+    private final Callable1<? super From, ? extends To> m;
 
-  MapParser(Parser<From> parser, Callable1<? super From, ? extends To> m) {
-    this.parser = parser;
-    this.m = m;
-  }
-
-  @Override boolean apply(final ParseContext ctxt) {
-    final boolean r = parser.run(ctxt);
-    if (r) {
-      ctxt.result = call(m, parser.getReturn(ctxt));
+    MapParser(Parser<From> parser, Callable1<? super From, ? extends To> m) {
+        this.parser = parser;
+        this.m = m;
     }
-    return r;
-  }
-  
-  @Override public String toString() {
-    return m.toString();
-  }
+
+    @Override
+    boolean apply(final ParseContext ctxt) {
+        final boolean r = parser.run(ctxt);
+        if (r) {
+            ctxt.result = call(m, parser.getReturn(ctxt));
+        }
+        return r;
+    }
+
+    @Override
+    public String toString() {
+        return m.toString();
+    }
 }

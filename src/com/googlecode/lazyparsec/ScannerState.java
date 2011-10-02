@@ -18,53 +18,59 @@ package com.googlecode.lazyparsec;
 
 /**
  * Parser state for scanner.
- * 
+ *
  * @author Ben Yu
  */
 final class ScannerState extends ParseContext {
-  private final int end;
-  
-  ScannerState(String module, CharSequence source, int from, SourceLocator locator) {
-    super(source, from, module, locator);
-    this.end = source.length();
-  }
-  
-  /**
-   * @param module the current module name for error reporting
-   * @param source the source string
-   * @param from from where do we start to scan?
-   * @param end till where do we stop scanning? (exclusive)
-   * @param locator the locator for mapping index to line and column number
-   * @param originalResult the original result value
-   */
-  ScannerState(String module, CharSequence source, int from, int end,
-      SourceLocator locator, Object originalResult) {
-    super(source, originalResult, from, module, locator);
-    this.end = end;
-  }
-  
-  @Override char peekChar() {
-    return source.charAt(at);
-  }
-  
-  @Override boolean isEof() {
-    return end == at;
-  }
-  
-  @Override int toIndex(int pos) {
-    return pos;
-  }
-  
-  @Override String getInputName(int pos) {
-    if (pos >= end) return EOF;
-    return Character.toString(source.charAt(pos));
-  }
-  
-  @Override CharSequence characters() {
-    return source;
-  }
+    private final int end;
 
-  @Override Token getToken() {
-    throw new IllegalStateException("Parser not on token level");
-  }
+    ScannerState(String module, CharSequence source, int from, SourceLocator locator) {
+        super(source, from, module, locator);
+        this.end = source.length();
+    }
+
+    /**
+     * @param module         the current module name for error reporting
+     * @param source         the source string
+     * @param from           from where do we start to scan?
+     * @param end            till where do we stop scanning? (exclusive)
+     * @param locator        the locator for mapping index to line and column number
+     * @param originalResult the original result value
+     */
+    ScannerState(String module, CharSequence source, int from, int end,
+                 SourceLocator locator, Object originalResult) {
+        super(source, originalResult, from, module, locator);
+        this.end = end;
+    }
+
+    @Override
+    char peekChar() {
+        return source.charAt(at);
+    }
+
+    @Override
+    boolean isEof() {
+        return end == at;
+    }
+
+    @Override
+    int toIndex(int pos) {
+        return pos;
+    }
+
+    @Override
+    String getInputName(int pos) {
+        if (pos >= end) return EOF;
+        return Character.toString(source.charAt(pos));
+    }
+
+    @Override
+    CharSequence characters() {
+        return source;
+    }
+
+    @Override
+    Token getToken() {
+        throw new IllegalStateException("Parser not on token level");
+    }
 }

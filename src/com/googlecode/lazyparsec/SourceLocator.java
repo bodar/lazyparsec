@@ -19,11 +19,13 @@ import com.googlecode.lazyparsec.error.Location;
 
 /**
  * Locates the line and column number of a 0-based index in the source.
- * 
+ *
  * @author Ben Yu
  */
 interface SourceLocator {
-  
-  /** Returns the {@link Location} of the 0-based {@code index} in the source. */
-  Location locate(int index);
+
+    /**
+     * Returns the {@link Location} of the 0-based {@code index} in the source.
+     */
+    Location locate(int index);
 }

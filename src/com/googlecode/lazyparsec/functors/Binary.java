@@ -19,9 +19,10 @@ import com.googlecode.totallylazy.Callable2;
 
 /**
  * Represents a binary operation on the same type {@code T}.
- * 
+ * <p/>
  * <p> Implement this interface for binary operator instead of {@link Callable2} for brevity.
- * 
+ *
  * @author Ben Yu
  */
-public interface Binary<T> extends Callable2<T, T, T> {}
+public interface Binary<T> extends Callable2<T, T, T> {
+}

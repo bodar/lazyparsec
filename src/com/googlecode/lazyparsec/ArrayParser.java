@@ -17,28 +17,30 @@ package com.googlecode.lazyparsec;
 
 /**
  * Sequentially runs an array of {@link Parser} objects and collects the return values in an array.
- * 
+ *
  * @author Ben Yu
  */
 final class ArrayParser extends Parser<Object[]> {
-  private final Parser<?>[] parsers;
+    private final Parser<?>[] parsers;
 
-  ArrayParser(Parser<?>[] parsers) {
-    this.parsers = parsers;
-  }
-
-  @Override boolean apply(ParseContext ctxt) {
-    Object[] ret = new Object[parsers.length];
-    for (int i = 0; i < parsers.length; i++) {
-      Parser<?> parser = parsers[i];
-      if (!parser.run(ctxt)) return false;
-      ret[i] = parser.getReturn(ctxt);
+    ArrayParser(Parser<?>[] parsers) {
+        this.parsers = parsers;
     }
-    ctxt.result = ret;
-    return true;
-  }
-  
-  @Override public String toString() {
-    return "array";
-  }
+
+    @Override
+    boolean apply(ParseContext ctxt) {
+        Object[] ret = new Object[parsers.length];
+        for (int i = 0; i < parsers.length; i++) {
+            Parser<?> parser = parsers[i];
+            if (!parser.run(ctxt)) return false;
+            ret[i] = parser.getReturn(ctxt);
+        }
+        ctxt.result = ret;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "array";
+    }
 }

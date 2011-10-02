@@ -16,29 +16,31 @@
 package com.googlecode.lazyparsec;
 
 final class IsTokenParser<T> extends Parser<T> {
-  private final TokenMap<? extends T> fromToken;
+    private final TokenMap<? extends T> fromToken;
 
-  IsTokenParser(TokenMap<? extends T> fromToken) {
-    this.fromToken = fromToken;
-  }
+    IsTokenParser(TokenMap<? extends T> fromToken) {
+        this.fromToken = fromToken;
+    }
 
-  @Override boolean apply(final ParseContext ctxt) {
-    if (ctxt.isEof()) {
-      ctxt.expected(fromToken);
-      return false;
+    @Override
+    boolean apply(final ParseContext ctxt) {
+        if (ctxt.isEof()) {
+            ctxt.expected(fromToken);
+            return false;
+        }
+        Token token = ctxt.getToken();
+        Object v = fromToken.map(token);
+        if (v == null) {
+            ctxt.expected(fromToken);
+            return false;
+        }
+        ctxt.result = v;
+        ctxt.next();
+        return true;
     }
-    Token token = ctxt.getToken();
-    Object v = fromToken.map(token);
-    if (v == null) {
-      ctxt.expected(fromToken);
-      return false;
+
+    @Override
+    public String toString() {
+        return fromToken.toString();
     }
-    ctxt.result = v;
-    ctxt.next();
-    return true;
-  }
-  
-  @Override public String toString() {
-    return fromToken.toString();
-  }
 }

@@ -21,19 +21,21 @@ package com.googlecode.lazyparsec;
  * @author Ben Yu
  */
 final class EofParser extends Parser<Object> {
-  private final String name;
+    private final String name;
 
-  EofParser(String name) {
-    this.name = name;
-  }
+    EofParser(String name) {
+        this.name = name;
+    }
 
-  @Override boolean apply(ParseContext ctxt) {
-    if (ctxt.isEof()) return true;
-    ctxt.expected(name);
-    return false;
-  }
-  
-  @Override public String toString() {
-    return name;
-  }
+    @Override
+    boolean apply(ParseContext ctxt) {
+        if (ctxt.isEof()) return true;
+        ctxt.expected(name);
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

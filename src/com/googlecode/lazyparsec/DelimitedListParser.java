@@ -24,18 +24,20 @@ import java.util.List;
  * @author Ben Yu
  */
 final class DelimitedListParser<T> extends DelimitedParser<T, List<T>> {
-  private final ListFactory<T> listFactory;
+    private final ListFactory<T> listFactory;
 
-  DelimitedListParser(Parser<T> p, Parser<?> delim, ListFactory<T> listFactory) {
-    super(p, delim);
-    this.listFactory = listFactory;
-  }
+    DelimitedListParser(Parser<T> p, Parser<?> delim, ListFactory<T> listFactory) {
+        super(p, delim);
+        this.listFactory = listFactory;
+    }
 
-  @Override List<T> begin() {
-    return listFactory.newList();
-  }
+    @Override
+    List<T> begin() {
+        return listFactory.newList();
+    }
 
-  @Override void element(ParseContext ctxt, List<T> list) {
-    list.add(parser.getReturn(ctxt));
-  }
+    @Override
+    void element(ParseContext ctxt, List<T> list) {
+        list.add(parser.getReturn(ctxt));
+    }
 }

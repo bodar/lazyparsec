@@ -2,28 +2,30 @@ package com.googlecode.lazyparsec;
 
 /**
  * Converts the current return value as a {@link Token} with starting index and length.
- * 
+ *
  * @author Ben Yu
  */
 final class ToTokenParser extends Parser<Token> {
-  private final Parser<?> parser;
-  
-  ToTokenParser(Parser<?> parser) {
-    this.parser = parser;
-  }
+    private final Parser<?> parser;
 
-  @Override boolean apply(ParseContext ctxt) throws Exception {
-    int begin = ctxt.getIndex();
-    if (!parser.apply(ctxt)) {
-      return false;
+    ToTokenParser(Parser<?> parser) {
+        this.parser = parser;
     }
-    int len = ctxt.getIndex() - begin;
-    Token token = new Token(begin, len, ctxt.result);
-    ctxt.result = token;
-    return true;
-  }
-  
-  @Override public String toString() {
-    return parser.toString();
-  }
+
+    @Override
+    boolean apply(ParseContext ctxt) throws Exception {
+        int begin = ctxt.getIndex();
+        if (!parser.apply(ctxt)) {
+            return false;
+        }
+        int len = ctxt.getIndex() - begin;
+        Token token = new Token(begin, len, ctxt.result);
+        ctxt.result = token;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return parser.toString();
+    }
 }
