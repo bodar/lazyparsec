@@ -17,8 +17,6 @@ package com.googlecode.lazyparsec;
 
 import com.googlecode.totallylazy.Callable1;
 
-import static com.googlecode.totallylazy.Callers.call;
-
 final class IfElseParser<T, C> extends Parser<T> {
     private final Parser<C> cond;
     private final Callable1<? super C, ? extends Parser<? extends T>> consequence;
@@ -32,12 +30,12 @@ final class IfElseParser<T, C> extends Parser<T> {
     }
 
     @Override
-    boolean apply(ParseContext context) {
+    boolean apply(ParseContext context) throws Exception {
         final Object ret = context.result;
         final int step = context.step;
         final int at = context.at;
         if (ParserInternals.runWithoutRecordingError(cond, context)) {
-            Parser<? extends T> parser = call(consequence, cond.getReturn(context));
+            Parser<? extends T> parser = consequence.call(cond.getReturn(context));
             return parser.run(context);
         }
         context.set(step, at, ret);

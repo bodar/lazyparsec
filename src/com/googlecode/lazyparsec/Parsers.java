@@ -586,8 +586,8 @@ public final class Parsers {
     }
 
     @SuppressWarnings("unchecked")
-    static <From> boolean runNext(ParseContext state, Callable1<? super From, ? extends Parser<?>> next) {
-        Parser<?> parser = Callers.call(next, (From) state.result);
+    static <From> boolean runNext(ParseContext state, Callable1<? super From, ? extends Parser<?>> next) throws Exception {
+        Parser<?> parser = next.call((From) state.result);
         return parser.run(state);
     }
 

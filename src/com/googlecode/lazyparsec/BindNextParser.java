@@ -34,7 +34,7 @@ final class BindNextParser<From, To> extends Parser<To> {
     }
 
     @Override
-    boolean apply(ParseContext context) {
+    boolean apply(ParseContext context) throws Exception {
         if (!parser.run(context))
             return false;
         return Parsers.runNext(context, callable1);

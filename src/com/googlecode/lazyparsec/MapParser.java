@@ -17,8 +17,6 @@ package com.googlecode.lazyparsec;
 
 import com.googlecode.totallylazy.Callable1;
 
-import static com.googlecode.totallylazy.Callers.call;
-
 final class MapParser<From, To> extends Parser<To> {
     private final Parser<From> parser;
     private final Callable1<? super From, ? extends To> m;
@@ -29,10 +27,10 @@ final class MapParser<From, To> extends Parser<To> {
     }
 
     @Override
-    boolean apply(final ParseContext context) {
+    boolean apply(final ParseContext context) throws Exception {
         final boolean r = parser.run(context);
         if (r) {
-            context.result = call(m, parser.getReturn(context));
+            context.result = m.call(parser.getReturn(context));
         }
         return r;
     }
