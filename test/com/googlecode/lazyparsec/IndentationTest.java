@@ -16,9 +16,9 @@
 
 package com.googlecode.lazyparsec;
 
-import com.googlecode.lazyparsec.pattern.CharPredicate;
 import com.googlecode.lazyparsec.pattern.Pattern;
 import com.googlecode.lazyparsec.util.Lists;
+import com.googlecode.totallylazy.Predicate;
 import junit.framework.TestCase;
 
 import java.util.List;
@@ -36,11 +36,11 @@ import static com.googlecode.lazyparsec.pattern.Pattern.MISMATCH;
 public class IndentationTest extends TestCase {
 
     public void testInlineWhitespace() {
-        CharPredicate predicate = Indentation.INLINE_WHITESPACE;
-        assertTrue(predicate.isChar(' '));
-        assertTrue(predicate.isChar('\t'));
-        assertTrue(predicate.isChar('\r'));
-        assertFalse(predicate.isChar('\n'));
+        Predicate<Character> predicate = Indentation.INLINE_WHITESPACE;
+        assertTrue(predicate.matches(' '));
+        assertTrue(predicate.matches('\t'));
+        assertTrue(predicate.matches('\r'));
+        assertFalse(predicate.matches('\n'));
         assertEquals("whitespace", predicate.toString());
     }
 

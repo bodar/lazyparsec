@@ -71,13 +71,13 @@ public class ScannersTest extends TestCase {
         assertFailure(scanner, "e1", 1, 1);
     }
 
-    public void testMany_withCharPredicate() {
+    public void testMany_withCharacterPredicate() {
         Parser<Void> scanner = Scanners.many(CharPredicates.IS_ALPHA);
         assertScanner(scanner, "abc123", "123");
         assertScanner(scanner, "123", "123");
     }
 
-    public void testMany1_withCharPredicate() {
+    public void testMany1_withCharacterPredicate() {
         Parser<Void> scanner = Scanners.many1(CharPredicates.IS_ALPHA);
         assertScanner(scanner, "abc123", "123");
         assertFailure(scanner, "123", 1, 1, "[a-zA-Z]+ expected, 1 encountered.");

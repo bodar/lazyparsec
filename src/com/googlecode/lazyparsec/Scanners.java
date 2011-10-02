@@ -15,10 +15,10 @@
  *****************************************************************************/
 package com.googlecode.lazyparsec;
 
-import com.googlecode.lazyparsec.pattern.CharPredicate;
 import com.googlecode.lazyparsec.pattern.CharPredicates;
 import com.googlecode.lazyparsec.pattern.Pattern;
 import com.googlecode.lazyparsec.pattern.Patterns;
+import com.googlecode.totallylazy.Predicate;
 
 /**
  * Provides common {@link Parser} implementations that scan the source and match certain string
@@ -166,22 +166,22 @@ public final class Scanners {
             pattern(Patterns.SCIENTIFIC_NOTATION, "scientific notation").source();
 
     /**
-     * A scanner that scans greedily for 0 or more characters that satisfies the given CharPredicate.
+     * A scanner that scans greedily for 0 or more characters that satisfies the given Predicate<Character>.
      *
      * @param predicate the predicate object.
      * @return the Parser object.
      */
-    public static Parser<Void> many(CharPredicate predicate) {
+    public static Parser<Void> many(Predicate<Character> predicate) {
         return pattern(Patterns.isChar(predicate).many(), predicate + "*");
     }
 
     /**
-     * A scanner that scans greedily for 1 or more characters that satisfies the given CharPredicate.
+     * A scanner that scans greedily for 1 or more characters that satisfies the given Predicate<Character>.
      *
      * @param predicate the predicate object.
      * @return the Parser object.
      */
-    public static Parser<Void> many1(CharPredicate predicate) {
+    public static Parser<Void> many1(Predicate<Character> predicate) {
         return pattern(Patterns.many1(predicate), predicate + "+");
     }
 
@@ -262,24 +262,24 @@ public final class Scanners {
 
     /**
      * A scanner that succeeds and consumes the current character if it satisfies the given
-     * {@link CharPredicate}.
+     * {@link Predicate<Character>}.
      *
      * @param predicate the predicate.
      * @return the scanner.
      */
-    public static Parser<Void> isChar(CharPredicate predicate) {
+    public static Parser<Void> isChar(Predicate<Character> predicate) {
         return isChar(predicate, predicate.toString());
     }
 
     /**
      * A scanner that succeeds and consumes the current character if it satisfies the given
-     * {@link CharPredicate}.
+     * {@link Predicate<Character>}.
      *
      * @param predicate the predicate.
      * @param name      the name of what's expected logically. Is used in error message.
      * @return the scanner.
      */
-    public static Parser<Void> isChar(CharPredicate predicate, String name) {
+    public static Parser<Void> isChar(Predicate<Character> predicate, String name) {
         return new IsCharScanner(name, predicate);
     }
 

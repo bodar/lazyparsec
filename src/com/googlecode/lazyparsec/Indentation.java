@@ -18,11 +18,11 @@ package com.googlecode.lazyparsec;
 
 import com.googlecode.lazyparsec.annotations.Private;
 import com.googlecode.lazyparsec.functors.Unary;
-import com.googlecode.lazyparsec.pattern.CharPredicate;
 import com.googlecode.lazyparsec.pattern.Pattern;
 import com.googlecode.lazyparsec.pattern.Patterns;
 import com.googlecode.lazyparsec.util.Lists;
 import com.googlecode.lazyparsec.util.Objects;
+import com.googlecode.totallylazy.Predicate;
 
 import java.util.List;
 import java.util.Stack;
@@ -36,11 +36,11 @@ import java.util.Stack;
 public final class Indentation {
 
     /**
-     * A {@link CharPredicate} that returns true only if the character isn't line feed
+     * A {@link Predicate<Character>} that returns true only if the character isn't line feed
      * and {@link Character#isWhitespace(char)} returns true.
      */
-    static final CharPredicate INLINE_WHITESPACE = new CharPredicate() {
-        public boolean isChar(char c) {
+    static final Predicate<Character> INLINE_WHITESPACE = new Predicate<Character>() {
+        public boolean matches(Character c) {
             return c != '\n' && Character.isWhitespace(c);
         }
 

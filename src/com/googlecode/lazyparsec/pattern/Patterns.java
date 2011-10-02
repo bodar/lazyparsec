@@ -16,6 +16,7 @@
 package com.googlecode.lazyparsec.pattern;
 
 import com.googlecode.lazyparsec.util.Checks;
+import com.googlecode.totallylazy.Predicate;
 
 import java.util.regex.Matcher;
 
@@ -203,12 +204,12 @@ public final class Patterns {
      * Returns a {@link Pattern} object that matches if the current character in the input satisfies
      * {@code predicate}, in which case {@code 1} is returned as match length.
      */
-    public static Pattern isChar(final CharPredicate predicate) {
+    public static Pattern isChar(final Predicate<Character> predicate) {
         return new Pattern() {
             @Override
             public int match(CharSequence src, int begin, int end) {
                 if (begin >= end) return Pattern.MISMATCH;
-                else if (predicate.isChar(src.charAt(begin))) return 1;
+                else if (predicate.matches(src.charAt(begin))) return 1;
                 else return Pattern.MISMATCH;
             }
         };
@@ -387,7 +388,7 @@ public final class Patterns {
      * Returns a {@link Pattern} object that matches if the input has at least {@code n} characters
      * and the first {@code n} characters all satisfy {@code predicate}.
      */
-    public static Pattern repeat(final int n, final CharPredicate predicate) {
+    public static Pattern repeat(final int n, final Predicate<Character> predicate) {
         Checks.checkNonNegative(n, "n < 0");
         return new Pattern() {
             @Override
@@ -415,7 +416,7 @@ public final class Patterns {
      * Returns a {@link Pattern} object that matches if the input starts with {@code min} or more
      * characters and all satisfy {@code predicate}.
      */
-    public static Pattern many(final int min, final CharPredicate predicate) {
+    public static Pattern many(final int min, final Predicate<Character> predicate) {
         Checks.checkMin(min);
         return new Pattern() {
             @Override
@@ -430,7 +431,7 @@ public final class Patterns {
     /**
      * Returns a {@link Pattern} that matches 0 or more characters satisfying {@code predicate}.
      */
-    public static Pattern many(final CharPredicate predicate) {
+    public static Pattern many(final Predicate<Character> predicate) {
         return new Pattern() {
             @Override
             public int match(CharSequence src, int begin, int end) {
@@ -464,7 +465,7 @@ public final class Patterns {
      * Returns a {@link Pattern} that matches at least {@code min} and up to {@code max} number of
      * characters satisfying {@code predicate},
      */
-    public static Pattern some(final int min, final int max, final CharPredicate predicate) {
+    public static Pattern some(final int min, final int max, final Predicate<Character> predicate) {
         Checks.checkMinMax(min, max);
         return new Pattern() {
             @Override
@@ -480,7 +481,7 @@ public final class Patterns {
      * Returns a {@link Pattern} that matches up to {@code max} number of characters
      * satisfying {@code predicate}.
      */
-    public static Pattern some(final int max, final CharPredicate predicate) {
+    public static Pattern some(final int max, final Predicate<Character> predicate) {
         Checks.checkMax(max);
         return new Pattern() {
             @Override
@@ -586,7 +587,7 @@ public final class Patterns {
     /**
      * Returns a {@link Pattern} that matches 1 or more characters satisfying {@code predicate}.
      */
-    public static Pattern many1(CharPredicate predicate) {
+    public static Pattern many1(Predicate<Character> predicate) {
         return many(1, predicate);
     }
 
@@ -623,11 +624,11 @@ public final class Patterns {
     }
 
     private static int matchRepeat(
-            int n, CharPredicate predicate, CharSequence src, int len, int from, int acc) {
+            int n, Predicate<Character> predicate, CharSequence src, int len, int from, int acc) {
         int tail = from + n;
         if (tail > len) return Pattern.MISMATCH;
         for (int i = from; i < tail; i++) {
-            if (!predicate.isChar(src.charAt(i))) return Pattern.MISMATCH;
+            if (!predicate.matches(src.charAt(i))) return Pattern.MISMATCH;
         }
         return n + acc;
     }
@@ -644,10 +645,10 @@ public final class Patterns {
     }
 
     private static int matchSome(
-            int max, CharPredicate predicate, CharSequence src, int len, int from, int acc) {
+            int max, Predicate<Character> predicate, CharSequence src, int len, int from, int acc) {
         int k = Math.min(max + from, len);
         for (int i = from; i < k; i++) {
-            if (!predicate.isChar(src.charAt(i))) return i - from + acc;
+            if (!predicate.matches(src.charAt(i))) return i - from + acc;
         }
         return k - from + acc;
     }
@@ -664,9 +665,9 @@ public final class Patterns {
     }
 
     private static int matchMany(
-            CharPredicate predicate, CharSequence src, int len, int from, int acc) {
+            Predicate<Character> predicate, CharSequence src, int len, int from, int acc) {
         for (int i = from; i < len; i++) {
-            if (!predicate.isChar(src.charAt(i))) return i - from + acc;
+            if (!predicate.matches(src.charAt(i))) return i - from + acc;
         }
         return len - from + acc;
     }

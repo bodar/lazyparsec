@@ -16,9 +16,10 @@
 package com.googlecode.lazyparsec.pattern;
 
 import com.googlecode.lazyparsec.util.Strings;
+import com.googlecode.totallylazy.Predicate;
 
 /**
- * Provides common {@link CharPredicate} implementations.
+ * Provides common {@link Predicate<Character>} implementations.
  *
  * @author Ben Yu
  */
@@ -28,10 +29,10 @@ public final class CharPredicates {
     }
 
     /**
-     * A {@link CharPredicate} that always returns false.
+     * A {@link Predicate<Character>} that always returns false.
      */
-    public static final CharPredicate NEVER = new CharPredicate() {
-        public boolean isChar(char c) {
+    public static final Predicate<Character> NEVER = new Predicate<Character>() {
+        public boolean matches(Character c) {
             return false;
         }
 
@@ -42,10 +43,10 @@ public final class CharPredicates {
     };
 
     /**
-     * A {@link CharPredicate} that always returns true.
+     * A {@link Predicate<Character>} that always returns true.
      */
-    public static final CharPredicate ALWAYS = new CharPredicate() {
-        public boolean isChar(char c) {
+    public static final Predicate<Character> ALWAYS = new Predicate<Character>() {
+        public boolean matches(Character c) {
             return true;
         }
 
@@ -56,11 +57,11 @@ public final class CharPredicates {
     };
 
     /**
-     * A {@link CharPredicate} that returns true if the character is a digit or within the range
+     * A {@link Predicate<Character>} that returns true if the character is a digit or within the range
      * of {@code [a-f]} or {@code [A-F]}.
      */
-    public static final CharPredicate IS_HEX_DIGIT = new CharPredicate() {
-        public boolean isChar(char c) {
+    public static final Predicate<Character> IS_HEX_DIGIT = new Predicate<Character>() {
+        public boolean matches(Character c) {
             return c >= '0' && c <= '9' || c >= 'a' && c <= 'f' || c >= 'A' && c <= 'F';
         }
 
@@ -71,11 +72,11 @@ public final class CharPredicates {
     };
 
     /**
-     * A {@link CharPredicate} that returns true if {@link Character#isUpperCase(char)} returns
+     * A {@link Predicate<Character>} that returns true if {@link Character#isUpperCase(char)} returns
      * true.
      */
-    public static final CharPredicate IS_UPPER_CASE = new CharPredicate() {
-        public boolean isChar(char c) {
+    public static final Predicate<Character> IS_UPPER_CASE = new Predicate<Character>() {
+        public boolean matches(Character c) {
             return Character.isUpperCase(c);
         }
 
@@ -86,11 +87,11 @@ public final class CharPredicates {
     };
 
     /**
-     * A {@link CharPredicate} that returns true if {@link Character#isLowerCase(char)} returns
+     * A {@link Predicate<Character>} that returns true if {@link Character#isLowerCase(char)} returns
      * true.
      */
-    public static final CharPredicate IS_LOWER_CASE = new CharPredicate() {
-        public boolean isChar(char c) {
+    public static final Predicate<Character> IS_LOWER_CASE = new Predicate<Character>() {
+        public boolean matches(Character c) {
             return Character.isLowerCase(c);
         }
 
@@ -101,11 +102,11 @@ public final class CharPredicates {
     };
 
     /**
-     * A {@link CharPredicate} that returns true if {@link Character#isWhitespace(char)}
+     * A {@link Predicate<Character>} that returns true if {@link Character#isWhitespace(char)}
      * returns true.
      */
-    public static final CharPredicate IS_WHITESPACE = new CharPredicate() {
-        public boolean isChar(char c) {
+    public static final Predicate<Character> IS_WHITESPACE = new Predicate<Character>() {
+        public boolean matches(Character c) {
             return Character.isWhitespace(c);
         }
 
@@ -116,10 +117,10 @@ public final class CharPredicates {
     };
 
     /**
-     * A {@link CharPredicate} that returns true if the character is an alpha character.
+     * A {@link Predicate<Character>} that returns true if the character is an alpha character.
      */
-    public static final CharPredicate IS_ALPHA = new CharPredicate() {
-        public boolean isChar(char c) {
+    public static final Predicate<Character> IS_ALPHA = new Predicate<Character>() {
+        public boolean matches(Character c) {
             return c <= 'z' && c >= 'a' || c <= 'Z' && c >= 'A';
         }
 
@@ -130,11 +131,11 @@ public final class CharPredicates {
     };
 
     /**
-     * A {@link CharPredicate} that returns true if it is an alpha character or the underscore
+     * A {@link Predicate<Character>} that returns true if it is an alpha character or the underscore
      * character {@code _}.
      */
-    public static final CharPredicate IS_ALPHA_ = new CharPredicate() {
-        public boolean isChar(char c) {
+    public static final Predicate<Character> IS_ALPHA_ = new Predicate<Character>() {
+        public boolean matches(Character c) {
             return c == '_' || c <= 'z' && c >= 'a' || c <= 'Z' && c >= 'A';
         }
 
@@ -145,11 +146,11 @@ public final class CharPredicates {
     };
 
     /**
-     * A {@link CharPredicate} that returns true if {@link Character#isLetter(char)} returns
+     * A {@link Predicate<Character>} that returns true if {@link Character#isLetter(char)} returns
      * true.
      */
-    public static final CharPredicate IS_LETTER = new CharPredicate() {
-        public boolean isChar(char c) {
+    public static final Predicate<Character> IS_LETTER = new Predicate<Character>() {
+        public boolean matches(Character c) {
             return Character.isLetter(c);
         }
 
@@ -160,11 +161,11 @@ public final class CharPredicates {
     };
 
     /**
-     * A {@link CharPredicate} that returns true if it is an alphanumeric character, or an
+     * A {@link Predicate<Character>} that returns true if it is an alphanumeric character, or an
      * underscore character.
      */
-    public static final CharPredicate IS_ALPHA_NUMERIC = new CharPredicate() {
-        public boolean isChar(char c) {
+    public static final Predicate<Character> IS_ALPHA_NUMERIC = new Predicate<Character>() {
+        public boolean matches(Character c) {
             return c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z' || c >= '0' && c <= '9';
         }
 
@@ -175,11 +176,11 @@ public final class CharPredicates {
     };
 
     /**
-     * A {@link CharPredicate} that returns true if it is an alphanumeric character, or an
+     * A {@link Predicate<Character>} that returns true if it is an alphanumeric character, or an
      * underscore character.
      */
-    public static final CharPredicate IS_ALPHA_NUMERIC_ = new CharPredicate() {
-        public boolean isChar(char c) {
+    public static final Predicate<Character> IS_ALPHA_NUMERIC_ = new Predicate<Character>() {
+        public boolean matches(Character c) {
             return c == '_' || c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z' || c >= '0' && c <= '9';
         }
 
@@ -190,11 +191,11 @@ public final class CharPredicates {
     };
 
     /**
-     * A {@link CharPredicate} that returns true if the character is equal to {@code c}.
+     * A {@link Predicate<Character>} that returns true if the character is equal to {@code c}.
      */
-    public static CharPredicate isChar(final char c) {
-        return new CharPredicate() {
-            public boolean isChar(char x) {
+    public static Predicate<Character> isChar(final char c) {
+        return new Predicate<Character>() {
+            public boolean matches(Character x) {
                 return x == c;
             }
 
@@ -206,11 +207,11 @@ public final class CharPredicates {
     }
 
     /**
-     * A {@link CharPredicate} that returns true if the character is not equal to {@code c}.
+     * A {@link Predicate<Character>} that returns true if the character is not equal to {@code c}.
      */
-    public static CharPredicate notChar(final char c) {
-        return new CharPredicate() {
-            public boolean isChar(char x) {
+    public static Predicate<Character> notChar(final char c) {
+        return new Predicate<Character>() {
+            public boolean matches(Character x) {
                 return x != c;
             }
 
@@ -222,12 +223,12 @@ public final class CharPredicates {
     }
 
     /**
-     * A {@link CharPredicate} that returns true if the character is within the range of
+     * A {@link Predicate<Character>} that returns true if the character is within the range of
      * {@code [a, b]}.
      */
-    public static CharPredicate range(final char a, final char b) {
-        return new CharPredicate() {
-            public boolean isChar(char c) {
+    public static Predicate<Character> range(final char a, final char b) {
+        return new Predicate<Character>() {
+            public boolean matches(Character c) {
                 return c >= a && c <= b;
             }
 
@@ -239,17 +240,17 @@ public final class CharPredicates {
     }
 
     /**
-     * A {@link CharPredicate} that returns true if the character is a digit.
+     * A {@link Predicate<Character>} that returns true if the character is a digit.
      */
-    public static final CharPredicate IS_DIGIT = range('0', '9');
+    public static final Predicate<Character> IS_DIGIT = range('0', '9');
 
     /**
-     * A {@link CharPredicate} that returns true if the character is not within the range of
+     * A {@link Predicate<Character>} that returns true if the character is not within the range of
      * {@code [a, b]}.
      */
-    public static CharPredicate notRange(final char a, final char b) {
-        return new CharPredicate() {
-            public boolean isChar(char c) {
+    public static Predicate<Character> notRange(final char a, final char b) {
+        return new Predicate<Character>() {
+            public boolean matches(Character c) {
                 return !(c >= a && c <= b);
             }
 
@@ -261,12 +262,12 @@ public final class CharPredicates {
     }
 
     /**
-     * A {@link CharPredicate} that returns true if the character is equal to any character in
+     * A {@link Predicate<Character>} that returns true if the character is equal to any character in
      * {@code chars}.
      */
-    public static CharPredicate among(final String chars) {
-        return new CharPredicate() {
-            public boolean isChar(char c) {
+    public static Predicate<Character> among(final String chars) {
+        return new Predicate<Character>() {
+            public boolean matches(Character c) {
                 return chars.indexOf(c) >= 0;
             }
 
@@ -278,12 +279,12 @@ public final class CharPredicates {
     }
 
     /**
-     * A {@link CharPredicate} that returns true if the character is not equal to any character
+     * A {@link Predicate<Character>} that returns true if the character is not equal to any character
      * in {@code chars}.
      */
-    public static CharPredicate notAmong(final String chars) {
-        return new CharPredicate() {
-            public boolean isChar(char c) {
+    public static Predicate<Character> notAmong(final String chars) {
+        return new Predicate<Character>() {
+            public boolean matches(Character c) {
                 return chars.indexOf(c) < 0;
             }
 
@@ -295,12 +296,12 @@ public final class CharPredicates {
     }
 
     /**
-     * A {@link CharPredicate} that returns true if {@code predicate} evaluates to false.
+     * A {@link Predicate<Character>} that returns true if {@code predicate} evaluates to false.
      */
-    public static CharPredicate not(final CharPredicate predicate) {
-        return new CharPredicate() {
-            public boolean isChar(char c) {
-                return !predicate.isChar(c);
+    public static Predicate<Character> not(final Predicate<Character> predicate) {
+        return new Predicate<Character>() {
+            public boolean matches(Character c) {
+                return !predicate.matches(c);
             }
 
             @Override
@@ -311,13 +312,13 @@ public final class CharPredicates {
     }
 
     /**
-     * A {@link CharPredicate} that returns true if both {@code predicate1} and
+     * A {@link Predicate<Character>} that returns true if both {@code predicate1} and
      * {@code predicate2} evaluates to true.
      */
-    public static CharPredicate and(final CharPredicate predicate1, final CharPredicate predicate2) {
-        return new CharPredicate() {
-            public boolean isChar(char c) {
-                return predicate1.isChar(c) && predicate2.isChar(c);
+    public static Predicate<Character> and(final Predicate<Character> predicate1, final Predicate<Character> predicate2) {
+        return new Predicate<Character>() {
+            public boolean matches(Character c) {
+                return predicate1.matches(c) && predicate2.matches(c);
             }
 
             @Override
@@ -328,13 +329,13 @@ public final class CharPredicates {
     }
 
     /**
-     * A {@link CharPredicate} that returns true if either {@code predicate1} or
+     * A {@link Predicate<Character>} that returns true if either {@code predicate1} or
      * {@code predicate2} evaluates to true.
      */
-    public static CharPredicate or(final CharPredicate predicate1, final CharPredicate predicate2) {
-        return new CharPredicate() {
-            public boolean isChar(char c) {
-                return predicate1.isChar(c) || predicate2.isChar(c);
+    public static Predicate<Character> or(final Predicate<Character> predicate1, final Predicate<Character> predicate2) {
+        return new Predicate<Character>() {
+            public boolean matches(Character c) {
+                return predicate1.matches(c) || predicate2.matches(c);
             }
 
             @Override
@@ -345,17 +346,17 @@ public final class CharPredicates {
     }
 
     /**
-     * A {@link CharPredicate} that returns true if all {@code CharPredicate} in
+     * A {@link Predicate<Character>} that returns true if all {@code Predicate<Character>} in
      * {@code predicates} evaluate to true.
      */
-    public static CharPredicate and(final CharPredicate... predicates) {
+    public static Predicate<Character> and(final Predicate<Character>... predicates) {
         if (predicates.length == 0)
             return ALWAYS;
         else if (predicates.length == 1) return predicates[0];
-        return new CharPredicate() {
-            public boolean isChar(char c) {
+        return new Predicate<Character>() {
+            public boolean matches(Character c) {
                 for (int i = 0; i < predicates.length; i++) {
-                    if (!predicates[i].isChar(c)) return false;
+                    if (!predicates[i].matches(c)) return false;
                 }
                 return true;
             }
@@ -368,17 +369,17 @@ public final class CharPredicates {
     }
 
     /**
-     * A {@link CharPredicate} that returns true if any {@code CharPredicate} in
+     * A {@link Predicate<Character>} that returns true if any {@code Predicate<Character>} in
      * {@code predicates} evaluates to true.
      */
-    public static CharPredicate or(final CharPredicate... predicates) {
+    public static Predicate<Character> or(final Predicate<Character>... predicates) {
         if (predicates.length == 0)
             return NEVER;
         else if (predicates.length == 1) return predicates[0];
-        return new CharPredicate() {
-            public boolean isChar(char c) {
+        return new Predicate<Character>() {
+            public boolean matches(Character c) {
                 for (int i = 0; i < predicates.length; i++) {
-                    if (predicates[i].isChar(c)) return true;
+                    if (predicates[i].matches(c)) return true;
                 }
                 return false;
             }

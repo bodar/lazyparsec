@@ -15,7 +15,7 @@
  *****************************************************************************/
 package com.googlecode.lazyparsec;
 
-import com.googlecode.lazyparsec.pattern.CharPredicate;
+import com.googlecode.totallylazy.Predicate;
 
 /**
  * Parses a given characgter.
@@ -24,9 +24,9 @@ import com.googlecode.lazyparsec.pattern.CharPredicate;
  */
 final class IsCharScanner extends Parser<Void> {
     private final String name;
-    private final CharPredicate predicate;
+    private final Predicate<Character> predicate;
 
-    IsCharScanner(String name, CharPredicate predicate) {
+    IsCharScanner(String name, Predicate<Character> predicate) {
         this.name = name;
         this.predicate = predicate;
     }
@@ -38,7 +38,7 @@ final class IsCharScanner extends Parser<Void> {
             return false;
         }
         char c = ctxt.peekChar();
-        if (predicate.isChar(c)) {
+        if (predicate.matches(c)) {
             ctxt.next();
             ctxt.result = null;
             return true;
