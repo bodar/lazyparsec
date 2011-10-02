@@ -28,13 +28,13 @@ final class AnyCharScanner extends Parser<Void> {
     }
 
     @Override
-    boolean apply(ParseContext ctxt) {
-        if (ctxt.isEof()) {
-            ctxt.expected(name);
+    boolean apply(ParseContext context) {
+        if (context.isEof()) {
+            context.expected(name);
             return false;
         }
-        ctxt.next();
-        ctxt.result = null;
+        context.next();
+        context.result = null;
         return true;
     }
 

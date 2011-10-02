@@ -28,12 +28,12 @@ final class ReturnSourceParser extends Parser<String> {
     }
 
     @Override
-    boolean apply(ParseContext ctxt) throws Exception {
-        int begin = ctxt.getIndex();
-        if (!parser.apply(ctxt)) {
+    boolean apply(ParseContext context) throws Exception {
+        int begin = context.getIndex();
+        if (!parser.apply(context)) {
             return false;
         }
-        ctxt.result = ctxt.source.subSequence(begin, ctxt.getIndex()).toString();
+        context.result = context.source.subSequence(begin, context.getIndex()).toString();
         return true;
     }
 

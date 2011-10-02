@@ -18,8 +18,8 @@ package com.googlecode.lazyparsec;
 final class NeverParser<T> extends Parser<T> {
 
     @Override
-    boolean apply(ParseContext ctxt) {
-        ctxt.trap();
+    boolean apply(ParseContext context) {
+        context.trap();
         return false;
     }
 

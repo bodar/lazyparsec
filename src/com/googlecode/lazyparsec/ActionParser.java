@@ -23,7 +23,7 @@ final class ActionParser extends Parser<Object> {
     }
 
     @Override
-    boolean apply(ParseContext ctxt) {
+    boolean apply(ParseContext context) {
         action.run();
         return true;
     }

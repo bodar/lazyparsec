@@ -606,23 +606,23 @@ public abstract class Parser<T> {
     }
 
     @SuppressWarnings("unchecked")
-    final T getReturn(ParseContext ctxt) {
-        return (T) ctxt.result;
+    final T getReturn(ParseContext context) {
+        return (T) context.result;
     }
 
-    private ParserException asParserException(Throwable e, ParseContext ctxt) {
+    private ParserException asParserException(Throwable e, ParseContext context) {
         if (e instanceof ParserException) return (ParserException) e;
         return new ParserException(
-                e, null, ctxt.module, ctxt.locator.locate(ctxt.getIndex()));
+                e, null, context.module, context.locator.locate(context.getIndex()));
     }
 
-    final boolean run(ParseContext ctxt) {
+    final boolean run(ParseContext context) {
         try {
-            return apply(ctxt);
+            return apply(context);
         } catch (Exception e) {
-            throw asParserException(e, ctxt);
+            throw asParserException(e, context);
         }
     }
 
-    abstract boolean apply(ParseContext ctxt) throws Exception;
+    abstract boolean apply(ParseContext context) throws Exception;
 }

@@ -32,16 +32,16 @@ final class PatternScanner extends Parser<Void> {
     }
 
     @Override
-    boolean apply(final ParseContext ctxt) {
-        int at = ctxt.at;
-        CharSequence src = ctxt.characters();
+    boolean apply(final ParseContext context) {
+        int at = context.at;
+        CharSequence src = context.characters();
         int matchLength = pattern.match(src, at, src.length());
         if (matchLength < 0) {
-            ctxt.expected(name);
+            context.expected(name);
             return false;
         }
-        ctxt.next(matchLength);
-        ctxt.result = null;
+        context.next(matchLength);
+        context.result = null;
         return true;
     }
 

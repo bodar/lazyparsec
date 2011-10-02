@@ -28,8 +28,8 @@ final class ExpectParser<T> extends Parser<T> {
     }
 
     @Override
-    boolean apply(ParseContext ctxt) {
-        ctxt.expected(name);
+    boolean apply(ParseContext context) {
+        context.expected(name);
         return false;
     }
 

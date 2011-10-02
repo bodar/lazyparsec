@@ -32,18 +32,18 @@ final class IsCharScanner extends Parser<Void> {
     }
 
     @Override
-    boolean apply(ParseContext ctxt) {
-        if (ctxt.isEof()) {
-            ctxt.expected(name);
+    boolean apply(ParseContext context) {
+        if (context.isEof()) {
+            context.expected(name);
             return false;
         }
-        char c = ctxt.peekChar();
+        char c = context.peekChar();
         if (predicate.matches(c)) {
-            ctxt.next();
-            ctxt.result = null;
+            context.next();
+            context.result = null;
             return true;
         }
-        ctxt.expected(name);
+        context.expected(name);
         return false;
     }
 

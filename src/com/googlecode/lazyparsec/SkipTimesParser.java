@@ -27,10 +27,10 @@ final class SkipTimesParser extends Parser<Void> {
     }
 
     @Override
-    boolean apply(ParseContext ctxt) {
-        if (!ParserInternals.repeat(parser, min, ctxt)) return false;
-        if (ParserInternals.repeatAtMost(parser, max - min, ctxt)) {
-            ctxt.result = null;
+    boolean apply(ParseContext context) {
+        if (!ParserInternals.repeat(parser, min, context)) return false;
+        if (ParserInternals.repeatAtMost(parser, max - min, context)) {
+            context.result = null;
             return true;
         }
         return false;

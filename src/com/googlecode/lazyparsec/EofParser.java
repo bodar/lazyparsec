@@ -28,9 +28,9 @@ final class EofParser extends Parser<Object> {
     }
 
     @Override
-    boolean apply(ParseContext ctxt) {
-        if (ctxt.isEof()) return true;
-        ctxt.expected(name);
+    boolean apply(ParseContext context) {
+        if (context.isEof()) return true;
+        context.expected(name);
         return false;
     }
 

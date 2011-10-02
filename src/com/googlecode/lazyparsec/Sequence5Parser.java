@@ -36,23 +36,23 @@ final class Sequence5Parser<A, B, C, D, E, T> extends Parser<T> {
     }
 
     @Override
-    boolean apply(ParseContext ctxt) throws Exception {
-        boolean r1 = p1.run(ctxt);
+    boolean apply(ParseContext context) throws Exception {
+        boolean r1 = p1.run(context);
         if (!r1) return false;
-        A o1 = p1.getReturn(ctxt);
-        boolean r2 = p2.run(ctxt);
+        A o1 = p1.getReturn(context);
+        boolean r2 = p2.run(context);
         if (!r2) return false;
-        B o2 = p2.getReturn(ctxt);
-        boolean r3 = p3.run(ctxt);
+        B o2 = p2.getReturn(context);
+        boolean r3 = p3.run(context);
         if (!r3) return false;
-        C o3 = p3.getReturn(ctxt);
-        boolean r4 = p4.run(ctxt);
+        C o3 = p3.getReturn(context);
+        boolean r4 = p4.run(context);
         if (!r4) return false;
-        D o4 = p4.getReturn(ctxt);
-        boolean r5 = p5.run(ctxt);
+        D o4 = p4.getReturn(context);
+        boolean r5 = p5.run(context);
         if (!r5) return false;
-        E o5 = p5.getReturn(ctxt);
-        ctxt.result = m5.call(o1, o2, o3, o4, o5);
+        E o5 = p5.getReturn(context);
+        context.result = m5.call(o1, o2, o3, o4, o5);
         return true;
     }
 

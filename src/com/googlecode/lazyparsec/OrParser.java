@@ -23,18 +23,18 @@ final class OrParser<T> extends Parser<T> {
     }
 
     @Override
-    boolean apply(ParseContext ctxt) {
-        final Object result = ctxt.result;
-        final int at = ctxt.at;
-        final int step = ctxt.step;
+    boolean apply(ParseContext context) {
+        final Object result = context.result;
+        final int at = context.at;
+        final int step = context.step;
         for (Parser<? extends T> p : alternatives) {
-            if (p.run(ctxt)) {
+            if (p.run(context)) {
                 return true;
             }
-            ctxt.set(step, at, result);
+            context.set(step, at, result);
         }
         // set the index to the most relevant error so far.
-        ctxt.setAt(step, at);
+        context.setAt(step, at);
         return false;
     }
 

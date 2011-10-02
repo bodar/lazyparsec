@@ -28,8 +28,8 @@ final class FailureParser<T> extends Parser<T> {
     }
 
     @Override
-    boolean apply(ParseContext ctxt) {
-        ctxt.fail(message);
+    boolean apply(ParseContext context) {
+        context.fail(message);
         return false;
     }
 

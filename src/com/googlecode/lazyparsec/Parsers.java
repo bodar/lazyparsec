@@ -110,12 +110,12 @@ public final class Parsers {
      */
     static <T> T parse(
             CharSequence src, Parser<T> parser, SourceLocator locator, String module) {
-        ScannerState ctxt = new ScannerState(module, src, 0, locator);
-        if (!parser.run(ctxt)) {
+        ScannerState context = new ScannerState(module, src, 0, locator);
+        if (!parser.run(context)) {
             throw new ParserException(
-                    ctxt.renderError(), ctxt.module, locator.locate(ctxt.errorIndex()));
+                    context.renderError(), context.module, locator.locate(context.errorIndex()));
         }
-        return parser.getReturn(ctxt);
+        return parser.getReturn(context);
     }
 
     /**
@@ -164,8 +164,8 @@ public final class Parsers {
     public static <T> Parser<T> constant(final T v) {
         return new Parser<T>() {
             @Override
-            boolean apply(ParseContext ctxt) {
-                ctxt.result = v;
+            boolean apply(ParseContext context) {
+                context.result = v;
                 return true;
             }
 

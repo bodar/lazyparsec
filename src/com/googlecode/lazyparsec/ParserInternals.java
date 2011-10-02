@@ -46,92 +46,92 @@ final class ParserInternals {
         state.set(bestStep, bestAt, bestResult);
     }
 
-    static boolean repeat(Parser<?> parser, int n, ParseContext ctxt) {
+    static boolean repeat(Parser<?> parser, int n, ParseContext context) {
         for (int i = 0; i < n; i++) {
-            if (!parser.run(ctxt)) return false;
+            if (!parser.run(context)) return false;
         }
         return true;
     }
 
-    static boolean many(final Parser<?> parser, final ParseContext ctxt) {
-        for (int at = ctxt.at, step = ctxt.step; ; step = ctxt.step) {
-            if (!greedyRun(parser, ctxt)) return stillThere(ctxt, at, step);
-            int at2 = ctxt.at;
+    static boolean many(final Parser<?> parser, final ParseContext context) {
+        for (int at = context.at, step = context.step; ; step = context.step) {
+            if (!greedyRun(parser, context)) return stillThere(context, at, step);
+            int at2 = context.at;
             if (at == at2) return true;
             at = at2;
         }
     }
 
-    static boolean repeatAtMost(Parser<?> parser, int max, ParseContext ctxt) {
+    static boolean repeatAtMost(Parser<?> parser, int max, ParseContext context) {
         for (int i = 0; i < max; i++) {
-            int at = ctxt.at;
-            int step = ctxt.step;
-            if (!greedyRun(parser, ctxt)) return stillThere(ctxt, at, step);
+            int at = context.at;
+            int step = context.step;
+            if (!greedyRun(parser, context)) return stillThere(context, at, step);
         }
         return true;
     }
 
     static <T> boolean repeat(
-            Parser<? extends T> parser, int n, Collection<T> collection, ParseContext ctxt) {
+            Parser<? extends T> parser, int n, Collection<T> collection, ParseContext context) {
         for (int i = 0; i < n; i++) {
-            if (!parser.run(ctxt)) return false;
-            collection.add(parser.getReturn(ctxt));
+            if (!parser.run(context)) return false;
+            collection.add(parser.getReturn(context));
         }
         return true;
     }
 
     static <T> boolean repeatAtMost(
-            Parser<? extends T> parser, int max, Collection<T> collection, ParseContext ctxt) {
+            Parser<? extends T> parser, int max, Collection<T> collection, ParseContext context) {
         for (int i = 0; i < max; i++) {
-            int at = ctxt.at;
-            int step = ctxt.step;
-            if (!greedyRun(parser, ctxt)) return stillThere(ctxt, at, step);
-            collection.add(parser.getReturn(ctxt));
+            int at = context.at;
+            int step = context.step;
+            if (!greedyRun(parser, context)) return stillThere(context, at, step);
+            collection.add(parser.getReturn(context));
         }
         return true;
     }
 
     static <T> boolean many(
-            Parser<? extends T> parser, Collection<T> collection, ParseContext ctxt) {
-        for (int at = ctxt.at, step = ctxt.step; ; step = ctxt.step) {
-            if (!greedyRun(parser, ctxt)) return stillThere(ctxt, at, step);
-            int at2 = ctxt.at;
+            Parser<? extends T> parser, Collection<T> collection, ParseContext context) {
+        for (int at = context.at, step = context.step; ; step = context.step) {
+            if (!greedyRun(parser, context)) return stillThere(context, at, step);
+            int at2 = context.at;
             if (at == at2) return true;
             at = at2;
-            collection.add(parser.getReturn(ctxt));
+            collection.add(parser.getReturn(context));
         }
     }
 
-    static boolean stillThere(ParseContext ctxt, int wasAt, int originalStep) {
-        if (ctxt.step == originalStep) {
+    static boolean stillThere(ParseContext context, int wasAt, int originalStep) {
+        if (context.step == originalStep) {
             // logical step didn't change, so logically we are still there, undo any physical offset
-            ctxt.setAt(originalStep, wasAt);
+            context.setAt(originalStep, wasAt);
             return true;
         }
         return false;
     }
 
     static boolean runNestedParser(
-            ParseContext ctxt, ParseContext freshInitState, Parser<?> parser) {
+            ParseContext context, ParseContext freshInitState, Parser<?> parser) {
         if (parser.run(freshInitState)) {
-            ctxt.set(freshInitState.step, ctxt.at, freshInitState.result);
+            context.set(freshInitState.step, context.at, freshInitState.result);
             return true;
         }
         // index on token level is the "at" on character level
-        ctxt.set(ctxt.step, freshInitState.getIndex(), null);
+        context.set(context.step, freshInitState.getIndex(), null);
 
         // always copy error because there could be false alarms in the character level.
         // For example, a "or" parser nested in a "many" failed in one of its branches.
-        copyError(ctxt, freshInitState);
+        copyError(context, freshInitState);
         return false;
     }
 
-    private static void copyError(ParseContext ctxt, ParseContext nestedState) {
+    private static void copyError(ParseContext context, ParseContext nestedState) {
         int errorIndex = nestedState.errorIndex();
-        ctxt.setErrorState(
+        context.setErrorState(
                 errorIndex, errorIndex, nestedState.errorType(), nestedState.errors());
         if (!nestedState.isEof()) {
-            ctxt.setEncountered(nestedState.getEncountered());
+            context.setEncountered(nestedState.getEncountered());
         }
     }
 
@@ -139,17 +139,17 @@ final class ParserInternals {
      * Runs {@code parser} in greedy mode. Currently it does nothing special.
      * May want to suppress irrelevant errors (such the 'x expected' in x*).
      */
-    static boolean greedyRun(Parser<?> parser, ParseContext ctxt) {
-        return parser.run(ctxt);
+    static boolean greedyRun(Parser<?> parser, ParseContext context) {
+        return parser.run(context);
     }
 
     /**
      * Runs {@code parser} with error recording suppressed.
      */
-    static boolean runWithoutRecordingError(Parser<?> parser, ParseContext ctxt) {
-        boolean oldValue = ctxt.suppressError(true);
-        boolean ok = parser.run(ctxt);
-        ctxt.suppressError(oldValue);
+    static boolean runWithoutRecordingError(Parser<?> parser, ParseContext context) {
+        boolean oldValue = context.suppressError(true);
+        boolean ok = parser.run(context);
+        context.suppressError(oldValue);
         return ok;
     }
 }

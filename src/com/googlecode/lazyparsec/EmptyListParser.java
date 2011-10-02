@@ -36,8 +36,8 @@ final class EmptyListParser<T> extends Parser<List<T>> {
     }
 
     @Override
-    boolean apply(ParseContext ctxt) {
-        ctxt.result = new ArrayList<T>(0);
+    boolean apply(ParseContext context) {
+        context.result = new ArrayList<T>(0);
         return true;
     }
 

@@ -22,8 +22,8 @@ package com.googlecode.lazyparsec;
  */
 final class GetIndexParser extends Parser<Integer> {
     @Override
-    boolean apply(final ParseContext ctxt) {
-        ctxt.result = ctxt.getIndex();
+    boolean apply(final ParseContext context) {
+        context.result = context.getIndex();
         return true;
     }
 

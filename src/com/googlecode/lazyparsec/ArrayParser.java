@@ -28,14 +28,14 @@ final class ArrayParser extends Parser<Object[]> {
     }
 
     @Override
-    boolean apply(ParseContext ctxt) {
+    boolean apply(ParseContext context) {
         Object[] ret = new Object[parsers.length];
         for (int i = 0; i < parsers.length; i++) {
             Parser<?> parser = parsers[i];
-            if (!parser.run(ctxt)) return false;
-            ret[i] = parser.getReturn(ctxt);
+            if (!parser.run(context)) return false;
+            ret[i] = parser.getReturn(context);
         }
-        ctxt.result = ret;
+        context.result = ret;
         return true;
     }
 

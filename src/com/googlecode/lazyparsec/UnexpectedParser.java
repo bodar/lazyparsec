@@ -23,8 +23,8 @@ final class UnexpectedParser<T> extends Parser<T> {
     }
 
     @Override
-    boolean apply(final ParseContext ctxt) {
-        ctxt.unexpected(name);
+    boolean apply(final ParseContext context) {
+        context.unexpected(name);
         return false;
     }
 

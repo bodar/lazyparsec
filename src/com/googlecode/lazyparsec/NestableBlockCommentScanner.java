@@ -33,36 +33,36 @@ final class NestableBlockCommentScanner extends Parser<Void> {
     }
 
     @Override
-    boolean apply(final ParseContext ctxt) {
-        if (!openQuote.run(ctxt)) return false;
+    boolean apply(final ParseContext context) {
+        if (!openQuote.run(context)) return false;
         for (int level = 1; level > 0; ) {
-            final int step = ctxt.step;
-            final int at = ctxt.at;
-            if (closeQuote.run(ctxt)) {
-                if (at == ctxt.at) {
+            final int step = context.step;
+            final int at = context.at;
+            if (closeQuote.run(context)) {
+                if (at == context.at) {
                     throw new IllegalStateException("closing comment scanner not consuming input.");
                 }
                 level--;
                 continue;
             }
-            if (!ParserInternals.stillThere(ctxt, at, step)) return false;
-            if (openQuote.run(ctxt)) {
-                if (at == ctxt.at) {
+            if (!ParserInternals.stillThere(context, at, step)) return false;
+            if (openQuote.run(context)) {
+                if (at == context.at) {
                     throw new IllegalStateException("opening comment scanner not consuming input.");
                 }
                 level++;
                 continue;
             }
-            if (!ParserInternals.stillThere(ctxt, at, step)) return false;
-            if (commented.run(ctxt)) {
-                if (at == ctxt.at) {
+            if (!ParserInternals.stillThere(context, at, step)) return false;
+            if (commented.run(context)) {
+                if (at == context.at) {
                     throw new IllegalStateException("commented scanner not consuming input.");
                 }
                 continue;
             }
             return false;
         }
-        ctxt.result = null;
+        context.result = null;
         return true;
     }
 

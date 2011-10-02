@@ -26,18 +26,18 @@ final class BestParser<T> extends Parser<T> {
     }
 
     @Override
-    boolean apply(ParseContext ctxt) {
-        final Object result = ctxt.result;
-        final int step = ctxt.step;
-        final int at = ctxt.at;
+    boolean apply(ParseContext context) {
+        final Object result = context.result;
+        final int step = context.step;
+        final int at = context.at;
         for (int i = 0; i < parsers.length; i++) {
             Parser<? extends T> parser = parsers[i];
-            if (parser.run(ctxt)) {
-                ParserInternals.runForBestFit(order, parsers, i + 1, ctxt, result, step, at);
+            if (parser.run(context)) {
+                ParserInternals.runForBestFit(order, parsers, i + 1, context, result, step, at);
                 return true;
             }
             // in alternate, we do not care partial match.
-            ctxt.set(step, at, result);
+            context.set(step, at, result);
         }
         return false;
     }

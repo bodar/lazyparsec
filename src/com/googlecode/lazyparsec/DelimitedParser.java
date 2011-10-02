@@ -31,30 +31,30 @@ class DelimitedParser<T, R> extends Parser<R> {
     }
 
     @Override
-    boolean apply(final ParseContext ctxt) {
+    boolean apply(final ParseContext context) {
         final R result = begin();
         for (; ; ) {
-            final int step0 = ctxt.step;
-            final int at0 = ctxt.at;
-            boolean r = ParserInternals.greedyRun(delim, ctxt);
+            final int step0 = context.step;
+            final int at0 = context.at;
+            boolean r = ParserInternals.greedyRun(delim, context);
             if (!r) {
-                if (!ParserInternals.stillThere(ctxt, at0, step0)) return false;
-                ctxt.result = result;
+                if (!ParserInternals.stillThere(context, at0, step0)) return false;
+                context.result = result;
                 return true;
             }
-            final int step1 = ctxt.step;
-            final int at1 = ctxt.at;
-            r = ParserInternals.greedyRun(parser, ctxt);
+            final int step1 = context.step;
+            final int at1 = context.at;
+            r = ParserInternals.greedyRun(parser, context);
             if (!r) {
-                if (!ParserInternals.stillThere(ctxt, at1, step1)) return false;
-                ctxt.result = result;
+                if (!ParserInternals.stillThere(context, at1, step1)) return false;
+                context.result = result;
                 return true;
             }
-            if (at0 == ctxt.at) { // infinite loop
-                ctxt.result = result;
+            if (at0 == context.at) { // infinite loop
+                context.result = result;
                 return true;
             }
-            element(ctxt, result);
+            element(context, result);
         }
     }
 
@@ -62,7 +62,7 @@ class DelimitedParser<T, R> extends Parser<R> {
         return null;
     }
 
-    void element(ParseContext ctxt, R result) {
+    void element(ParseContext context, R result) {
     }
 
     @Override

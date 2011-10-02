@@ -25,10 +25,10 @@ final class SkipAtLeastParser extends Parser<Void> {
     }
 
     @Override
-    boolean apply(ParseContext ctxt) {
-        if (!ParserInternals.repeat(parser, min, ctxt)) return false;
-        if (ParserInternals.many(parser, ctxt)) {
-            ctxt.result = null;
+    boolean apply(ParseContext context) {
+        if (!ParserInternals.repeat(parser, min, context)) return false;
+        if (ParserInternals.many(parser, context)) {
+            context.result = null;
             return true;
         }
         return false;

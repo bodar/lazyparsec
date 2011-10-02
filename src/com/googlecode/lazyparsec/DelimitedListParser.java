@@ -37,7 +37,7 @@ final class DelimitedListParser<T> extends DelimitedParser<T, List<T>> {
     }
 
     @Override
-    void element(ParseContext ctxt, List<T> list) {
-        list.add(parser.getReturn(ctxt));
+    void element(ParseContext context, List<T> list) {
+        list.add(parser.getReturn(context));
     }
 }

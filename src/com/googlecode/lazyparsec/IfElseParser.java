@@ -32,16 +32,16 @@ final class IfElseParser<T, C> extends Parser<T> {
     }
 
     @Override
-    boolean apply(ParseContext ctxt) {
-        final Object ret = ctxt.result;
-        final int step = ctxt.step;
-        final int at = ctxt.at;
-        if (ParserInternals.runWithoutRecordingError(cond, ctxt)) {
-            Parser<? extends T> parser = call(consequence, cond.getReturn(ctxt));
-            return parser.run(ctxt);
+    boolean apply(ParseContext context) {
+        final Object ret = context.result;
+        final int step = context.step;
+        final int at = context.at;
+        if (ParserInternals.runWithoutRecordingError(cond, context)) {
+            Parser<? extends T> parser = call(consequence, cond.getReturn(context));
+            return parser.run(context);
         }
-        ctxt.set(step, at, ret);
-        return alternative.run(ctxt);
+        context.set(step, at, ret);
+        return alternative.run(context);
     }
 
     @Override

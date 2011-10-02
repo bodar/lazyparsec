@@ -34,13 +34,13 @@ final class ListParser<T> extends Parser<List<T>> {
     }
 
     @Override
-    boolean apply(ParseContext ctxt) {
+    boolean apply(ParseContext context) {
         ArrayList<T> list = Lists.arrayList(parsers.length);
         for (Parser<? extends T> parser : parsers) {
-            if (!parser.run(ctxt)) return false;
-            list.add(parser.getReturn(ctxt));
+            if (!parser.run(context)) return false;
+            list.add(parser.getReturn(context));
         }
-        ctxt.result = list;
+        context.result = list;
         return true;
     }
 

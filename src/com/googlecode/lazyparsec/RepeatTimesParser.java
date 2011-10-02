@@ -36,12 +36,12 @@ final class RepeatTimesParser<T> extends Parser<List<T>> {
     }
 
     @Override
-    boolean apply(ParseContext ctxt) {
+    boolean apply(ParseContext context) {
         List<T> result = listFactory.newList();
-        if (!ParserInternals.repeat(parser, min, result, ctxt))
+        if (!ParserInternals.repeat(parser, min, result, context))
             return false;
-        if (ParserInternals.repeatAtMost(parser, max - min, result, ctxt)) {
-            ctxt.result = result;
+        if (ParserInternals.repeatAtMost(parser, max - min, result, context)) {
+            context.result = result;
             return true;
         }
         return false;

@@ -13,14 +13,14 @@ final class ToTokenParser extends Parser<Token> {
     }
 
     @Override
-    boolean apply(ParseContext ctxt) throws Exception {
-        int begin = ctxt.getIndex();
-        if (!parser.apply(ctxt)) {
+    boolean apply(ParseContext context) throws Exception {
+        int begin = context.getIndex();
+        if (!parser.apply(context)) {
             return false;
         }
-        int len = ctxt.getIndex() - begin;
-        Token token = new Token(begin, len, ctxt.result);
-        ctxt.result = token;
+        int len = context.getIndex() - begin;
+        Token token = new Token(begin, len, context.result);
+        context.result = token;
         return true;
     }
 

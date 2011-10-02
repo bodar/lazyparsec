@@ -29,10 +29,10 @@ final class MapParser<From, To> extends Parser<To> {
     }
 
     @Override
-    boolean apply(final ParseContext ctxt) {
-        final boolean r = parser.run(ctxt);
+    boolean apply(final ParseContext context) {
+        final boolean r = parser.run(context);
         if (r) {
-            ctxt.result = call(m, parser.getReturn(ctxt));
+            context.result = call(m, parser.getReturn(context));
         }
         return r;
     }

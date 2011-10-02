@@ -30,12 +30,12 @@ final class NestedScanner extends Parser<Void> {
     }
 
     @Override
-    boolean apply(ParseContext ctxt) {
-        int from = ctxt.at;
-        if (!outer.run(ctxt)) return false;
+    boolean apply(ParseContext context) {
+        int from = context.at;
+        if (!outer.run(context)) return false;
         ScannerState scannerState = new ScannerState(
-                ctxt.module, ctxt.characters(), from, ctxt.at, ctxt.locator, ctxt.result);
-        return ParserInternals.runNestedParser(ctxt, scannerState, inner);
+                context.module, context.characters(), from, context.at, context.locator, context.result);
+        return ParserInternals.runNestedParser(context, scannerState, inner);
     }
 
     @Override

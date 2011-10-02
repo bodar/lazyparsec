@@ -23,11 +23,11 @@ final class PeekParser<T> extends Parser<T> {
     }
 
     @Override
-    boolean apply(ParseContext ctxt) {
-        int step = ctxt.step;
-        int at = ctxt.at;
-        boolean ok = parser.run(ctxt);
-        if (ok) ctxt.setAt(step, at);
+    boolean apply(ParseContext context) {
+        int step = context.step;
+        int at = context.at;
+        boolean ok = parser.run(context);
+        if (ok) context.setAt(step, at);
         return ok;
     }
 
