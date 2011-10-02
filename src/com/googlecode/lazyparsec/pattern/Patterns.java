@@ -77,7 +77,7 @@ public final class Patterns {
     /**
      * A {@link Pattern} object that matches an integer.
      */
-    public static final Pattern INTEGER = many1(CharPredicates.IS_DIGIT);
+    public static final Pattern INTEGER = many1(CharacterPredicates.IS_DIGIT);
 
     /**
      * A {@link Pattern} object that matches a decimal number that has at least one digit
@@ -86,7 +86,7 @@ public final class Patterns {
      * <p> {@code 0, 11., 2.3} are all good candidates. While {@code .1, .} are not.
      */
     public static final Pattern STRICT_DECIMAL =
-            INTEGER.next(isChar('.').next(many(CharPredicates.IS_DIGIT)).optional());
+            INTEGER.next(isChar('.').next(many(CharacterPredicates.IS_DIGIT)).optional());
 
     /**
      * A {@link Pattern} object that matches a decimal point and one or more digits after it.
@@ -103,29 +103,29 @@ public final class Patterns {
      * A {@link Pattern} object that matches a standard english word, which starts with either
      * an underscore or an alpha character, followed by 0 or more alphanumeric characters.
      */
-    public static final Pattern WORD = isChar(CharPredicates.IS_ALPHA_)
-            .next(isChar(CharPredicates.IS_ALPHA_NUMERIC_).many());
+    public static final Pattern WORD = isChar(CharacterPredicates.IS_ALPHA_)
+            .next(isChar(CharacterPredicates.IS_ALPHA_NUMERIC_).many());
 
     /**
      * A {@link Pattern} object that matches an octal integer that starts with a {@code 0} and
      * is followed by 0 or more {@code [0 - 7]} characters.
      */
     public static final Pattern OCT_INTEGER =
-            isChar('0').next(many(CharPredicates.range('0', '7')));
+            isChar('0').next(many(CharacterPredicates.range('0', '7')));
 
     /**
      * A {@link Pattern} object that matches a decimal integer, which starts with a non-zero
      * digit and is followed by 0 or more digits.
      */
     public static final Pattern DEC_INTEGER =
-            sequence(range('1', '9'), many(CharPredicates.IS_DIGIT));
+            sequence(range('1', '9'), many(CharacterPredicates.IS_DIGIT));
 
     /**
      * A {@link Pattern} object that matches a hex integer, which starts with a {@code 0x} or
      * {@code 0X}, and is followed by one or more hex digits.
      */
     public static final Pattern HEX_INTEGER =
-            string("0x").or(string("0X")).next(many1(CharPredicates.IS_HEX_DIGIT));
+            string("0x").or(string("0X")).next(many1(CharacterPredicates.IS_HEX_DIGIT));
 
     /**
      * A {@link Pattern} object that matches a scientific notation, such as {@code 1e12},
@@ -181,7 +181,7 @@ public final class Patterns {
      * character {@code c}, in which case {@code 1} is returned as match length. Mismatches otherwise.
      */
     public static Pattern isChar(char c) {
-        return isChar(CharPredicates.isChar(c));
+        return isChar(CharacterPredicates.isChar(c));
     }
 
     /**
@@ -189,7 +189,7 @@ public final class Patterns {
      * character {@code c1} and {@code c2}, in which case {@code 1} is returned as match length.
      */
     public static Pattern range(char c1, char c2) {
-        return isChar(CharPredicates.range(c1, c2));
+        return isChar(CharacterPredicates.range(c1, c2));
     }
 
     /**
@@ -197,7 +197,7 @@ public final class Patterns {
      * any character in {@code chars}, in which case {@code 1} is returned as match length.
      */
     public static Pattern among(String chars) {
-        return isChar(CharPredicates.among(chars));
+        return isChar(CharacterPredicates.among(chars));
     }
 
     /**
@@ -220,7 +220,7 @@ public final class Patterns {
      * and ended by {@code EOF} or {@code LF} (the line feed character).
      */
     public static Pattern lineComment(String begin) {
-        return string(begin).next(many(CharPredicates.notChar('\n')));
+        return string(begin).next(many(CharacterPredicates.notChar('\n')));
     }
 
     /**
@@ -685,11 +685,11 @@ public final class Patterns {
     private static final Pattern getRegularExpressionPattern() {
         Pattern quote = isChar('/');
         Pattern escape = isChar('\\').next(hasAtLeast(1));
-        Pattern content = or(escape, isChar(CharPredicates.notAmong("/\r\n\\")));
+        Pattern content = or(escape, isChar(CharacterPredicates.notAmong("/\r\n\\")));
         return quote.next(content.many()).next(quote);
     }
 
     private static final Pattern getModifiersPattern() {
-        return isChar(CharPredicates.IS_ALPHA).many();
+        return isChar(CharacterPredicates.IS_ALPHA).many();
     }
 }

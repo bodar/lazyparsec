@@ -1,6 +1,6 @@
 package com.googlecode.lazyparsec;
 
-import com.googlecode.lazyparsec.pattern.CharPredicates;
+import com.googlecode.lazyparsec.pattern.CharacterPredicates;
 import com.googlecode.lazyparsec.pattern.Patterns;
 import junit.framework.TestCase;
 
@@ -72,13 +72,13 @@ public class ScannersTest extends TestCase {
     }
 
     public void testMany_withCharacterPredicate() {
-        Parser<Void> scanner = Scanners.many(CharPredicates.IS_ALPHA);
+        Parser<Void> scanner = Scanners.many(CharacterPredicates.IS_ALPHA);
         assertScanner(scanner, "abc123", "123");
         assertScanner(scanner, "123", "123");
     }
 
     public void testMany1_withCharacterPredicate() {
-        Parser<Void> scanner = Scanners.many1(CharPredicates.IS_ALPHA);
+        Parser<Void> scanner = Scanners.many1(CharacterPredicates.IS_ALPHA);
         assertScanner(scanner, "abc123", "123");
         assertFailure(scanner, "123", 1, 1, "[a-zA-Z]+ expected, 1 encountered.");
         assertFailure(scanner, "", 1, 1, "[a-zA-Z]+ expected, EOF encountered.");
@@ -434,7 +434,7 @@ public class ScannersTest extends TestCase {
     public void testNestableBlockComment_withQuotedParser() {
         Parser<Void> scanner = Scanners.nestableBlockComment(
                 Scanners.string("<!--"), Scanners.string("-->"),
-                Scanners.isChar(CharPredicates.not(CharPredicates.IS_DIGIT)));
+                Scanners.isChar(CharacterPredicates.not(CharacterPredicates.IS_DIGIT)));
         assertScanner(scanner, "<!-- not nested -->");
         assertScanner(scanner, "<!-- this is <!--nested--> -->");
         assertFailure(scanner, "", 1, 1);
@@ -507,7 +507,7 @@ public class ScannersTest extends TestCase {
 
     public void testNestedScanner() {
         Parser<Void> scanner = Scanners.nestedScanner(
-                Scanners.isChar(CharPredicates.IS_ALPHA).skipMany1(), Scanners.isChar('a').skipTimes(2));
+                Scanners.isChar(CharacterPredicates.IS_ALPHA).skipMany1(), Scanners.isChar('a').skipTimes(2));
         assertEquals("nested scanner", scanner.toString());
         assertScanner(scanner, "aa");
         assertScanner(scanner, "aabb");

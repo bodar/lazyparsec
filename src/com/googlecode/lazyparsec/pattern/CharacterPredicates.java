@@ -23,9 +23,9 @@ import com.googlecode.totallylazy.Predicate;
  *
  * @author Ben Yu
  */
-public final class CharPredicates {
+public final class CharacterPredicates {
 
-    private CharPredicates() {
+    private CharacterPredicates() {
     }
 
     /**

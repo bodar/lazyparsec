@@ -3,31 +3,31 @@ package com.googlecode.lazyparsec.pattern;
 import com.googlecode.totallylazy.Predicate;
 import junit.framework.TestCase;
 
-import static com.googlecode.lazyparsec.pattern.CharPredicates.*;
+import static com.googlecode.lazyparsec.pattern.CharacterPredicates.*;
 
 /**
- * Unit test for {@link CharPredicates}.
+ * Unit test for {@link CharacterPredicates}.
  *
  * @author Ben Yu
  */
-public class CharPredicatesTest extends TestCase {
+public class CharacterPredicatesTest extends TestCase {
 
     public void testIsChar() {
-        Predicate<Character> predicate = CharPredicates.isChar('a');
+        Predicate<Character> predicate = CharacterPredicates.isChar('a');
         assertTrue(predicate.matches('a'));
         assertFalse(predicate.matches('x'));
         assertEquals("a", predicate.toString());
     }
 
     public void testNotChar() {
-        Predicate<Character> predicate = CharPredicates.notChar('a');
+        Predicate<Character> predicate = CharacterPredicates.notChar('a');
         assertFalse(predicate.matches('a'));
         assertTrue(predicate.matches('x'));
         assertEquals("^a", predicate.toString());
     }
 
     public void testRange() {
-        Predicate<Character> predicate = CharPredicates.range('1', '3');
+        Predicate<Character> predicate = CharacterPredicates.range('1', '3');
         assertTrue(predicate.matches('1'));
         assertTrue(predicate.matches('2'));
         assertTrue(predicate.matches('3'));
@@ -37,7 +37,7 @@ public class CharPredicatesTest extends TestCase {
     }
 
     public void testIsDigit() {
-        Predicate<Character> predicate = CharPredicates.IS_DIGIT;
+        Predicate<Character> predicate = CharacterPredicates.IS_DIGIT;
         assertTrue(predicate.matches('0'));
         assertTrue(predicate.matches('9'));
         assertFalse(predicate.matches('a'));
@@ -46,7 +46,7 @@ public class CharPredicatesTest extends TestCase {
     }
 
     public void testNotRange() {
-        Predicate<Character> predicate = CharPredicates.notRange('1', '3');
+        Predicate<Character> predicate = CharacterPredicates.notRange('1', '3');
         assertFalse(predicate.matches('1'));
         assertFalse(predicate.matches('2'));
         assertFalse(predicate.matches('3'));
@@ -56,7 +56,7 @@ public class CharPredicatesTest extends TestCase {
     }
 
     public void testAmong() {
-        Predicate<Character> predicate = CharPredicates.among("a1");
+        Predicate<Character> predicate = CharacterPredicates.among("a1");
         assertTrue(predicate.matches('a'));
         assertTrue(predicate.matches('1'));
         assertFalse(predicate.matches(' '));
@@ -64,7 +64,7 @@ public class CharPredicatesTest extends TestCase {
     }
 
     public void testNotAmong() {
-        Predicate<Character> predicate = CharPredicates.notAmong("a1");
+        Predicate<Character> predicate = CharacterPredicates.notAmong("a1");
         assertFalse(predicate.matches('a'));
         assertFalse(predicate.matches('1'));
         assertTrue(predicate.matches(' '));
@@ -72,7 +72,7 @@ public class CharPredicatesTest extends TestCase {
     }
 
     public void testIsHexDigit() {
-        Predicate<Character> predicate = CharPredicates.IS_HEX_DIGIT;
+        Predicate<Character> predicate = CharacterPredicates.IS_HEX_DIGIT;
         assertFalse(predicate.matches('g'));
         assertFalse(predicate.matches(' '));
         assertTrue(predicate.matches('A'));
@@ -87,7 +87,7 @@ public class CharPredicatesTest extends TestCase {
     }
 
     public void testIsUpperCase() {
-        Predicate<Character> predicate = CharPredicates.IS_UPPER_CASE;
+        Predicate<Character> predicate = CharacterPredicates.IS_UPPER_CASE;
         assertFalse(predicate.matches('a'));
         assertFalse(predicate.matches('1'));
         assertFalse(predicate.matches(' '));
@@ -97,7 +97,7 @@ public class CharPredicatesTest extends TestCase {
     }
 
     public void testIsLowerCase() {
-        Predicate<Character> predicate = CharPredicates.IS_LOWER_CASE;
+        Predicate<Character> predicate = CharacterPredicates.IS_LOWER_CASE;
         assertFalse(predicate.matches('A'));
         assertFalse(predicate.matches('1'));
         assertFalse(predicate.matches(' '));
@@ -107,7 +107,7 @@ public class CharPredicatesTest extends TestCase {
     }
 
     public void testIsWhitespace() {
-        Predicate<Character> predicate = CharPredicates.IS_WHITESPACE;
+        Predicate<Character> predicate = CharacterPredicates.IS_WHITESPACE;
         assertFalse(predicate.matches('A'));
         assertFalse(predicate.matches('1'));
         assertFalse(predicate.matches('a'));
@@ -118,7 +118,7 @@ public class CharPredicatesTest extends TestCase {
     }
 
     public void testIsAlpha() {
-        Predicate<Character> predicate = CharPredicates.IS_ALPHA;
+        Predicate<Character> predicate = CharacterPredicates.IS_ALPHA;
         assertFalse(predicate.matches('-'));
         assertFalse(predicate.matches('1'));
         assertFalse(predicate.matches('_'));
@@ -128,7 +128,7 @@ public class CharPredicatesTest extends TestCase {
     }
 
     public void testIsAlpha_() {
-        Predicate<Character> predicate = CharPredicates.IS_ALPHA_;
+        Predicate<Character> predicate = CharacterPredicates.IS_ALPHA_;
         assertFalse(predicate.matches('-'));
         assertFalse(predicate.matches('1'));
         assertTrue(predicate.matches('_'));
@@ -138,7 +138,7 @@ public class CharPredicatesTest extends TestCase {
     }
 
     public void testIsAlphaNumeric() {
-        Predicate<Character> predicate = CharPredicates.IS_ALPHA_NUMERIC;
+        Predicate<Character> predicate = CharacterPredicates.IS_ALPHA_NUMERIC;
         assertFalse(predicate.matches('-'));
         assertFalse(predicate.matches('_'));
         assertTrue(predicate.matches('1'));
@@ -148,7 +148,7 @@ public class CharPredicatesTest extends TestCase {
     }
 
     public void testIsAlphaNumeric_() {
-        Predicate<Character> predicate = CharPredicates.IS_ALPHA_NUMERIC_;
+        Predicate<Character> predicate = CharacterPredicates.IS_ALPHA_NUMERIC_;
         assertFalse(predicate.matches('-'));
         assertTrue(predicate.matches('1'));
         assertTrue(predicate.matches('_'));
@@ -158,7 +158,7 @@ public class CharPredicatesTest extends TestCase {
     }
 
     public void testIsLetter() {
-        Predicate<Character> predicate = CharPredicates.IS_LETTER;
+        Predicate<Character> predicate = CharacterPredicates.IS_LETTER;
         assertFalse(predicate.matches('-'));
         assertFalse(predicate.matches('1'));
         assertFalse(predicate.matches('_'));
@@ -189,7 +189,7 @@ public class CharPredicatesTest extends TestCase {
 
     public void testAnd() {
         assertSame(ALWAYS, and());
-        assertSame(CharPredicates.IS_ALPHA, and(CharPredicates.IS_ALPHA));
+        assertSame(CharacterPredicates.IS_ALPHA, and(CharacterPredicates.IS_ALPHA));
         assertFalse(and(ALWAYS, NEVER).matches('a'));
         assertFalse(and(NEVER, ALWAYS).matches('a'));
         assertFalse(and(NEVER, NEVER).matches('a'));
@@ -204,7 +204,7 @@ public class CharPredicatesTest extends TestCase {
 
     public void testOr() {
         assertSame(NEVER, or());
-        assertSame(CharPredicates.IS_ALPHA, or(CharPredicates.IS_ALPHA));
+        assertSame(CharacterPredicates.IS_ALPHA, or(CharacterPredicates.IS_ALPHA));
         assertTrue(or(ALWAYS, NEVER).matches('a'));
         assertTrue(or(NEVER, ALWAYS).matches('a'));
         assertTrue(or(ALWAYS, ALWAYS).matches('a'));

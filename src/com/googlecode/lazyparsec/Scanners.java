@@ -15,7 +15,7 @@
  *****************************************************************************/
 package com.googlecode.lazyparsec;
 
-import com.googlecode.lazyparsec.pattern.CharPredicates;
+import com.googlecode.lazyparsec.pattern.CharacterPredicates;
 import com.googlecode.lazyparsec.pattern.Pattern;
 import com.googlecode.lazyparsec.pattern.Patterns;
 import com.googlecode.totallylazy.Predicate;
@@ -37,7 +37,7 @@ public final class Scanners {
      * A scanner that scans greedily for 1 or more whitespace characters.
      */
     public static final Parser<Void> WHITESPACES =
-            pattern(Patterns.many1(CharPredicates.IS_WHITESPACE), "whitespaces");
+            pattern(Patterns.many1(CharacterPredicates.IS_WHITESPACE), "whitespaces");
 
     /**
      * Matches any character in the input. Different from {@link Parsers#always()},
@@ -291,7 +291,7 @@ public final class Scanners {
      * @return the scanner.
      */
     public static Parser<Void> isChar(char ch, String name) {
-        return isChar(CharPredicates.isChar(ch), name);
+        return isChar(CharacterPredicates.isChar(ch), name);
     }
 
     /**
@@ -312,7 +312,7 @@ public final class Scanners {
      * @return the scanner.
      */
     public static Parser<Void> notChar(char ch, String name) {
-        return isChar(CharPredicates.notChar(ch), name);
+        return isChar(CharacterPredicates.notChar(ch), name);
     }
 
     /**
@@ -334,7 +334,7 @@ public final class Scanners {
      * @return the scanner.
      */
     public static Parser<Void> among(String chars, String name) {
-        return isChar(CharPredicates.among(chars), name);
+        return isChar(CharacterPredicates.among(chars), name);
     }
 
     /**
@@ -342,9 +342,9 @@ public final class Scanners {
      * {@code chars}.
      */
     public static Parser<Void> among(String chars) {
-        if (chars.length() == 0) return isChar(CharPredicates.NEVER);
+        if (chars.length() == 0) return isChar(CharacterPredicates.NEVER);
         if (chars.length() == 1) return isChar(chars.charAt(0));
-        return isChar(CharPredicates.among(chars));
+        return isChar(CharacterPredicates.among(chars));
     }
 
     /**
@@ -356,7 +356,7 @@ public final class Scanners {
      * @return the scanner.
      */
     public static Parser<Void> notAmong(String chars, String name) {
-        return isChar(CharPredicates.notAmong(chars), name);
+        return isChar(CharacterPredicates.notAmong(chars), name);
     }
 
     /**
@@ -366,7 +366,7 @@ public final class Scanners {
     public static Parser<Void> notAmong(String chars) {
         if (chars.length() == 0) return ANY_CHAR;
         if (chars.length() == 1) return notChar(chars.charAt(0));
-        return isChar(CharPredicates.notAmong(chars));
+        return isChar(CharacterPredicates.notAmong(chars));
     }
 
     /**
@@ -424,7 +424,7 @@ public final class Scanners {
      * @return the block comment scanner.
      */
     public static Parser<Void> nestableBlockComment(String begin, String end) {
-        return nestableBlockComment(begin, end, Patterns.isChar(CharPredicates.ALWAYS));
+        return nestableBlockComment(begin, end, Patterns.isChar(CharacterPredicates.ALWAYS));
     }
 
     /**
@@ -461,7 +461,7 @@ public final class Scanners {
      */
     public static Parser<String> quoted(char begin, char end) {
         Pattern beforeClosingQuote =
-                Patterns.isChar(begin).next(Patterns.many(CharPredicates.notChar(end)));
+                Patterns.isChar(begin).next(Patterns.many(CharacterPredicates.notChar(end)));
         return pattern(beforeClosingQuote, Character.toString(begin)).next(isChar(end)).source();
     }
 
