@@ -15,11 +15,11 @@
  *****************************************************************************/
 package com.googlecode.lazyparsec;
 
-import com.googlecode.lazyparsec.functors.Map5;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Callable3;
 import com.googlecode.totallylazy.Callable4;
+import com.googlecode.totallylazy.Callable5;
 
 /**
  * Functors used only internally by this package. 
@@ -94,8 +94,8 @@ final class InternalFunctors {
   };
   
   @SuppressWarnings("unchecked")
-  private static final Map5 LAST_OF_FIVE = new Map5() {
-    public Object map(Object a, Object b, Object c, Object d, Object last) {
+  private static final Callable5 LAST_OF_FIVE = new Callable5() {
+    public Object call(Object a, Object b, Object c, Object d, Object last) {
       return last;
     }
     @Override public String toString() {
@@ -124,7 +124,7 @@ final class InternalFunctors {
   }
   
   @SuppressWarnings("unchecked")
-  static<A, B, C, D, T> Map5<A, B, C, D, T, T> lastOfFive() {
+  static<A, B, C, D, T> Callable5<A, B, C, D, T, T> lastOfFive() {
     return LAST_OF_FIVE;
   }
 

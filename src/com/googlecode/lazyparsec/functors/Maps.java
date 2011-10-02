@@ -19,6 +19,7 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Callable3;
 import com.googlecode.totallylazy.Callable4;
+import com.googlecode.totallylazy.Callable5;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Quadruple;
 import com.googlecode.totallylazy.Quintuple;
@@ -159,8 +160,8 @@ public final class Maps {
   };
       
   @SuppressWarnings("unchecked")
-  private static final Map5 ID5 = new Map5() {
-    public Quintuple map(Object a, Object b, Object c, Object d, Object e) {
+  private static final Callable5 ID_5 = new Callable5() {
+    public Quintuple call(Object a, Object b, Object c, Object d, Object e) {
       return Tuples.tuple(a, b, c, d, e);
     }
     @Override public String toString() {
@@ -186,10 +187,10 @@ public final class Maps {
     return ID_4;
   }
   
-  /** A {@link Map5} object that maps 5 values to a {@link Quintuple} object. */
+  /** A {@link Callable5} object that maps 5 values to a {@link Quintuple} object. */
   @SuppressWarnings("unchecked")
-  public static <A, B, C, D, E> Map5<A, B, C, D, E, Quintuple<A, B, C, D, E>> toQuintuple() {
-    return ID5;
+  public static <A, B, C, D, E> Callable5<A, B, C, D, E, Quintuple<A, B, C, D, E>> toQuintuple() {
+    return ID_5;
   }
   
   private static final Unary<Object> ID = new Unary<Object>() {

@@ -6,10 +6,10 @@ import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Callable3;
 import com.googlecode.totallylazy.Callable4;
+import com.googlecode.totallylazy.Callable5;
 import junit.framework.TestCase;
 
 import com.googlecode.lazyparsec.easymock.BaseMockTests;
-import com.googlecode.lazyparsec.functors.Map5;
 
 /**
  * Unit test for {@link InternalFunctors}.
@@ -61,10 +61,10 @@ public class InternalFunctorsTest extends TestCase {
     assertEquals("four", callable.call(1, "two", "three", "four"));
   }
   
-  public void testLastOfFive() {
-    Map5<Integer, String, String, String, String, String> map = InternalFunctors.lastOfFive();
-    assertEquals("sequence", map.toString());
-    assertEquals("five", map.map(1, "two", "three", "four", "five"));
+  public void testLastOfFive() throws Exception {
+    Callable5<Integer, String, String, String, String, String> callable = InternalFunctors.lastOfFive();
+    assertEquals("sequence", callable.toString());
+    assertEquals("five", callable.call(1, "two", "three", "four", "five"));
   }
   
   public static class FallbackTest extends BaseMockTests {

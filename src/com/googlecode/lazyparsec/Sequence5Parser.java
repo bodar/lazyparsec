@@ -15,7 +15,7 @@
  *****************************************************************************/
 package com.googlecode.lazyparsec;
 
-import com.googlecode.lazyparsec.functors.Map5;
+import com.googlecode.totallylazy.Callable5;
 
 final class Sequence5Parser<A, B, C, D, E, T> extends Parser<T> {
   private final Parser<A> p1;
@@ -23,10 +23,10 @@ final class Sequence5Parser<A, B, C, D, E, T> extends Parser<T> {
   private final Parser<C> p3;
   private final Parser<D> p4;
   private final Parser<E> p5;
-  private final Map5<? super A, ? super B, ? super C, ? super D, ? super E, ? extends T> m5;
+  private final Callable5<? super A, ? super B, ? super C, ? super D, ? super E, ? extends T> m5;
 
   Sequence5Parser(Parser<A> p1, Parser<B> p2, Parser<C> p3, Parser<D> p4, Parser<E> p5,
-      Map5<? super A, ? super B, ? super C, ? super D, ? super E, ? extends T> m5) {
+      Callable5<? super A, ? super B, ? super C, ? super D, ? super E, ? extends T> m5) {
     this.p1 = p1;
     this.p2 = p2;
     this.p3 = p3;
@@ -35,7 +35,7 @@ final class Sequence5Parser<A, B, C, D, E, T> extends Parser<T> {
     this.m5 = m5;
   }
 
-  @Override boolean apply(ParseContext ctxt) {
+  @Override boolean apply(ParseContext ctxt) throws Exception {
     boolean r1 = p1.run(ctxt);
     if (!r1) return false;
     A o1 = p1.getReturn(ctxt);
@@ -51,7 +51,7 @@ final class Sequence5Parser<A, B, C, D, E, T> extends Parser<T> {
     boolean r5 = p5.run(ctxt);
     if (!r5) return false;
     E o5 = p5.getReturn(ctxt);
-    ctxt.result = m5.map(o1, o2, o3, o4, o5);
+    ctxt.result = m5.call(o1, o2, o3, o4, o5);
     return true;
   }
   
