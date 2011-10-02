@@ -18,6 +18,7 @@ package com.googlecode.lazyparsec.functors;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Callable3;
+import com.googlecode.totallylazy.Callable4;
 import com.googlecode.totallylazy.Pair;
 import com.googlecode.totallylazy.Quadruple;
 import com.googlecode.totallylazy.Quintuple;
@@ -148,8 +149,8 @@ public final class Maps {
   };
   
   @SuppressWarnings("unchecked")
-  private static final Map4 ID4 = new Map4() {
-    public Quadruple map(Object a, Object b, Object c, Object d) {
+  private static final Callable4 ID_4 = new Callable4() {
+    public Quadruple call(Object a, Object b, Object c, Object d) {
       return Tuples.tuple(a, b, c, d);
     }
     @Override public String toString() {
@@ -179,10 +180,10 @@ public final class Maps {
     return ID_3;
   }
   
-  /** A {@link Map4} object that maps 4 values to a {@link Quadruple} object. */
+  /** A {@link Callable4} object that maps 4 values to a {@link Quadruple} object. */
   @SuppressWarnings("unchecked")
-  public static <A, B, C, D> Map4<A, B, C, D, Quadruple<A, B, C, D>> toQuadruple() {
-    return ID4;
+  public static <A, B, C, D> Callable4<A, B, C, D, Quadruple<A, B, C, D>> toQuadruple() {
+    return ID_4;
   }
   
   /** A {@link Map5} object that maps 5 values to a {@link Quintuple} object. */

@@ -74,8 +74,8 @@ public class MapsTest extends TestCase {
     assertEquals("tuple", Maps.toTriple().toString());
   }
   
-  public void testToTuple4() {
-    assertEquals(Tuples.tuple("123", 1, 2, 3), Maps.toQuadruple().map("123", 1, 2, 3));
+  public void testToTuple4() throws Exception {
+    assertEquals(Tuples.tuple("123", 1, 2, 3), Maps.toQuadruple().call("123", 1, 2, 3));
     assertEquals("tuple", Maps.toQuadruple().toString());
   }
   

@@ -5,10 +5,10 @@ import static org.easymock.EasyMock.expect;
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Callable3;
+import com.googlecode.totallylazy.Callable4;
 import junit.framework.TestCase;
 
 import com.googlecode.lazyparsec.easymock.BaseMockTests;
-import com.googlecode.lazyparsec.functors.Map4;
 import com.googlecode.lazyparsec.functors.Map5;
 
 /**
@@ -55,10 +55,10 @@ public class InternalFunctorsTest extends TestCase {
     assertEquals("three", callable.call(1, "two", "three"));
   }
   
-  public void testLastOfFour() {
-    Map4<Integer, String, String, String, String> map = InternalFunctors.lastOfFour();
-    assertEquals("sequence", map.toString());
-    assertEquals("four", map.map(1, "two", "three", "four"));
+  public void testLastOfFour() throws Exception {
+    Callable4<Integer, String, String, String, String> callable = InternalFunctors.lastOfFour();
+    assertEquals("sequence", callable.toString());
+    assertEquals("four", callable.call(1, "two", "three", "four"));
   }
   
   public void testLastOfFive() {

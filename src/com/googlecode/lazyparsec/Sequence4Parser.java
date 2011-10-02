@@ -15,17 +15,17 @@
  *****************************************************************************/
 package com.googlecode.lazyparsec;
 
-import com.googlecode.lazyparsec.functors.Map4;
+import com.googlecode.totallylazy.Callable4;
 
 final class Sequence4Parser<A, B, C, D, T> extends Parser<T> {
   private final Parser<A> p1;
   private final Parser<B> p2;
   private final Parser<C> p3;
   private final Parser<D> p4;
-  private final Map4<? super A, ? super B, ? super C, ? super D, ? extends T> m4;
+  private final Callable4<? super A, ? super B, ? super C, ? super D, ? extends T> m4;
 
   Sequence4Parser(Parser<A> p1, Parser<B> p2, Parser<C> p3, Parser<D> p4,
-      Map4<? super A, ? super B, ? super C, ? super D, ? extends T> m4) {
+      Callable4<? super A, ? super B, ? super C, ? super D, ? extends T> m4) {
     this.p1 = p1;
     this.p2 = p2;
     this.p3 = p3;
@@ -33,7 +33,7 @@ final class Sequence4Parser<A, B, C, D, T> extends Parser<T> {
     this.m4 = m4;
   }
 
-  @Override boolean apply(ParseContext ctxt) {
+  @Override boolean apply(ParseContext ctxt) throws Exception {
     boolean r1 = p1.run(ctxt);
     if (!r1) return false;
     A o1 = p1.getReturn(ctxt);
@@ -46,7 +46,7 @@ final class Sequence4Parser<A, B, C, D, T> extends Parser<T> {
     boolean r4 = p4.run(ctxt);
     if (!r4) return false;
     D o4 = p4.getReturn(ctxt);
-    ctxt.result = m4.map(o1, o2, o3, o4);
+    ctxt.result = m4.call(o1, o2, o3, o4);
     return true;
   }
   
