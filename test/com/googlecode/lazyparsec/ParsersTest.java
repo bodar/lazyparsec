@@ -1,12 +1,14 @@
 package com.googlecode.lazyparsec;
 
 import com.googlecode.lazyparsec.easymock.BaseMockTests;
-import com.googlecode.lazyparsec.functors.Tuples;
 import com.googlecode.totallylazy.Callable2;
 import com.googlecode.totallylazy.Callable3;
 import com.googlecode.totallylazy.Callable4;
 import com.googlecode.totallylazy.Callable5;
 import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Quadruple;
+import com.googlecode.totallylazy.Quintuple;
+import com.googlecode.totallylazy.Triple;
 
 import java.util.Arrays;
 import java.util.List;
@@ -152,7 +154,7 @@ public class ParsersTest extends BaseMockTests {
     public void testTuple_3Parsers() {
         Parser<?> parser = Parsers.tuple(isChar('a'), isChar('b'), isChar('c'));
         assertEquals("tuple", parser.toString());
-        assertParser(parser, "abc", Tuples.tuple('a', 'b', 'c'));
+        assertParser(parser, "abc", Triple.triple('a', 'b', 'c'));
         assertFailure(parser, "xbc", 1, 1);
         assertFailure(parser, "axc", 1, 2);
         assertFailure(parser, "abx", 1, 3);
@@ -161,7 +163,7 @@ public class ParsersTest extends BaseMockTests {
     public void testTuple_4Parsers() {
         Parser<?> parser = Parsers.tuple(isChar('a'), isChar('b'), isChar('c'), isChar('d'));
         assertEquals("tuple", parser.toString());
-        assertParser(parser, "abcd", Tuples.tuple('a', 'b', 'c', 'd'));
+        assertParser(parser, "abcd", Quadruple.quadruple('a', 'b', 'c', 'd'));
         assertFailure(parser, "xbcd", 1, 1);
         assertFailure(parser, "axcd", 1, 2);
         assertFailure(parser, "abxd", 1, 3);
@@ -172,7 +174,7 @@ public class ParsersTest extends BaseMockTests {
         Parser<?> parser =
                 Parsers.tuple(isChar('a'), isChar('b'), isChar('c'), isChar('d'), isChar('e'));
         assertEquals("tuple", parser.toString());
-        assertParser(parser, "abcde", Tuples.tuple('a', 'b', 'c', 'd', 'e'));
+        assertParser(parser, "abcde", Quintuple.quintuple('a', 'b', 'c', 'd', 'e'));
         assertFailure(parser, "xbcde", 1, 1);
         assertFailure(parser, "axcde", 1, 2);
         assertFailure(parser, "abxde", 1, 3);

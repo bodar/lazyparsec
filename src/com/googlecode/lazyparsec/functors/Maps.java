@@ -171,7 +171,7 @@ public final class Maps {
     @SuppressWarnings("unchecked")
     private static final Callable3 ID_3 = new Callable3() {
         public Triple call(Object a, Object b, Object c) {
-            return Tuples.tuple(a, b, c);
+            return Triple.triple(a, b, c);
         }
 
         @Override
@@ -183,7 +183,7 @@ public final class Maps {
     @SuppressWarnings("unchecked")
     private static final Callable4 ID_4 = new Callable4() {
         public Quadruple call(Object a, Object b, Object c, Object d) {
-            return Tuples.tuple(a, b, c, d);
+            return Quadruple.quadruple(a, b, c, d);
         }
 
         @Override
@@ -195,7 +195,7 @@ public final class Maps {
     @SuppressWarnings("unchecked")
     private static final Callable5 ID_5 = new Callable5() {
         public Quintuple call(Object a, Object b, Object c, Object d, Object e) {
-            return Tuples.tuple(a, b, c, d, e);
+            return Quintuple.quintuple(a, b, c, d, e);
         }
 
         @Override

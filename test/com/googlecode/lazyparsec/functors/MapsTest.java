@@ -2,6 +2,9 @@ package com.googlecode.lazyparsec.functors;
 
 import com.googlecode.totallylazy.Callable1;
 import com.googlecode.totallylazy.Pair;
+import com.googlecode.totallylazy.Quadruple;
+import com.googlecode.totallylazy.Quintuple;
+import com.googlecode.totallylazy.Triple;
 import junit.framework.TestCase;
 
 import java.util.HashMap;
@@ -70,17 +73,17 @@ public class MapsTest extends TestCase {
     }
 
     public void testToTuple3() throws Exception {
-        assertEquals(Tuples.tuple("12", 1, 2), Maps.toTriple().call("12", 1, 2));
+        assertEquals(Triple.triple("12", 1, 2), Maps.toTriple().call("12", 1, 2));
         assertEquals("tuple", Maps.toTriple().toString());
     }
 
     public void testToTuple4() throws Exception {
-        assertEquals(Tuples.tuple("123", 1, 2, 3), Maps.toQuadruple().call("123", 1, 2, 3));
+        assertEquals(Quadruple.quadruple("123", 1, 2, 3), Maps.toQuadruple().call("123", 1, 2, 3));
         assertEquals("tuple", Maps.toQuadruple().toString());
     }
 
     public void testToTuple5() throws Exception {
-        assertEquals(Tuples.tuple("1234", 1, 2, 3, 4), Maps.toQuintuple().call("1234", 1, 2, 3, 4));
+        assertEquals(Quintuple.quintuple("1234", 1, 2, 3, 4), Maps.toQuintuple().call("1234", 1, 2, 3, 4));
         assertEquals("tuple", Maps.toQuintuple().toString());
     }
 }
