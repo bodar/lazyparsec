@@ -294,9 +294,10 @@ public class PatternsTest extends TestCase {
                 Patterns.shortest(Patterns.hasAtLeast(1), Patterns.hasExact(2), NEVER).match("ab", 0, 2));
     }
 
-    public void testDecimalL() {
+    public void testStrictDecimal() {
         assertEquals(2, Patterns.STRICT_DECIMAL.match("12a", 0, 3));
         assertEquals(3, Patterns.STRICT_DECIMAL.match("12.a", 0, 4));
+        assertEquals(3, Patterns.STRICT_DECIMAL.match("-15", 0, 3));
         assertEquals(2, Patterns.STRICT_DECIMAL.match("0.", 0, 2));
         assertEquals(5, Patterns.STRICT_DECIMAL.match("12.34 ", 0, 6));
         assertEquals(MISMATCH, Patterns.STRICT_DECIMAL.match(".34 ", 0, 3));
@@ -304,10 +305,11 @@ public class PatternsTest extends TestCase {
         assertEquals(MISMATCH, Patterns.STRICT_DECIMAL.match("", 0, 0));
     }
 
-    public void testDecimalR() {
+    public void testFraction() {
         assertEquals(2, Patterns.FRACTION.match(".1", 0, 2));
         assertEquals(2, Patterns.FRACTION.match(".0a", 0, 3));
         assertEquals(2, Patterns.FRACTION.match(".1", 0, 2));
+        assertEquals(3, Patterns.FRACTION.match("-.1", 0, 3));
         assertEquals(MISMATCH, Patterns.FRACTION.match("12.34 ", 0, 6));
         assertEquals(MISMATCH, Patterns.FRACTION.match("a.34 ", 0, 4));
         assertEquals(MISMATCH, Patterns.FRACTION.match(". ", 0, 2));

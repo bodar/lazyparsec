@@ -86,12 +86,12 @@ public final class Patterns {
      * <p> {@code 0, 11., 2.3} are all good candidates. While {@code .1, .} are not.
      */
     public static final Pattern STRICT_DECIMAL =
-            INTEGER.next(isChar('.').next(many(CharacterPredicates.IS_DIGIT)).optional());
+            isChar('-').optional().next(INTEGER.next(isChar('.').next(many(CharacterPredicates.IS_DIGIT)).optional()));
 
     /**
      * A {@link Pattern} object that matches a decimal point and one or more digits after it.
      */
-    public static final Pattern FRACTION = isChar('.').next(INTEGER);
+    public static final Pattern FRACTION = isChar('-').optional().next(isChar('.').next(INTEGER));
 
     /**
      * A {@link Pattern} object that matches a decimal number that could start with a decimal
