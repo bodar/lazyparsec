@@ -15,8 +15,8 @@ import static com.googlecode.lazyparsec.OperatorTable.Associativity.*;
  */
 public class OperatorTableTest extends TestCase {
     private static final Parser<?> OP = Parsers.never();
-    private static final Parser<Callable1<Integer, Integer>> UNARY_OP = Parsers.never();
-    private static final Parser<Callable2<Integer, Integer, Integer>> BINARY_OP = Parsers.never();
+    private static final Parser<Callable1<Integer, Integer>> UnaryFunction_OP = Parsers.never();
+    private static final Parser<Callable2<Integer, Integer, Integer>> BinaryFunction_OP = Parsers.never();
 
     public void testAssociativityOrder() {
         assertTotalOrder(PREFIX, POSTFIX, LASSOC, NASSOC, RASSOC);
@@ -32,12 +32,12 @@ public class OperatorTableTest extends TestCase {
 
     public void testGetOperators() {
         OperatorTable<Integer> table = new OperatorTable<Integer>()
-                .infixl(BINARY_OP, 2)
-                .infixr(BINARY_OP, 1)
-                .prefix(UNARY_OP, 4)
-                .postfix(UNARY_OP, 3)
-                .postfix(UNARY_OP, 3)
-                .infixn(BINARY_OP, 5);
+                .infixl(BinaryFunction_OP, 2)
+                .infixr(BinaryFunction_OP, 1)
+                .prefix(UnaryFunction_OP, 4)
+                .postfix(UnaryFunction_OP, 3)
+                .postfix(UnaryFunction_OP, 3)
+                .infixn(BinaryFunction_OP, 5);
         assertNotNull(table);
         Operator[] operators = table.operators();
         assertEquals(6, operators.length);

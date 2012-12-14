@@ -16,7 +16,7 @@
 
 package com.googlecode.lazyparsec;
 
-import com.googlecode.lazyparsec.functors.Unary;
+import com.googlecode.totallylazy.UnaryFunction;
 import com.googlecode.lazyparsec.util.Lists;
 import junit.framework.TestCase;
 
@@ -166,7 +166,7 @@ public class ParserErrorHandlingTest extends TestCase {
         Terminals terminals =
                 Terminals.caseSensitive(new String[]{"+", "-"}, new String[]{"foo", "bar", "baz"});
         Parser<List<Token>> lexeme = terminals.tokenizer().lexer(Scanners.WHITESPACES)
-                .map(new Unary<List<Token>>() {
+                .map(new UnaryFunction<List<Token>>() {
                     public List<Token> call(List<Token> tokens) {
                         List<Token> result = Lists.arrayList();
                         for (Token token : tokens) {

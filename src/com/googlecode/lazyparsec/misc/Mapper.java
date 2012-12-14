@@ -17,8 +17,8 @@ package com.googlecode.lazyparsec.misc;
 
 import com.googlecode.lazyparsec.Parser;
 import com.googlecode.lazyparsec.Parsers;
-import com.googlecode.lazyparsec.functors.Binary;
-import com.googlecode.lazyparsec.functors.Unary;
+import com.googlecode.totallylazy.BinaryFunction;
+import com.googlecode.totallylazy.UnaryFunction;
 import com.googlecode.lazyparsec.util.Checks;
 import com.googlecode.lazyparsec.util.Lists;
 import com.googlecode.totallylazy.Callable1;
@@ -53,7 +53,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * </pre>
  * <p/>
  * <p> Alternatively, instead of sequencing the operands and operators directly,
- * a parser of {@link Unary} or {@link Binary} can be returned to cooperate with
+ * a parser of {@link UnaryFunction} or {@link BinaryFunction} can be returned to cooperate with
  * {@link com.googlecode.lazyparsec.OperatorTable}, {@link Parser#prefix(Parser)},
  * {@link Parser#postfix(Parser)}, {@link Parser#infixl(Parser)},
  * {@link Parser#infixn(Parser)} or {@link Parser#infixr(Parser)}.
@@ -95,28 +95,28 @@ public abstract class Mapper<T> {
     /**
      * A {@link Mapper} that curries the only public constructor defined in {@code clazz}
      * and invokes it with parameters returned by the sequentially executed {@link Parser} objects.
-     * For example, to parse an expression with binary operator and create an instance of
+     * For example, to parse an expression with BinaryFunction operator and create an instance of
      * the following object model:
      * <pre>
-     * class BinaryExpression implements Expression {
-     *   public BinaryExpression(Expression left, Operator op, Expression right) {...}
+     * class BinaryFunctionExpression implements Expression {
+     *   public BinaryFunctionExpression(Expression left, Operator op, Expression right) {...}
      *   ...
      * }
      * </pre>
-     * The parser that parses this expression with binary operator can be written as:
+     * The parser that parses this expression with BinaryFunction operator can be written as:
      * <pre>
-     * Parser&lt;Expression> binary(Parser&lt;Expression> operand, Parser&lt;Operator> operator) {
-     *   return Sequencer.&lt;Expression>curry(BinaryExpression.class)
+     * Parser&lt;Expression> BinaryFunction(Parser&lt;Expression> operand, Parser&lt;Operator> operator) {
+     *   return Sequencer.&lt;Expression>curry(BinaryFunctionExpression.class)
      *       .sequence(operand, operator, operand);
      * }
      * </pre>
      * Which is equivalent to the more verbose but reflection-free version:
      * <pre>
-     * Parser&lt;Expression> binary(Parser&lt;Expression> expr, Parser&lt;Operator> op) {
+     * Parser&lt;Expression> BinaryFunction(Parser&lt;Expression> expr, Parser&lt;Operator> op) {
      *   return Parsers.sequence(expr, op, expr,
      *       new Map3&lt;Expression, Operator, Expression, Expression>() {
      *         public Expression map(Expression left, Operator op, Expression right) {
-     *           return new BinaryExpression(left, op, right);
+     *           return new BinaryFunctionExpression(left, op, right);
      *         }
      *       });
      * }
@@ -141,31 +141,31 @@ public abstract class Mapper<T> {
     }
 
     /**
-     * A {@link Parser} that returns a {@link Unary} instance that invokes the underlying
+     * A {@link Parser} that returns a {@link UnaryFunction} instance that invokes the underlying
      * {@code map} method or curried constructor with the only parameter of the
-     * {@link Unary#call(Object)} method.
+     * {@link UnaryFunction#call(Object)} method.
      */
-    public final Parser<Unary<T>> unary() {
-        return Parsers.constant(asUnary());
+    public final Parser<UnaryFunction<T>> UnaryFunction() {
+        return Parsers.constant(asUnaryFunction());
     }
 
     /**
-     * A {@link Parser} that returns a {@link Binary} instance that invokes the underlying
+     * A {@link Parser} that returns a {@link BinaryFunction} instance that invokes the underlying
      * {@code map} method or curried constructor with the two parameters of the
-     * {@link Binary#call(Object, Object)} method.
+     * {@link BinaryFunction#call(Object, Object)} method.
      */
-    public final Parser<Binary<T>> binary() {
-        return Parsers.constant(asBinary());
+    public final Parser<BinaryFunction<T>> BinaryFunction() {
+        return Parsers.constant(asBinaryFunction());
     }
 
     /**
-     * A {@link Parser} that runs {@code operator} and returns a {@link Unary} instance,
+     * A {@link Parser} that runs {@code operator} and returns a {@link UnaryFunction} instance,
      * which will pass along the return value of {@code operator} followed by its only parameter
      * to the underlying {@code map} method or curried constructor.
      * <p/>
      * <p> For example:
      * <pre>
-     * Parser&lt;Unary&lt;Expression>> prefixOperator(Parser&lt;Operator> op) {
+     * Parser&lt;UnaryFunction&lt;Expression>> prefixOperator(Parser&lt;Operator> op) {
      *   return new Mapper&lt;Expression>() {
      *     Expression map(Operator operator, Expression operand) {
      *       return new PrefixExpression(operator, operand);
@@ -174,7 +174,7 @@ public abstract class Mapper<T> {
      * }
      * </pre>
      * Or alternatively, by using the {@link #curry(Class, Object[])} method: <pre>
-     * Parser&lt;Unary&lt;Expression>> prefixOperator(Parser&lt;Operator> op) {
+     * Parser&lt;UnaryFunction&lt;Expression>> prefixOperator(Parser&lt;Operator> op) {
      *   return Mapper.&lt;Expression>curry(PrefixExpression.class).prefix(op);
      * }
      * </pre>
@@ -182,14 +182,14 @@ public abstract class Mapper<T> {
      * <p> Useful when the returned parser is used in {@link Parser#prefix(Parser)} or
      * {@link com.googlecode.lazyparsec.OperatorTable}.
      */
-    public final Parser<Unary<T>> prefix(Parser<?> operator) {
+    public final Parser<UnaryFunction<T>> prefix(Parser<?> operator) {
         checkNotSkipped(operator);
-        checkFutureParameters(Unary.class, 2);
-        return operator.map(new Callable1<Object, Unary<T>>() {
-            public Unary<T> call(final Object pre) {
-                return new Unary<T>() {
+        checkFutureParameters(UnaryFunction.class, 2);
+        return operator.map(new Callable1<Object, UnaryFunction<T>>() {
+            public UnaryFunction<T> call(final Object pre) {
+                return new UnaryFunction<T>() {
                     public T call(T v) {
-                        return apply(pre, v);
+                        return Mapper.this.apply(pre, v);
                     }
                 };
             }
@@ -197,7 +197,7 @@ public abstract class Mapper<T> {
     }
 
     /**
-     * A {@link Parser} that runs {@code operator} sequentially and returns a {@link Unary} instance,
+     * A {@link Parser} that runs {@code operator} sequentially and returns a {@link UnaryFunction} instance,
      * which will pass along the return values of {@code operator} followed by its only parameter
      * to the underlying {@code map} method or curried constructor.
      * <p/>
@@ -205,7 +205,7 @@ public abstract class Mapper<T> {
      * than one components. For example, the Java label statement (like {@code here:}) can be
      * modeled as a prefix operator applied to statements:
      * <pre>
-     * Parser&lt;Unary&lt;Statement>> label = new Mapper&lt;Statement>() {
+     * Parser&lt;UnaryFunction&lt;Statement>> label = new Mapper&lt;Statement>() {
      *   Statement map(String label, Statement statement) {
      *     return new LabelStatement(label, statement);
      *   }
@@ -213,23 +213,23 @@ public abstract class Mapper<T> {
      * </pre>
      * Or alternatively, by using the {@link #curry(Class, Object[])} method:
      * <pre>
-     * Parser&lt;Unary&lt;Statement>> label = Mapper.&lt;Statement>curry(LabelStatement.class)
+     * Parser&lt;UnaryFunction&lt;Statement>> label = Mapper.&lt;Statement>curry(LabelStatement.class)
      *     .prefix(Terminals.STRING, _(terminal(":")));
      * </pre>
      * <p/>
      * <p> Useful when the returned parser is used in {@link Parser#prefix(Parser)} or
      * {@link com.googlecode.lazyparsec.OperatorTable}.
      */
-    public final Parser<Unary<T>> prefix(Parser<?>... operator) {
+    public final Parser<UnaryFunction<T>> prefix(Parser<?>... operator) {
         List<Parser<?>> operatorList = mergeSkipped(operator);
         if (operatorList.size() == 1) return prefix(operatorList.get(0));
-        checkFutureParameters(Unary.class, operatorList.size() + 1);
-        return Parsers.list(operatorList).map(new Callable1<List<Object>, Unary<T>>() {
-            public Unary<T> call(final List<Object> list) {
-                return new Unary<T>() {
+        checkFutureParameters(UnaryFunction.class, operatorList.size() + 1);
+        return Parsers.list(operatorList).map(new Callable1<List<Object>, UnaryFunction<T>>() {
+            public UnaryFunction<T> call(final List<Object> list) {
+                return new UnaryFunction<T>() {
                     public T call(T v) {
                         list.add(v);
-                        return apply(list.toArray());
+                        return Mapper.this.apply(list.toArray());
                     }
                 };
             }
@@ -237,13 +237,13 @@ public abstract class Mapper<T> {
     }
 
     /**
-     * A {@link Parser} that runs {@code operator} and returns a {@link Unary} instance,
+     * A {@link Parser} that runs {@code operator} and returns a {@link UnaryFunction} instance,
      * which will pass along its only parameter followed by the return value of {@code operator}
      * to the underlying {@code map} method or curried constructor.
      * <p/>
      * <p> For example:
      * <pre>
-     * Parser&lt;Binary&lt;Expression>> postfixOperator(Parser&lt;Operator> op) {
+     * Parser&lt;BinaryFunction&lt;Expression>> postfixOperator(Parser&lt;Operator> op) {
      *   return new Mapper&lt;Expression>() {
      *     Expression map(Expression operand, Operator operator) {
      *       return new PostfixExpression(operand, operator);
@@ -252,7 +252,7 @@ public abstract class Mapper<T> {
      * }
      * </pre>
      * Or alternatively, by using the {@link #curry(Class, Object[])} method: <pre>
-     * Parser&lt;Unary&lt;Expression>> postfixOperator(Parser&lt;Operator> op) {
+     * Parser&lt;UnaryFunction&lt;Expression>> postfixOperator(Parser&lt;Operator> op) {
      *   return Mapper.&lt;Expression>curry(PostfixExpression.class).postfix(op);
      * }
      * </pre>
@@ -260,14 +260,14 @@ public abstract class Mapper<T> {
      * <p> Useful when the returned parser is used in {@link Parser#postfix(Parser)} or
      * {@link com.googlecode.lazyparsec.OperatorTable}.
      */
-    public final Parser<Unary<T>> postfix(Parser<?> operator) {
+    public final Parser<UnaryFunction<T>> postfix(Parser<?> operator) {
         checkNotSkipped(operator);
-        checkFutureParameters(Unary.class, 2);
-        return operator.map(new Callable1<Object, Unary<T>>() {
-            public Unary<T> call(final Object post) {
-                return new Unary<T>() {
+        checkFutureParameters(UnaryFunction.class, 2);
+        return operator.map(new Callable1<Object, UnaryFunction<T>>() {
+            public UnaryFunction<T> call(final Object post) {
+                return new UnaryFunction<T>() {
                     public T call(T v) {
-                        return apply(v, post);
+                        return Mapper.this.apply(v, post);
                     }
                 };
             }
@@ -275,7 +275,7 @@ public abstract class Mapper<T> {
     }
 
     /**
-     * A {@link Parser} that runs {@code operator} sequentially and returns a {@link Unary} instance,
+     * A {@link Parser} that runs {@code operator} sequentially and returns a {@link UnaryFunction} instance,
      * which will pass along its only parameter followed by the return values of {@code operator}
      * to the underlying {@code map} method or curried constructor.
      * <p/>
@@ -287,7 +287,7 @@ public abstract class Mapper<T> {
      * {@code array} expression to an array slice expression.
      * The parser can be written as:
      * <pre>
-     * Parser&lt;Unary&lt;Expression>> slice(Parser&lt;Expression bound) {
+     * Parser&lt;UnaryFunction&lt;Expression>> slice(Parser&lt;Expression bound) {
      *   return new Mapper&lt;Expression>() {
      *     Expression map(Expression array, Expression from, Expression to) {
      *       return new ArraySliceExpression(array, from, to);
@@ -297,7 +297,7 @@ public abstract class Mapper<T> {
      * </pre>
      * Or alternatively, by using the {@link #curry(Class, Object[])} method:
      * <pre>
-     * Parser&lt;Unary&lt;Expression>> slice(Parser&lt;Expression bound) {
+     * Parser&lt;UnaryFunction&lt;Expression>> slice(Parser&lt;Expression bound) {
      *   return Mapper.&lt;Expression>curry(ArraySliceExpression.class)
      *       .postfix(_(terminal("[")), bound, _(terminal(",")), bound, _(terminal("]")));
      * }
@@ -306,18 +306,18 @@ public abstract class Mapper<T> {
      * <p> Useful when the returned parser is used in {@link Parser#postfix(Parser)} or
      * {@link com.googlecode.lazyparsec.OperatorTable}.
      */
-    public final Parser<Unary<T>> postfix(Parser<?>... operator) {
+    public final Parser<UnaryFunction<T>> postfix(Parser<?>... operator) {
         operator = toArray(mergeSkipped(operator));
         if (operator.length == 1) return postfix(operator[0]);
-        checkFutureParameters(Unary.class, operator.length + 1);
-        return Parsers.array(operator).map(new Callable1<Object[], Unary<T>>() {
-            public Unary<T> call(final Object[] array) {
-                return new Unary<T>() {
+        checkFutureParameters(UnaryFunction.class, operator.length + 1);
+        return Parsers.array(operator).map(new Callable1<Object[], UnaryFunction<T>>() {
+            public UnaryFunction<T> call(final Object[] array) {
+                return new UnaryFunction<T>() {
                     public T call(T v) {
                         Object[] args = new Object[array.length + 1];
                         args[0] = v;
                         System.arraycopy(array, 0, args, 1, array.length);
-                        return apply(args);
+                        return Mapper.this.apply(args);
                     }
                 };
             }
@@ -325,13 +325,13 @@ public abstract class Mapper<T> {
     }
 
     /**
-     * A {@link Parser} that runs {@code operator} and returns a {@link Binary} instance,
+     * A {@link Parser} that runs {@code operator} and returns a {@link BinaryFunction} instance,
      * which will pass along its first parameter, followed by the return value of {@code operator},
      * followed by its second parameter to the underlying {@code map} method or curried constructor.
      * <p/>
      * <p> For example:
      * <pre>
-     * Parser&lt;Binary&lt;Expression>> infixOperator(Parser&lt;Operator> op) {
+     * Parser&lt;BinaryFunction&lt;Expression>> infixOperator(Parser&lt;Operator> op) {
      *   return new Mapper&lt;Expression>() {
      *     Expression map(Expression left, Operator operator, Expression right) {
      *       return new InfixExpression(left, operand, right);
@@ -340,7 +340,7 @@ public abstract class Mapper<T> {
      * }
      * </pre>
      * Or alternatively, by using the {@link #curry(Class, Object[])} method: <pre>
-     * Parser&lt;Binary&lt;Expression>> infixOperator(Parser&lt;Operator> op) {
+     * Parser&lt;BinaryFunction&lt;Expression>> infixOperator(Parser&lt;Operator> op) {
      *   return Mapper.&lt;Expression>curry(InfixExpression.class).infix(op);
      * }
      * </pre>
@@ -349,14 +349,14 @@ public abstract class Mapper<T> {
      * {@link Parser#infixn(Parser)}, {@link Parser#infixr(Parser)}
      * or {@link com.googlecode.lazyparsec.OperatorTable}.
      */
-    public final Parser<Binary<T>> infix(Parser<?> operator) {
+    public final Parser<BinaryFunction<T>> infix(Parser<?> operator) {
         checkNotSkipped(operator);
-        checkFutureParameters(Binary.class, 3);
-        return operator.map(new Callable1<Object, Binary<T>>() {
-            public Binary<T> call(final Object op) {
-                return new Binary<T>() {
+        checkFutureParameters(BinaryFunction.class, 3);
+        return operator.map(new Callable1<Object, BinaryFunction<T>>() {
+            public BinaryFunction<T> call(final Object op) {
+                return new BinaryFunction<T>() {
                     public T call(T left, T right) {
-                        return apply(left, op, right);
+                        return Mapper.this.apply(left, op, right);
                     }
                 };
             }
@@ -364,7 +364,7 @@ public abstract class Mapper<T> {
     }
 
     /**
-     * A {@link Parser} that runs {@code operator} sequentially and returns a {@link Binary} instance,
+     * A {@link Parser} that runs {@code operator} sequentially and returns a {@link BinaryFunction} instance,
      * which will pass along its first parameter, followed by the return values of {@code operator},
      * followed by its second parameter to the underlying {@code map} method or curried constructor.
      * <p/>
@@ -374,7 +374,7 @@ public abstract class Mapper<T> {
      * {@code ? consequence :} part as a right associative infix operator that binds the condition and
      * the alternative expression together as a composite expression. The parser can be written as:
      * <pre>
-     * Parser&lt;Binary&lt;Expression>> conditional(Parser&lt;Expression> expr) {
+     * Parser&lt;BinaryFunction&lt;Expression>> conditional(Parser&lt;Expression> expr) {
      *   return new Mapper&lt;Expression>() {
      *     Expression map(Expression condition, Expression consequence, Expression alternative) {
      *       return new ConditionalExpression(condition, consequence, alternative);
@@ -384,7 +384,7 @@ public abstract class Mapper<T> {
      * </pre>
      * Or alternatively, by using the {@link #curry(Class, Object[])} method:
      * <pre>
-     * Parser&lt;Binary&lt;Expression>> conditional(Parser&lt;Expression> expr) {
+     * Parser&lt;BinaryFunction&lt;Expression>> conditional(Parser&lt;Expression> expr) {
      *   return Mapper.&lt;Expression>.curry(ConditionalExpression.class)
      *       .postfix(_(terminal("?")), expr, _(terminal(":")));
      * }
@@ -394,19 +394,19 @@ public abstract class Mapper<T> {
      * {@link Parser#infixn(Parser)}, {@link Parser#infixr(Parser)}
      * or {@link com.googlecode.lazyparsec.OperatorTable}.
      */
-    public final Parser<Binary<T>> infix(Parser<?>... operator) {
+    public final Parser<BinaryFunction<T>> infix(Parser<?>... operator) {
         operator = toArray(mergeSkipped(operator));
         if (operator.length == 1) return infix(operator[0]);
-        checkFutureParameters(Binary.class, operator.length + 2);
-        return Parsers.array(operator).map(new Callable1<Object[], Binary<T>>() {
-            public Binary<T> call(final Object[] array) {
-                return new Binary<T>() {
+        checkFutureParameters(BinaryFunction.class, operator.length + 2);
+        return Parsers.array(operator).map(new Callable1<Object[], BinaryFunction<T>>() {
+            public BinaryFunction<T> call(final Object[] array) {
+                return new BinaryFunction<T>() {
                     public T call(T left, T right) {
                         Object[] args = new Object[array.length + 2];
                         args[0] = left;
                         System.arraycopy(array, 0, args, 1, array.length);
                         args[args.length - 1] = right;
-                        return apply(args);
+                        return Mapper.this.apply(args);
                     }
                 };
             }
@@ -456,14 +456,14 @@ public abstract class Mapper<T> {
     }
 
     /**
-     * Returns a {@link Unary} instance that invokes the underlying {@code map} method or
-     * curried constructor with the only parameter of the {@link Unary#call(Object)} method.
+     * Returns a {@link UnaryFunction} instance that invokes the underlying {@code map} method or
+     * curried constructor with the only parameter of the {@link UnaryFunction#call(Object)} method.
      */
-    final Unary<T> asUnary() {
-        checkFutureParameters(Unary.class, 1);
-        return new Unary<T>() {
+    final UnaryFunction<T> asUnaryFunction() {
+        checkFutureParameters(UnaryFunction.class, 1);
+        return new UnaryFunction<T>() {
             public T call(T v) {
-                return apply(v);
+                return Mapper.this.apply(v);
             }
 
             @Override
@@ -474,14 +474,14 @@ public abstract class Mapper<T> {
     }
 
     /**
-     * Returns a {@link Binary} instance that invokes the underlying {@code map} method or
-     * curried constructor with the two parameters of the {@link Binary#call(Object, Object)} method.
+     * Returns a {@link BinaryFunction} instance that invokes the underlying {@code map} method or
+     * curried constructor with the two parameters of the {@link BinaryFunction#call(Object, Object)} method.
      */
-    final Binary<T> asBinary() {
-        checkFutureParameters(Binary.class, 2);
-        return new Binary<T>() {
+    final BinaryFunction<T> asBinaryFunction() {
+        checkFutureParameters(BinaryFunction.class, 2);
+        return new BinaryFunction<T>() {
             public T call(T left, T right) {
-                return apply(left, right);
+                return Mapper.this.apply(left, right);
             }
 
             @Override
@@ -493,12 +493,12 @@ public abstract class Mapper<T> {
 
     /**
      * Returns a {@link com.googlecode.totallylazy.Callable1} instance that invokes the underlying {@code map} method or
-     * curried constructor with the only parameter of the {@link Unary#call(Object)} method.
+     * curried constructor with the only parameter of the {@link UnaryFunction#call(Object)} method.
      */
     final Callable1<Object[], T> asMap() {
         return new Callable1<Object[], T>() {
             public T call(Object[] args) {
-                return apply(args);
+                return Mapper.this.apply(args);
             }
 
             @Override
@@ -618,7 +618,7 @@ public abstract class Mapper<T> {
     // Use new to ensure uniqueness of the string.
     private static final String SKIPPED = new String("skipped");
 
-    private static final Unary<Object> SKIP = new Unary<Object>() {
+    private static final UnaryFunction<Object> SKIP = new UnaryFunction<Object>() {
         public Object call(Object v) {
             return v;
         }

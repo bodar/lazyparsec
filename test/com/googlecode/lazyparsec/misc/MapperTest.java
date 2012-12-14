@@ -2,8 +2,8 @@ package com.googlecode.lazyparsec.misc;
 
 import com.googlecode.lazyparsec.Parser;
 import com.googlecode.lazyparsec.Parsers;
-import com.googlecode.lazyparsec.functors.Binary;
-import com.googlecode.lazyparsec.functors.Unary;
+import com.googlecode.totallylazy.BinaryFunction;
+import com.googlecode.totallylazy.UnaryFunction;
 import junit.framework.TestCase;
 
 import java.util.Arrays;
@@ -60,88 +60,88 @@ public class MapperTest extends TestCase {
         assertEquals("snull", MAPPER.asMap().call(new Object[]{"s", null}));
     }
 
-    public void testUnary() throws Exception {
-        Parser<Unary<Object>> parser = new Mapper<Object>() {
+    public void testUnaryFunction() throws Exception {
+        Parser<UnaryFunction<Object>> parser = new Mapper<Object>() {
             @SuppressWarnings("unused")
             int map(String text) {
                 return Integer.parseInt(text);
             }
-        }.unary();
+        }.UnaryFunction();
         assertEquals("int", parser.toString());
-        Unary<Object> unary = parser.parse("");
-        assertEquals(10, unary.call("10"));
+        UnaryFunction<Object> UnaryFunction = parser.parse("");
+        assertEquals(10, UnaryFunction.call("10"));
     }
 
-    public void testBinary() throws Exception {
-        Parser<Binary<Object>> parser = new Mapper<Object>() {
+    public void testBinaryFunction() throws Exception {
+        Parser<BinaryFunction<Object>> parser = new Mapper<Object>() {
             @SuppressWarnings("unused")
             String map(String name, int i) {
                 return name + i;
             }
-        }.binary();
+        }.BinaryFunction();
         assertEquals(String.class.getName(), parser.toString());
-        Binary<Object> binary = parser.parse("");
-        assertEquals("a1", binary.call("a", 1));
+        BinaryFunction<Object> BinaryFunction = parser.parse("");
+        assertEquals("a1", BinaryFunction.call("a", 1));
     }
 
     public void testPrefix() throws Exception {
-        Unary<Object> unary = new Mapper<Object>() {
+        UnaryFunction<Object> UnaryFunction = new Mapper<Object>() {
             @SuppressWarnings("unused")
             String map(String name, int i) {
                 return name + i;
             }
         }.prefix(constant("a")).parse("");
-        assertEquals("a1", unary.call(1));
+        assertEquals("a1", UnaryFunction.call(1));
     }
 
     public void testPrefix_multiOp() throws Exception {
-        Unary<Object> unary = new Mapper<Object>() {
+        UnaryFunction<Object> UnaryFunction = new Mapper<Object>() {
             @SuppressWarnings("unused")
             String map(String name, int i, int j) {
                 return name + i + j;
             }
         }.prefix(constant("a"), constant(1)).parse("");
-        assertEquals("a12", unary.call(2));
+        assertEquals("a12", UnaryFunction.call(2));
     }
 
     public void testPostfix() throws Exception {
-        Unary<Object> unary = new Mapper<Object>() {
+        UnaryFunction<Object> UnaryFunction = new Mapper<Object>() {
             @SuppressWarnings("unused")
             String map(String name, int i) {
                 return name + i;
             }
         }.postfix(constant(2)).parse("");
-        assertEquals("a2", unary.call("a"));
+        assertEquals("a2", UnaryFunction.call("a"));
     }
 
     public void testPostfix_multiOp() throws Exception {
-        Unary<Object> unary = new Mapper<Object>() {
+        UnaryFunction<Object> UnaryFunction = new Mapper<Object>() {
             @SuppressWarnings("unused")
             String map(String name, int i, int j) {
                 return name + i + j;
             }
         }.postfix(constant(1), constant(2)).parse("");
-        assertEquals("a12", unary.call("a"));
+        assertEquals("a12", UnaryFunction.call("a"));
     }
 
     public void testInfix() throws Exception {
-        Binary<Object> unary = new Mapper<Object>() {
+        BinaryFunction<Object> UnaryFunction = new Mapper<Object>() {
             @SuppressWarnings("unused")
             String map(String name, int i, int j) {
                 return name + i + j;
             }
         }.infix(constant(1)).parse("");
-        assertEquals("a12", unary.call("a", 2));
+        assertEquals("a12", UnaryFunction.call("a", 2));
     }
 
     public void testInfix_multiOp() throws Exception {
-        Binary<Object> unary = new Mapper<Object>() {
+        BinaryFunction<Object> UnaryFunction = new Mapper<Object>() {
             @SuppressWarnings("unused")
             String map(String name, int i, int j, int k) {
                 return name + i + j + k;
             }
         }.infix(constant(1), constant(2)).parse("");
-        assertEquals("a123", unary.call("a", 3));
+        assertEquals("a123", UnaryFunction.call("a", 3));
     }
 
     public void testMap_errorPropagated() {

@@ -65,7 +65,7 @@ public final class OperatorTable<T> {
     }
 
     /**
-     * Adds a prefix unary operator.
+     * Adds a prefix UnaryFunction operator.
      *
      * @param parser     the parser for the operator.
      * @param precedence the precedence number.
@@ -78,7 +78,7 @@ public final class OperatorTable<T> {
     }
 
     /**
-     * Adds a postfix unary operator.
+     * Adds a postfix UnaryFunction operator.
      *
      * @param parser     the parser for the operator.
      * @param precedence the precedence number.
@@ -91,7 +91,7 @@ public final class OperatorTable<T> {
     }
 
     /**
-     * Adds an infix left-associative binary operator.
+     * Adds an infix left-associative BinaryFunction operator.
      *
      * @param parser     the parser for the operator.
      * @param precedence the precedence number.
@@ -104,7 +104,7 @@ public final class OperatorTable<T> {
     }
 
     /**
-     * Adds an infix right-associative binary operator.
+     * Adds an infix right-associative BinaryFunction operator.
      *
      * @param parser     the parser for the operator.
      * @param precedence the precedence number.
@@ -117,7 +117,7 @@ public final class OperatorTable<T> {
     }
 
     /**
-     * Adds an infix non-associative binary operator.
+     * Adds an infix non-associative BinaryFunction operator.
      *
      * @param parser     the parser for the operator.
      * @param precedence the precedence number.

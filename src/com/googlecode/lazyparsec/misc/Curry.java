@@ -2,8 +2,8 @@ package com.googlecode.lazyparsec.misc;
 
 import com.googlecode.lazyparsec.Parser;
 import com.googlecode.lazyparsec.annotations.Private;
-import com.googlecode.lazyparsec.functors.Binary;
-import com.googlecode.lazyparsec.functors.Unary;
+import com.googlecode.totallylazy.BinaryFunction;
+import com.googlecode.totallylazy.UnaryFunction;
 import com.googlecode.lazyparsec.util.Checks;
 import net.sf.cglib.reflect.FastClass;
 
@@ -15,34 +15,34 @@ import java.util.List;
 /**
  * Curries the only public constructor defined in the {@code T} class and invokes it with
  * parameters returned by the sequentially executed {@link Parser} objects.
- * For example, to parse an expression with binary operator and create an instance of
+ * For example, to parse an expression with BinaryFunction operator and create an instance of
  * the following object model:
  * <pre>
- * class BinaryExpression implements Expression {
- *   public BinaryExpression(Expression left, Operator op, Expression right) {...}
+ * class BinaryFunctionExpression implements Expression {
+ *   public BinaryFunctionExpression(Expression left, Operator op, Expression right) {...}
  *   ...
  * }
  * </pre>
- * The parser that parses this expression with binary operator can be written as:
+ * The parser that parses this expression with BinaryFunction operator can be written as:
  * <pre>
- * Parser&lt;Expression> binary(Parser&lt;Expression> expr, Parser&lt;Operator> op) {
- *   return Curry.&lt;Expression>of(BinaryExpression.class).sequence(expr, op, expr);
+ * Parser&lt;Expression> BinaryFunction(Parser&lt;Expression> expr, Parser&lt;Operator> op) {
+ *   return Curry.&lt;Expression>of(BinaryFunctionExpression.class).sequence(expr, op, expr);
  * }
  * </pre>
  * Which is equivalent to the more verbose but reflection-free version:
  * <pre>
- * Parser&lt;Expression> binary(Parser&lt;Expression> expr, Parser&lt;Operator> op) {
+ * Parser&lt;Expression> BinaryFunction(Parser&lt;Expression> expr, Parser&lt;Operator> op) {
  *   return Parsers.sequence(expr, op, expr,
  *       new Map3&lt;Expression, Operator, Expression, Expression>() {
  *         public Expression map(Expression left, Operator op, Expression right) {
- *           return new BinaryExpression(left, op, right);
+ *           return new BinaryFunctionExpression(left, op, right);
  *         }
  *       });
  * }
  * </pre>
  * <p/>
  * <p> Alternatively, instead of sequencing the operands and operators directly,
- * a {@link Unary} or {@link Binary} instance can be returned to cooperate with
+ * a {@link UnaryFunction} or {@link BinaryFunction} instance can be returned to cooperate with
  * {@link com.googlecode.lazyparsec.OperatorTable}, {@link Parser#prefix(Parser)},
  * {@link Parser#postfix(Parser)}, {@link Parser#infixl(Parser)},
  * {@link Parser#infixn(Parser)} or {@link Parser#infixr(Parser)}.

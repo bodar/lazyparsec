@@ -3,8 +3,8 @@ package com.googlecode.lazyparsec.misc;
 import com.googlecode.lazyparsec.Parser;
 import com.googlecode.lazyparsec.Parsers;
 import com.googlecode.lazyparsec.error.ParserException;
-import com.googlecode.lazyparsec.functors.Binary;
-import com.googlecode.lazyparsec.functors.Unary;
+import com.googlecode.totallylazy.BinaryFunction;
+import com.googlecode.totallylazy.UnaryFunction;
 import com.googlecode.lazyparsec.util.ObjectTester;
 import junit.framework.TestCase;
 
@@ -63,16 +63,16 @@ public class CurryTest extends TestCase {
         assertEquals(1, foo.size);
     }
 
-    public void testUnary() throws Exception {
-        Unary<Object> unary = Curry.<Object>of(Foo.class, 1).unary().parse("");
-        Foo foo = (Foo) unary.call("foo");
+    public void testUnaryFunction() throws Exception {
+        UnaryFunction<Object> UnaryFunction = Curry.<Object>of(Foo.class, 1).UnaryFunction().parse("");
+        Foo foo = (Foo) UnaryFunction.call("foo");
         assertEquals("foo", foo.name);
         assertEquals(1, foo.size);
     }
 
-    public void testBinary() throws Exception {
-        Binary<Object> binary = Curry.<Object>of(Foo.class).binary().parse("");
-        Foo foo = (Foo) binary.call("foo", 2);
+    public void testBinaryFunction() throws Exception {
+        BinaryFunction<Object> BinaryFunction = Curry.<Object>of(Foo.class).BinaryFunction().parse("");
+        Foo foo = (Foo) BinaryFunction.call("foo", 2);
         assertEquals("foo", foo.name);
         assertEquals(2, foo.size);
     }
@@ -395,26 +395,26 @@ public class CurryTest extends TestCase {
 
     public void testWrongArgumentType() throws Exception {
         try {
-            Curry.<Object>of(Foo.class).asBinary().call("foo", 2L);
+            Curry.<Object>of(Foo.class).asBinaryFunction().call("foo", 2L);
             fail();
         } catch (IllegalArgumentException e) {
             assertTrue(e.getMessage(), e.getMessage().contains("int"));
         }
     }
 
-    public void testAsUnary_wrongParamNumber() {
+    public void testAsUnaryFunction_wrongParamNumber() {
         Curry<Foo> curry = Curry.of(Foo.class);
         try {
-            curry.asUnary();
+            curry.asUnaryFunction();
             fail();
         } catch (IllegalArgumentException e) {
         }
     }
 
-    public void testAsBinary_wrongParamNumber() {
+    public void testAsBinaryFunction_wrongParamNumber() {
         Curry<Foo> curry = Curry.of(Foo.class, 1);
         try {
-            curry.asBinary();
+            curry.asBinaryFunction();
             fail();
         } catch (IllegalArgumentException e) {
         }

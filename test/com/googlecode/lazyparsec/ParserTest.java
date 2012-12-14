@@ -430,99 +430,99 @@ public class ParserTest extends BaseMockTests {
     }
 
     @Mock
-    Callable1<Integer, Integer> unaryOp;
+    Callable1<Integer, Integer> UnaryFunctionOp;
 
     public void testPrefix_noOperator() {
         replay();
-        Parser<Integer> parser = INTEGER.prefix(isChar('-').retn(unaryOp));
+        Parser<Integer> parser = INTEGER.prefix(isChar('-').retn(UnaryFunctionOp));
         assertEquals("prefix", parser.toString());
         assertParser(parser, "123", 123);
     }
 
     public void testPrefix() throws Exception {
-        expect(unaryOp.call(1)).andReturn(-1);
-        expect(unaryOp.call(-1)).andReturn(1);
-        expect(unaryOp.call(1)).andReturn(-1);
+        expect(UnaryFunctionOp.call(1)).andReturn(-1);
+        expect(UnaryFunctionOp.call(-1)).andReturn(1);
+        expect(UnaryFunctionOp.call(1)).andReturn(-1);
         replay();
-        Parser<Integer> parser = INTEGER.prefix(isChar('-').retn(unaryOp));
+        Parser<Integer> parser = INTEGER.prefix(isChar('-').retn(UnaryFunctionOp));
         assertEquals("prefix", parser.toString());
         assertParser(parser, "---1", -1);
     }
 
     public void testPostfix_noOperator() {
         replay();
-        Parser<Integer> parser = INTEGER.postfix(isChar('^').retn(unaryOp));
+        Parser<Integer> parser = INTEGER.postfix(isChar('^').retn(UnaryFunctionOp));
         assertEquals("postfix", parser.toString());
         assertParser(parser, "123", 123);
     }
 
     public void testPostfix() throws Exception {
-        expect(unaryOp.call(2)).andReturn(4);
-        expect(unaryOp.call(4)).andReturn(256);
+        expect(UnaryFunctionOp.call(2)).andReturn(4);
+        expect(UnaryFunctionOp.call(4)).andReturn(256);
         replay();
-        Parser<Integer> parser = INTEGER.postfix(isChar('^').retn(unaryOp));
+        Parser<Integer> parser = INTEGER.postfix(isChar('^').retn(UnaryFunctionOp));
         assertEquals("postfix", parser.toString());
         assertParser(parser, "2^^", 256);
     }
 
     @Mock
-    Callable2<Integer, Integer, Integer> binaryOp;
+    Callable2<Integer, Integer, Integer> BinaryFunctionOp;
 
     public void testInfixn_noOperator() {
         replay();
-        Parser<Integer> parser = INTEGER.infixn(isChar('+').retn(binaryOp));
+        Parser<Integer> parser = INTEGER.infixn(isChar('+').retn(BinaryFunctionOp));
         assertEquals("infixn", parser.toString());
         assertParser(parser, "1", 1);
     }
 
     public void testInfixn() throws Exception {
-        expect(binaryOp.call(1, 2)).andReturn(3);
+        expect(BinaryFunctionOp.call(1, 2)).andReturn(3);
         replay();
-        Parser<Integer> parser = INTEGER.infixn(isChar('+').retn(binaryOp));
+        Parser<Integer> parser = INTEGER.infixn(isChar('+').retn(BinaryFunctionOp));
         assertEquals("infixn", parser.toString());
         assertParser(parser, "1+2+3", 3, "+3");
     }
 
     public void testInfixl_noOperator() {
         replay();
-        Parser<Integer> parser = INTEGER.infixl(isChar('+').retn(binaryOp));
+        Parser<Integer> parser = INTEGER.infixl(isChar('+').retn(BinaryFunctionOp));
         assertEquals("infixl", parser.toString());
         assertParser(parser, "1", 1);
     }
 
     public void testInfixl() throws Exception {
-        expect(binaryOp.call(4, 1)).andReturn(3);
-        expect(binaryOp.call(3, 2)).andReturn(1);
+        expect(BinaryFunctionOp.call(4, 1)).andReturn(3);
+        expect(BinaryFunctionOp.call(3, 2)).andReturn(1);
         replay();
-        Parser<Integer> parser = INTEGER.infixl(isChar('-').retn(binaryOp));
+        Parser<Integer> parser = INTEGER.infixl(isChar('-').retn(BinaryFunctionOp));
         assertEquals("infixl", parser.toString());
         assertParser(parser, "4-1-2", 1);
     }
 
     public void testInfixl_fails() {
         replay();
-        assertFailure(INTEGER.infixl(isChar('-').retn(binaryOp)), "4-1-", 1, 5);
+        assertFailure(INTEGER.infixl(isChar('-').retn(BinaryFunctionOp)), "4-1-", 1, 5);
     }
 
     public void testInfixr_noOperator() {
         replay();
-        Parser<Integer> parser = INTEGER.infixr(isChar('+').retn(binaryOp));
+        Parser<Integer> parser = INTEGER.infixr(isChar('+').retn(BinaryFunctionOp));
         assertEquals("infixr", parser.toString());
         assertParser(parser, "1", 1);
     }
 
     public void testInfixr() throws Exception {
-        expect(binaryOp.call(1, 2)).andReturn(12);
-        expect(binaryOp.call(4, 12)).andReturn(412);
+        expect(BinaryFunctionOp.call(1, 2)).andReturn(12);
+        expect(BinaryFunctionOp.call(4, 12)).andReturn(412);
         replay();
-        Parser<Integer> parser = INTEGER.infixr(string("->").retn(binaryOp));
+        Parser<Integer> parser = INTEGER.infixr(string("->").retn(BinaryFunctionOp));
         assertEquals("infixr", parser.toString());
         assertParser(parser, "4->1->2", 412);
     }
 
     public void testInfixr_fails() {
         replay();
-        assertFailure(INTEGER.infixr(isChar('-').retn(binaryOp)), "4-1-", 1, 5);
+        assertFailure(INTEGER.infixr(isChar('-').retn(BinaryFunctionOp)), "4-1-", 1, 5);
     }
 
     public void testFrom() {

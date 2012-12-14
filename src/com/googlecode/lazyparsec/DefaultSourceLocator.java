@@ -67,12 +67,12 @@ final class DefaultSourceLocator implements SourceLocator {
     int nextColumnIndex = 0;
 
     /**
-     * Uses binary search to look up the index of the first element in {@code ascendingInts} that's
+     * Uses BinaryFunction search to look up the index of the first element in {@code ascendingInts} that's
      * greater than or equal to {@code value}. If all elements are smaller than {@code value},
      * {@code ascendingInts.size()} is returned.
      */
     @Private
-    static int binarySearch(IntList ascendingInts, int value) {
+    static int BinaryFunctionSearch(IntList ascendingInts, int value) {
         for (int begin = 0, to = ascendingInts.size(); ; ) {
             if (begin == to) return begin;
             int i = (begin + to) / 2;
@@ -91,7 +91,7 @@ final class DefaultSourceLocator implements SourceLocator {
     Location lookup(int index) {
         int size = lineBreakIndices.size();
         if (size == 0) return location(0, index);
-        int lineNumber = binarySearch(lineBreakIndices, index);
+        int lineNumber = BinaryFunctionSearch(lineBreakIndices, index);
         if (lineNumber == 0) return location(0, index);
         int previousBreak = lineBreakIndices.get(lineNumber - 1);
         return location(lineNumber, index - previousBreak - 1);

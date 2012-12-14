@@ -15,15 +15,7 @@
  *****************************************************************************/
 package com.googlecode.lazyparsec.functors;
 
-import com.googlecode.totallylazy.Callable1;
-import com.googlecode.totallylazy.Callable2;
-import com.googlecode.totallylazy.Callable3;
-import com.googlecode.totallylazy.Callable4;
-import com.googlecode.totallylazy.Callable5;
-import com.googlecode.totallylazy.Pair;
-import com.googlecode.totallylazy.Quadruple;
-import com.googlecode.totallylazy.Quintuple;
-import com.googlecode.totallylazy.Triple;
+import com.googlecode.totallylazy.*;
 
 import java.util.Locale;
 
@@ -50,15 +42,15 @@ public final class Maps {
     };
 
     /**
-     * The {@link Unary} that maps a {@link String} to lower case using {@link Locale#US}.
+     * The {@link UnaryFunction} that maps a {@link String} to lower case using {@link Locale#US}.
      */
-    public static Unary<String> TO_LOWER_CASE = toLowerCase(Locale.US);
+    public static UnaryFunction<String> TO_LOWER_CASE = toLowerCase(Locale.US);
 
     /**
-     * Returns a {@link Unary} that maps a {@link String} to lower case using {@code locale}.
+     * Returns a {@link UnaryFunction} that maps a {@link String} to lower case using {@code locale}.
      */
-    public static Unary<String> toLowerCase(final Locale locale) {
-        return new Unary<String>() {
+    public static UnaryFunction<String> toLowerCase(final Locale locale) {
+        return new UnaryFunction<String>() {
             public String call(String s) {
                 return s.toLowerCase(locale);
             }
@@ -71,15 +63,15 @@ public final class Maps {
     }
 
     /**
-     * The {@link Unary} that maps a {@link String} to upper case using {@link Locale#US}.
+     * The {@link UnaryFunction} that maps a {@link String} to upper case using {@link Locale#US}.
      */
-    public static Unary<String> TO_UPPER_CASE = toUpperCase(Locale.US);
+    public static UnaryFunction<String> TO_UPPER_CASE = toUpperCase(Locale.US);
 
     /**
-     * Returns a {@link Unary} that maps a {@link String} to upper case using {@code locale}.
+     * Returns a {@link UnaryFunction} that maps a {@link String} to upper case using {@code locale}.
      */
-    public static Unary<String> toUpperCase(final Locale locale) {
-        return new Unary<String>() {
+    public static UnaryFunction<String> toUpperCase(final Locale locale) {
+        return new UnaryFunction<String>() {
             public String call(String s) {
                 return s.toUpperCase(locale);
             }
@@ -121,8 +113,8 @@ public final class Maps {
      * Returns an identity map that maps parameter to itself.
      */
     @SuppressWarnings("unchecked")
-    public static <T> Unary<T> identity() {
-        return (Unary<T>) ID;
+    public static <T> UnaryFunction<T> identity() {
+        return (UnaryFunction<T>) ID;
     }
 
     /**
@@ -236,7 +228,7 @@ public final class Maps {
         return ID_5;
     }
 
-    private static final Unary<Object> ID = new Unary<Object>() {
+    private static final UnaryFunction<Object> ID = new UnaryFunction<Object>() {
         public Object call(Object v) {
             return v;
         }

@@ -17,7 +17,7 @@
 package com.googlecode.lazyparsec;
 
 import com.googlecode.lazyparsec.annotations.Private;
-import com.googlecode.lazyparsec.functors.Unary;
+import com.googlecode.totallylazy.UnaryFunction;
 import com.googlecode.lazyparsec.pattern.Pattern;
 import com.googlecode.lazyparsec.pattern.Patterns;
 import com.googlecode.lazyparsec.util.Lists;
@@ -119,7 +119,7 @@ public final class Indentation {
      */
     public Parser<List<Token>> lexer(Parser<?> tokenizer, Parser<?> delim) {
         Parser<?> lf = Scanners.isChar('\n').retn(Punctuation.LF);
-        return Parsers.plus(tokenizer, lf).lexer(delim).map(new Unary<List<Token>>() {
+        return Parsers.plus(tokenizer, lf).lexer(delim).map(new UnaryFunction<List<Token>>() {
             public List<Token> call(List<Token> tokens) {
                 return analyzeIndentations(tokens, Punctuation.LF);
             }

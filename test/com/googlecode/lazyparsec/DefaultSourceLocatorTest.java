@@ -25,48 +25,48 @@ public class DefaultSourceLocatorTest extends TestCase {
         assertEquals(location, locator.locate(0));
     }
 
-    public void testBinarySearch_firstElementIsEqual() {
-        assertEquals(0, DefaultSourceLocator.binarySearch(intList(1, 2, 3), 1));
+    public void testBinaryFunctionSearch_firstElementIsEqual() {
+        assertEquals(0, DefaultSourceLocator.BinaryFunctionSearch(intList(1, 2, 3), 1));
     }
 
-    public void testBinarySearch_firstElementIsBigger() {
-        assertEquals(0, DefaultSourceLocator.binarySearch(intList(1, 2, 3), 0));
+    public void testBinaryFunctionSearch_firstElementIsBigger() {
+        assertEquals(0, DefaultSourceLocator.BinaryFunctionSearch(intList(1, 2, 3), 0));
     }
 
-    public void testBinarySearch_secondElementIsEqual() {
-        assertEquals(1, DefaultSourceLocator.binarySearch(intList(1, 2, 3), 2));
+    public void testBinaryFunctionSearch_secondElementIsEqual() {
+        assertEquals(1, DefaultSourceLocator.BinaryFunctionSearch(intList(1, 2, 3), 2));
     }
 
-    public void testBinarySearch_secondElementIsBigger() {
-        assertEquals(1, DefaultSourceLocator.binarySearch(intList(1, 3, 5), 2));
+    public void testBinaryFunctionSearch_secondElementIsBigger() {
+        assertEquals(1, DefaultSourceLocator.BinaryFunctionSearch(intList(1, 3, 5), 2));
     }
 
-    public void testBinarySearch_lastElementIsEqual() {
-        assertEquals(2, DefaultSourceLocator.binarySearch(intList(1, 3, 5), 5));
+    public void testBinaryFunctionSearch_lastElementIsEqual() {
+        assertEquals(2, DefaultSourceLocator.BinaryFunctionSearch(intList(1, 3, 5), 5));
     }
 
-    public void testBinarySearch_lastElementIsBigger() {
-        assertEquals(2, DefaultSourceLocator.binarySearch(intList(1, 3, 5), 4));
+    public void testBinaryFunctionSearch_lastElementIsBigger() {
+        assertEquals(2, DefaultSourceLocator.BinaryFunctionSearch(intList(1, 3, 5), 4));
     }
 
-    public void testBinarySearch_allSmaller() {
-        assertEquals(3, DefaultSourceLocator.binarySearch(intList(1, 3, 5), 10));
+    public void testBinaryFunctionSearch_allSmaller() {
+        assertEquals(3, DefaultSourceLocator.BinaryFunctionSearch(intList(1, 3, 5), 10));
     }
 
-    public void testBinarySearch_oneEqualElement() {
-        assertEquals(0, DefaultSourceLocator.binarySearch(intList(1), 1));
+    public void testBinaryFunctionSearch_oneEqualElement() {
+        assertEquals(0, DefaultSourceLocator.BinaryFunctionSearch(intList(1), 1));
     }
 
-    public void testBinarySearch_oneBiggerElement() {
-        assertEquals(0, DefaultSourceLocator.binarySearch(intList(2), 1));
+    public void testBinaryFunctionSearch_oneBiggerElement() {
+        assertEquals(0, DefaultSourceLocator.BinaryFunctionSearch(intList(2), 1));
     }
 
-    public void testBinarySearch_oneSmallerElement() {
-        assertEquals(1, DefaultSourceLocator.binarySearch(intList(0), 1));
+    public void testBinaryFunctionSearch_oneSmallerElement() {
+        assertEquals(1, DefaultSourceLocator.BinaryFunctionSearch(intList(0), 1));
     }
 
-    public void testBinarySearch_noElement() {
-        assertEquals(0, DefaultSourceLocator.binarySearch(intList(), 1));
+    public void testBinaryFunctionSearch_noElement() {
+        assertEquals(0, DefaultSourceLocator.BinaryFunctionSearch(intList(), 1));
     }
 
     public void testLookup_noLineBreaksScanned() {
