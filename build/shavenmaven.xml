@@ -7,7 +7,7 @@
 
         <sequential>
             <mkdir dir="@{directory}"/>
-            <get src="http://shavenmaven.googlecode.com/files/shavenmaven-nodep-@{version}.jar"
+            <get src="http://shavenmaven.googlecode.com/files/shavenmaven-@{version}.jar"
                  dest="@{directory}/shavenmaven.jar" usetimestamp="true"/>
         </sequential>
     </macrodef>
@@ -21,6 +21,8 @@
             <mkdir dir="@{directory}"/>
             <java classname="com.googlecode.shavenmaven.Dependencies" classpath="@{shavenmaven.jar}" fork="true"
                   failonerror="true">
+                <!--<jvmarg value="-Dhttp.proxyHost=proxy.server"/>-->
+                <!--<jvmarg value="-Dhttp.proxyPort=8080"/>-->
                 <arg value="@{dependencies}"/>
                 <arg value="@{directory}"/>
             </java>
